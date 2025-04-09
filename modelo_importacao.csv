@@ -1,0 +1,3 @@
+nome_servico,endereco,bairro,tipo,descricao,horario_inicio,horario_fim,categorias
+Posto Saúde A,Rua Flores 100,Centro,Saúde,"Clínico Geral",08:00,17:00,"1,3"
+Centro Cultural B,Rua Livros 200,Centro,Cultura,"Espaço de leitura",09:00,18:00,"2"
