@@ -24,3 +24,4 @@ Sistema Bairro Ativo - Mapeamento de Serviços Públicos e Privados
 - Mapa: `mapa.php`
 - Admin: `admin_login.php`
   Usuário: `admin`, Senha: `senha123`
+2923ef94f739425b96ec104bd6613eb5
