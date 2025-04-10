@@ -10,7 +10,7 @@ $bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT
 $tipos   = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
 $categorias = $pdo->query("SELECT id, nome FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 
-// Filtros e joins dinâmicos
+// Filtros dinâmicos
 $where = [];
 $params = [];
 $join_categoria = '';
@@ -33,7 +33,6 @@ if (!empty($_GET['categoria'])) {
     $params[':categoria'] = $_GET['categoria'];
 }
 
-// Consulta principal
 $sql = "SELECT s.* FROM servicos s $join_categoria";
 if ($where) {
     $sql .= " WHERE " . implode(" AND ", $where);
@@ -73,7 +72,6 @@ if ($json_servicos === false) $json_servicos = '[]';
     </div>
 </header>
 
-<!-- Filtros -->
 <div class="filtros">
     <form method="GET" style="display: flex; flex-wrap: wrap; gap: 10px;">
         <input type="hidden" name="lang" value="<?= $lang ?>">
@@ -114,69 +112,71 @@ if ($json_servicos === false) $json_servicos = '[]';
 </footer>
 
 <script>
-const map = L.map('map').setView([-23.55, -46.63], 12);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+document.addEventListener("DOMContentLoaded", () => {
+    const map = L.map('map').setView([-23.55, -46.63], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-const servicos = <?= $json_servicos ?>;
+    const servicos = <?= $json_servicos ?>;
 
-servicos.forEach(s => {
-    if (!s.latitude || !s.longitude) return;
+    servicos.forEach(s => {
+        if (!s.latitude || !s.longitude) return;
 
-    const popup = `
-        <strong>${s.nome_servico}</strong><br>
-        ${s.endereco}, ${s.bairro}<br>
-        <i class="fa fa-layer-group"></i> ${s.tipo}<br>
-        <a href="detalhes.php?id=${s.id}&lang=<?= $lang ?>">ℹ️ <?= htmlspecialchars($t['detalhes']) ?></a>
-    `;
+        const popup = `
+            <strong>${s.nome_servico}</strong><br>
+            ${s.endereco}, ${s.bairro}<br>
+            <i class="fa fa-layer-group"></i> ${s.tipo}<br>
+            <a href="detalhes.php?id=${s.id}&lang=<?= $lang ?>">ℹ️ <?= htmlspecialchars($t['detalhes']) ?></a>
+        `;
 
-    L.marker([s.latitude, s.longitude]).addTo(map).bindPopup(popup);
-});
-
-function localizarUsuario() {
-    if (!navigator.geolocation) {
-        alert("Navegador não suporta geolocalização.");
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(pos => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-
-        L.marker([lat, lng], {
-            icon: L.icon({
-                iconUrl: 'images/user-location.png',
-                iconSize: [32, 32],
-                iconAnchor: [16, 32]
-            })
-        }).addTo(map).bindPopup("📍 Você está aqui").openPopup();
-
-        map.setView([lat, lng], 14);
-
-        fetch(`ajax/mapa.php?lat=${lat}&lng=${lng}`)
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(s => {
-                    if (!s.latitude || !s.longitude) return;
-
-                    const popup = `
-                        <strong>${s.nome_servico}</strong><br>
-                        ${s.endereco}, ${s.bairro}<br>
-                        <i class="fa fa-layer-group"></i> ${s.tipo}<br>
-                        <a href="detalhes.php?id=${s.id}&lang=<?= $lang ?>">ℹ️ <?= htmlspecialchars($t['detalhes']) ?></a>
-                    `;
-
-                    L.marker([s.latitude, s.longitude]).addTo(map).bindPopup(popup);
-                });
-
-                if (data.length === 0) {
-                    alert("Nenhum serviço encontrado em até 10km.");
-                }
-            })
-            .catch(() => alert("Erro ao buscar serviços próximos."));
-    }, () => {
-        alert("Erro ao obter sua localização.");
+        L.marker([s.latitude, s.longitude]).addTo(map).bindPopup(popup);
     });
-}
+
+    window.localizarUsuario = function() {
+        if (!navigator.geolocation) {
+            alert("Navegador não suporta geolocalização.");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(pos => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+
+            L.marker([lat, lng], {
+                icon: L.icon({
+                    iconUrl: 'images/user-location.png',
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 32]
+                })
+            }).addTo(map).bindPopup("📍 Você está aqui").openPopup();
+
+            map.setView([lat, lng], 14);
+
+            fetch(`ajax/mapa.php?lat=${lat}&lng=${lng}`)
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach(s => {
+                        if (!s.latitude || !s.longitude) return;
+
+                        const popup = `
+                            <strong>${s.nome_servico}</strong><br>
+                            ${s.endereco}, ${s.bairro}<br>
+                            <i class="fa fa-layer-group"></i> ${s.tipo}<br>
+                            <a href="detalhes.php?id=${s.id}&lang=<?= $lang ?>">ℹ️ <?= htmlspecialchars($t['detalhes']) ?></a>
+                        `;
+
+                        L.marker([s.latitude, s.longitude]).addTo(map).bindPopup(popup);
+                    });
+
+                    if (data.length === 0) {
+                        alert("Nenhum serviço encontrado em até 10km.");
+                    }
+                })
+                .catch(() => alert("Erro ao buscar serviços próximos."));
+        }, () => {
+            alert("Erro ao obter sua localização.");
+        });
+    };
+});
 </script>
 
 </body>
