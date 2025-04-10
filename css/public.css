@@ -103,3 +103,48 @@ footer {
         align-items: stretch;
     }
 }
+
+.card-servico {
+    display: flex;
+    gap: 15px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 6px;
+    background: #fff;
+    align-items: center;
+}
+
+.card-servico .thumb {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-servico .thumb img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.card-servico .info {
+    flex-grow: 1;
+}
+
+@media (max-width: 600px) {
+    .card-servico {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-servico .thumb {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+}
