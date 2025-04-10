@@ -153,7 +153,6 @@
  </div>
  
  <div id="map"></div>
- @@ -104,6 +126,29 @@
  
          L.marker([s.latitude, s.longitude]).addTo(map).bindPopup(popup);
      });
