@@ -148,3 +148,36 @@ footer {
         margin-bottom: 10px;
     }
 }
+
+.filtros-flex {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.filtros-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex: 1;
+}
+
+.btn-localizacao {
+    white-space: nowrap;
+    padding: 10px 15px;
+}
+
+@media (max-width: 768px) {
+    .filtros-flex {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-localizacao {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
