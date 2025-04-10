@@ -7,7 +7,7 @@ require 'conexao.php';
 
 // Filtros únicos
 $bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT NULL ORDER BY bairro")->fetchAll(PDO::FETCH_COLUMN);
-$tipos   = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
+$tipos = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
 $categorias = $pdo->query("SELECT id, nome FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 
 // Filtros dinâmicos
@@ -51,16 +51,13 @@ if ($json_servicos === false) $json_servicos = '[]';
     <title><?= $t['titulo'] ?> | Bairro Ativo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Leaflet -->
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/public.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" type="image/png" href="images/logo.png">
 
-    <!-- CSS Principal -->
-    <link rel="stylesheet" href="css/public.css">
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -72,40 +69,41 @@ if ($json_servicos === false) $json_servicos = '[]';
     </div>
 </header>
 
-<div class="filtros">
-    <form method="GET" style="display: flex; flex-wrap: wrap; gap: 10px;">
-        <input type="hidden" name="lang" value="<?= $lang ?>">
-        <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
+<main>
+    <div class="filtros">
+        <form method="GET" style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <input type="hidden" name="lang" value="<?= $lang ?>">
+            <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
 
-        <select name="bairro">
-            <option value="">Bairro</option>
-            <?php foreach ($bairros as $bairro): ?>
-                <option value="<?= $bairro ?>" <?= ($_GET['bairro'] ?? '') === $bairro ? 'selected' : '' ?>><?= $bairro ?></option>
-            <?php endforeach; ?>
-        </select>
+            <select name="bairro">
+                <option value="">Bairro</option>
+                <?php foreach ($bairros as $bairro): ?>
+                    <option value="<?= $bairro ?>" <?= ($_GET['bairro'] ?? '') === $bairro ? 'selected' : '' ?>><?= $bairro ?></option>
+                <?php endforeach; ?>
+            </select>
 
-        <select name="tipo">
-            <option value="">Tipo</option>
-            <?php foreach ($tipos as $tipo): ?>
-                <option value="<?= $tipo ?>" <?= ($_GET['tipo'] ?? '') === $tipo ? 'selected' : '' ?>><?= $tipo ?></option>
-            <?php endforeach; ?>
-        </select>
+            <select name="tipo">
+                <option value="">Tipo</option>
+                <?php foreach ($tipos as $tipo): ?>
+                    <option value="<?= $tipo ?>" <?= ($_GET['tipo'] ?? '') === $tipo ? 'selected' : '' ?>><?= $tipo ?></option>
+                <?php endforeach; ?>
+            </select>
 
-        <select name="categoria">
-            <option value="">Categoria</option>
-            <?php foreach ($categorias as $c): ?>
-                <option value="<?= $c['id'] ?>" <?= ($_GET['categoria'] ?? '') == $c['id'] ? 'selected' : '' ?>><?= $c['nome'] ?></option>
-            <?php endforeach; ?>
-        </select>
+            <select name="categoria">
+                <option value="">Categoria</option>
+                <?php foreach ($categorias as $c): ?>
+                    <option value="<?= $c['id'] ?>" <?= ($_GET['categoria'] ?? '') == $c['id'] ? 'selected' : '' ?>><?= $c['nome'] ?></option>
+                <?php endforeach; ?>
+            </select>
 
-        <button type="submit" class="btn">🔍 <?= $t['buscar'] ?></button>
-    </form>
+            <button type="submit" class="btn">🔍 <?= $t['buscar'] ?></button>
+        </form>
 
-    <button onclick="localizarUsuario()" class="btn">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
-</div>
+        <button onclick="localizarUsuario()" class="btn">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
+    </div>
 
-<!-- Mapa -->
-<div id="map"></div>
+    <div id="map"></div>
+</main>
 
 <footer>
     &copy; <?= date('Y') ?> Sistema Bairro Ativo. Todos os direitos reservados.
