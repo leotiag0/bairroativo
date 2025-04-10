@@ -2,8 +2,35 @@
 include 'lang.php';
 require 'conexao.php';
 
-// Consulta de serviços (simples, pode ser filtrado depois)
-$servicos = $pdo->query("SELECT * FROM servicos")->fetchAll(PDO::FETCH_ASSOC);
+// Preparar listas para os filtros
+$bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT NULL ORDER BY bairro")->fetchAll(PDO::FETCH_COLUMN);
+$tipos   = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
+
+// Filtros da URL
+$where = [];
+$params = [];
+
+if (!empty($_GET['q'])) {
+    $where[] = "(nome_servico LIKE :q OR descricao LIKE :q)";
+    $params[':q'] = '%' . $_GET['q'] . '%';
+}
+if (!empty($_GET['bairro'])) {
+    $where[] = "bairro = :bairro";
+    $params[':bairro'] = $_GET['bairro'];
+}
+if (!empty($_GET['tipo'])) {
+    $where[] = "tipo = :tipo";
+    $params[':tipo'] = $_GET['tipo'];
+}
+
+$sql = "SELECT * FROM servicos";
+if ($where) {
+    $sql .= " WHERE " . implode(" AND ", $where);
+}
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="<?= $lang ?>">
@@ -27,6 +54,36 @@ $servicos = $pdo->query("SELECT * FROM servicos")->fetchAll(PDO::FETCH_ASSOC);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filtros {
+            background: #f2f2f2;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .filtros select,
+        .filtros input[type="text"],
+        .filtros button {
+            padding: 8px 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .btn-green {
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-green:hover {
+            background: #218838;
         }
 
         #map {
@@ -35,32 +92,11 @@ $servicos = $pdo->query("SELECT * FROM servicos")->fetchAll(PDO::FETCH_ASSOC);
             min-height: 500px;
         }
 
-        .filtros {
-            padding: 10px;
-            background: #f9f9f9;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
         footer {
             background: #007bff;
             color: white;
             text-align: center;
             padding: 10px;
-        }
-
-        .btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background: #218838;
         }
     </style>
 </head>
@@ -68,25 +104,42 @@ $servicos = $pdo->query("SELECT * FROM servicos")->fetchAll(PDO::FETCH_ASSOC);
 
 <header>
     <div><strong><?= $t['titulo'] ?></strong></div>
-    <div>
-        <button class="btn" onclick="localizarUsuario()">📍 Próximo de mim</button>
-    </div>
+    <button class="btn-green" onclick="localizarUsuario()">📍 <?= $t['navegar'] ?></button>
 </header>
 
+<!-- FILTROS -->
 <div class="filtros">
-    <form method="GET" action="mapa.php">
+    <form method="GET" action="mapa.php" style="display:flex; flex-wrap:wrap; gap:10px;">
         <input type="hidden" name="lang" value="<?= $lang ?>">
-        <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." />
-        <button type="submit" class="btn"><?= $t['buscar'] ?></button>
+
+        <select name="bairro">
+            <option value="">Bairro</option>
+            <?php foreach ($bairros as $b): ?>
+                <option value="<?= $b ?>" <?= ($_GET['bairro'] ?? '') === $b ? 'selected' : '' ?>><?= $b ?></option>
+            <?php endforeach; ?>
+        </select>
+
+        <select name="tipo">
+            <option value="">Tipo</option>
+            <?php foreach ($tipos as $t): ?>
+                <option value="<?= $t ?>" <?= ($_GET['tipo'] ?? '') === $t ? 'selected' : '' ?>><?= $t ?></option>
+            <?php endforeach; ?>
+        </select>
+
+        <input type="text" name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" placeholder="<?= $t['buscar'] ?>..." />
+
+        <button type="submit" class="btn-green"><?= $t['buscar'] ?></button>
     </form>
 </div>
 
+<!-- MAPA -->
 <div id="map"></div>
 
 <footer>
     &copy; <?= date('Y') ?> Sistema Bairro Ativo. Todos os direitos reservados.
 </footer>
 
+<!-- Leaflet e Mapa -->
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 <script>
     const map = L.map('map').setView([-23.55, -46.63], 12);
