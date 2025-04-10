@@ -154,6 +154,26 @@
  
  <div id="map"></div>
  
+ <footer>
+     &copy; <?= date('Y') ?> Sistema Bairro Ativo. Todos os direitos reservados.
+ </footer>
+ 
+ <script>
+     const map = L.map('map').setView([-23.55, -46.63], 12);
+     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+ 
+     const lang = '<?= $lang ?>';
+     const servicos = <?= json_encode($servicos) ?>;
+ 
+     servicos.forEach(s => {
+         if (!s.latitude || !s.longitude) return;
+ 
+         const popup = `
+             <strong>${s.nome_servico}</strong><br>
+             ${s.rua}, ${s.bairro}, ${s.cidade}<br>
+             <a href="detalhes.php?id=${s.id}&lang=${lang}">ℹ️ <?= $t['detalhes'] ?></a>
+         `;
+ 
          L.marker([s.latitude, s.longitude]).addTo(map).bindPopup(popup);
      });
  
@@ -182,3 +202,4 @@
  </script>
  
  </body>
+ </html>
