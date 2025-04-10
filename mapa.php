@@ -5,12 +5,12 @@ error_reporting(E_ALL);
 include 'lang.php';
 require 'conexao.php';
 
-// Filtros únicos
+// Filtros
 $bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT NULL ORDER BY bairro")->fetchAll(PDO::FETCH_COLUMN);
 $tipos = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
 $categorias = $pdo->query("SELECT id, nome FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 
-// Filtros dinâmicos
+// Consulta dinâmica
 $where = [];
 $params = [];
 $join_categoria = '';
@@ -40,7 +40,6 @@ if ($where) {
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 $json_servicos = json_encode($servicos, JSON_UNESCAPED_UNICODE);
 if ($json_servicos === false) $json_servicos = '[]';
 ?>
@@ -53,11 +52,31 @@ if ($json_servicos === false) $json_servicos = '[]';
 
     <!-- Estilos -->
     <link rel="stylesheet" href="css/public.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" type="image/png" href="images/logo.png">
-
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <style>
+        #map-loader {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 16px;
+            color: #555;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
 
@@ -102,16 +121,50 @@ if ($json_servicos === false) $json_servicos = '[]';
         <button onclick="localizarUsuario()" class="btn">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
     </div>
 
-    <div id="map"></div>
+    <div id="map">
+        <div id="map-loader">
+            <div class="spinner"></div>
+            Carregando mapa...
+        </div>
+    </div>
 </main>
 
 <footer>
     &copy; <?= date('Y') ?> Sistema Bairro Ativo. Todos os direitos reservados.
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 <script>
+let map;
+
+function ajustarAlturaMapa() {
+    const header = document.querySelector('header');
+    const filtros = document.querySelector('.filtros');
+    const footer = document.querySelector('footer');
+    const mapDiv = document.getElementById('map');
+
+    if (!mapDiv) return;
+
+    const alturaMapa = window.innerHeight
+        - (header?.offsetHeight || 0)
+        - (filtros?.offsetHeight || 0)
+        - (footer?.offsetHeight || 0)
+        - 30;
+
+    mapDiv.style.height = `${alturaMapa}px`;
+
+    if (map) {
+        map.invalidateSize();
+    }
+}
+
+window.addEventListener('resize', ajustarAlturaMapa);
+
 document.addEventListener("DOMContentLoaded", () => {
-    const map = L.map('map').setView([-23.55, -46.63], 12);
+    ajustarAlturaMapa();
+
+    // Inicializa mapa
+    map = L.map('map').setView([-23.55, -46.63], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
     const servicos = <?= $json_servicos ?>;
@@ -129,76 +182,56 @@ document.addEventListener("DOMContentLoaded", () => {
         L.marker([s.latitude, s.longitude]).addTo(map).bindPopup(popup);
     });
 
-    window.localizarUsuario = function() {
-        if (!navigator.geolocation) {
-            alert("Navegador não suporta geolocalização.");
-            return;
-        }
-
-        navigator.geolocation.getCurrentPosition(pos => {
-            const lat = pos.coords.latitude;
-            const lng = pos.coords.longitude;
-
-            L.marker([lat, lng], {
-                icon: L.icon({
-                    iconUrl: 'images/user-location.png',
-                    iconSize: [32, 32],
-                    iconAnchor: [16, 32]
-                })
-            }).addTo(map).bindPopup("📍 Você está aqui").openPopup();
-
-            map.setView([lat, lng], 14);
-
-            fetch(`ajax/proximos.php?lat=${lat}&lng=${lng}`)
-                .then(res => res.json())
-                .then(data => {
-                    data.forEach(s => {
-                        if (!s.latitude || !s.longitude) return;
-
-                        const popup = `
-                            <strong>${s.nome_servico}</strong><br>
-                            ${s.endereco}, ${s.bairro}<br>
-                            <i class="fa fa-layer-group"></i> ${s.tipo}<br>
-                            <a href="detalhes.php?id=${s.id}&lang=<?= $lang ?>">ℹ️ <?= htmlspecialchars($t['detalhes']) ?></a>
-                        `;
-
-                        L.marker([s.latitude, s.longitude]).addTo(map).bindPopup(popup);
-                    });
-
-                    if (data.length === 0) {
-                        alert("Nenhum serviço encontrado em até 10km.");
-                    }
-                })
-                .catch(() => alert("Erro ao buscar serviços próximos."));
-        }, () => {
-            alert("Erro ao obter sua localização.");
-        });
-    };
+    // Remove spinner de carregamento
+    const loader = document.getElementById('map-loader');
+    if (loader) loader.remove();
 });
-</script>
-    
-<script>
-function ajustarAlturaMapa() {
-    const header = document.querySelector('header');
-    const filtros = document.querySelector('.filtros');
-    const footer = document.querySelector('footer');
-    const mapDiv = document.getElementById('map');
 
-    if (!mapDiv) return;
+function localizarUsuario() {
+    if (!navigator.geolocation) {
+        alert("Navegador não suporta geolocalização.");
+        return;
+    }
 
-    const headerHeight = header?.offsetHeight || 0;
-    const filtrosHeight = filtros?.offsetHeight || 0;
-    const footerHeight = footer?.offsetHeight || 0;
+    navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
 
-    const alturaTotal = window.innerHeight;
-    const alturaMapa = alturaTotal - (headerHeight + filtrosHeight + footerHeight + 30); // margem de segurança
+        L.marker([lat, lng], {
+            icon: L.icon({
+                iconUrl: 'images/user-location.png',
+                iconSize: [32, 32],
+                iconAnchor: [16, 32]
+            })
+        }).addTo(map).bindPopup("📍 Você está aqui").openPopup();
 
-    mapDiv.style.height = `${alturaMapa}px`;
+        map.setView([lat, lng], 14);
+
+        fetch(`ajax/proximos.php?lat=${lat}&lng=${lng}`)
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(s => {
+                    if (!s.latitude || !s.longitude) return;
+
+                    const popup = `
+                        <strong>${s.nome_servico}</strong><br>
+                        ${s.endereco}, ${s.bairro}<br>
+                        <i class="fa fa-layer-group"></i> ${s.tipo}<br>
+                        <a href="detalhes.php?id=${s.id}&lang=<?= $lang ?>">ℹ️ <?= htmlspecialchars($t['detalhes']) ?></a>
+                    `;
+
+                    L.marker([s.latitude, s.longitude]).addTo(map).bindPopup(popup);
+                });
+
+                if (data.length === 0) {
+                    alert("Nenhum serviço encontrado em até 10km.");
+                }
+            })
+            .catch(() => alert("Erro ao buscar serviços próximos."));
+    }, () => {
+        alert("Erro ao obter sua localização.");
+    });
 }
-
-// Executa ao carregar a página e ao redimensionar a janela
-window.addEventListener('resize', ajustarAlturaMapa);
-document.addEventListener('DOMContentLoaded', ajustarAlturaMapa);
 </script>
 
 </body>
