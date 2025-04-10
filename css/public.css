@@ -1,18 +1,21 @@
+/* === Reset & Base === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    margin: 0;
     color: #333;
+    line-height: 1.5;
 }
 
-#map {
-    height: 100%;
-    min-height: 500px;
-}
-
+/* === Cabeçalho === */
 header {
-    background: #007bff;
-    color: white;
+    background-color: #007bff;
+    color: #fff;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
@@ -20,10 +23,19 @@ header {
     flex-wrap: wrap;
 }
 
-header img {
-    height: 50px;
+.logo {
+    height: 60px;
 }
 
+.flags img,
+.flag-icon {
+    width: 24px;
+    height: 24px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* === Navegação (opcional) === */
 nav.menu a {
     color: white;
     text-decoration: none;
@@ -35,34 +47,42 @@ nav.menu a:hover {
     text-decoration: underline;
 }
 
-.flag-icon {
-    height: 22px;
-    margin-left: 10px;
-}
-
+/* === Container Central === */
 .container {
     max-width: 960px;
     margin: auto;
     padding: 20px;
 }
 
-footer {
-    background: #007bff;
-    color: white;
-    text-align: center;
+/* === Filtros === */
+.filtros {
     padding: 15px;
+    background-color: #f1f1f1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
 
-.btn {
-    background: #28a745;
+.filtros select,
+.filtros input[type="text"],
+.filtros button {
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.filtros button {
+    background-color: #28a745;
     color: white;
-    text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    display: inline-block;
-    margin: 5px;
+    border: none;
+    cursor: pointer;
 }
 
-.btn:hover {
-    background: #218838;
+.filtros button:hover {
+    background-color: #218838;
 }
+
+/
