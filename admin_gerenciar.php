@@ -15,6 +15,9 @@ if (isset($_GET['excluir'])) {
 }
 
 $servicos = $pdo->query("SELECT * FROM servicos ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
+
+include 'admin_menu.php';
+
 ?>
 
 <!DOCTYPE html>
