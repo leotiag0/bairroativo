@@ -1,47 +1,53 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include 'lang.php';
 require 'conexao.php';
 
 // Filtros únicos
 $bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT NULL ORDER BY bairro")->fetchAll(PDO::FETCH_COLUMN);
-$tipos   = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
-$categorias = $pdo->query("
-    SELECT c.id, c.nome 
-    FROM categorias c 
-    ORDER BY nome
-")->fetchAll(PDO::FETCH_ASSOC);
+$tipos = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
+$categorias = $pdo->query("SELECT c.id, c.nome FROM categorias c ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 
 // Condições dinâmicas
 $where = [];
 $params = [];
+$join_categoria = '';
 
 if (!empty($_GET['q'])) {
-    $where[] = "(nome_servico LIKE :q OR tipo LIKE :q OR bairro LIKE :q OR cidade LIKE :q)";
+    $where[] = "(s.nome_servico LIKE :q OR s.tipo LIKE :q OR s.bairro LIKE :q OR s.cidade LIKE :q)";
     $params[':q'] = '%' . $_GET['q'] . '%';
 }
 if (!empty($_GET['bairro'])) {
-    $where[] = "bairro = :bairro";
+    $where[] = "s.bairro = :bairro";
     $params[':bairro'] = $_GET['bairro'];
 }
 if (!empty($_GET['tipo'])) {
-    $where[] = "tipo = :tipo";
+    $where[] = "s.tipo = :tipo";
     $params[':tipo'] = $_GET['tipo'];
 }
 if (!empty($_GET['categoria'])) {
-    $where[] = "id IN (
-        SELECT servico_id FROM servico_categoria WHERE categoria_id = :categoria
-    )";
+    $join_categoria = "INNER JOIN servico_categoria sc ON sc.servico_id = s.id";
+    $where[] = "sc.categoria_id = :categoria";
     $params[':categoria'] = $_GET['categoria'];
 }
 
 // Consulta
-$sql = "SELECT * FROM servicos";
+$sql = "SELECT s.* FROM servicos s $join_categoria";
 if ($where) {
     $sql .= " WHERE " . implode(" AND ", $where);
 }
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// JSON seguro
+$json_servicos = json_encode($servicos, JSON_UNESCAPED_UNICODE);
+if ($json_servicos === false) {
+    $json_servicos = '[]';
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?= $lang ?>">
@@ -49,11 +55,11 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title><?= $t['titulo'] ?> | Bairro Ativo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" type="image/png" href="images/logo.png">
@@ -164,7 +170,8 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 const map = L.map('map').setView([-23.55, -46.63], 12);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-const servicos = <?= json_encode($servicos, JSON_UNESCAPED_UNICODE); ?>;
+// Carregar serviços atuais
+const servicos = <?= $json_servicos ?>;
 
 servicos.forEach(s => {
     if (!s.latitude || !s.longitude) return;
@@ -198,6 +205,28 @@ function localizarUsuario() {
         }).addTo(map).bindPopup("📍 Você está aqui").openPopup();
 
         map.setView([lat, lng], 14);
+
+        fetch(`ajax/proximos.php?lat=${lat}&lng=${lng}`)
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(s => {
+                    if (!s.latitude || !s.longitude) return;
+
+                    const popup = `
+                        <strong>${s.nome_servico}</strong><br>
+                        ${s.endereco}, ${s.bairro}<br>
+                        <i class="fa fa-layer-group"></i> ${s.tipo}<br>
+                        <a href="detalhes.php?id=${s.id}&lang=<?= $lang ?>">ℹ️ <?= $t['detalhes'] ?></a>
+                    `;
+
+                    L.marker([s.latitude, s.longitude]).addTo(map).bindPopup(popup);
+                });
+
+                if (data.length === 0) {
+                    alert("Nenhum serviço encontrado em até 10km.");
+                }
+            })
+            .catch(() => alert("Erro ao buscar serviços próximos."));
     }, () => {
         alert("Erro ao obter sua localização.");
     });
