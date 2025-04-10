@@ -35,7 +35,13 @@ include 'lang.php';
            ($lang === 'en' ? 'Welcome to the community service platform.' :
            'Bem-vindo à plataforma de serviços comunitários.') ?>
     </p>
+
     <img src="images/como_funciona.jpg" alt="Como funciona" style="max-width:100%; margin-top:20px;">
+
+    <div style="margin-top: 30px;">
+        <a class="btn" href="mapa.php?lang=<?= $lang ?>">🗺️ Ver Mapa</a>
+        <a class="btn" href="admin_login.php">🔐 Acesso Administrativo</a>
+    </div>
 </div>
 
 <footer>
