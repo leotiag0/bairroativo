@@ -1,4 +1,4 @@
-/* === Reset & Base === */
+/* Reset & base layout */
 * {
     margin: 0;
     padding: 0;
@@ -7,16 +7,14 @@
 
 html, body {
     height: 100%;
-}
-
-body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     color: #333;
-    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
 }
 
-/* === Cabeçalho === */
+/* Header */
 header {
     background-color: #007bff;
     color: #fff;
@@ -31,34 +29,21 @@ header {
     height: 60px;
 }
 
-.flags img,
-.flag-icon {
+.flags img {
     width: 24px;
     height: 24px;
     margin-left: 10px;
     cursor: pointer;
 }
 
-/* === Navegação (se usar nav.menu) === */
-nav.menu a {
-    color: white;
-    text-decoration: none;
-    margin-left: 10px;
-    font-weight: bold;
+/* Main layout */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-nav.menu a:hover {
-    text-decoration: underline;
-}
-
-/* === Container Central === */
-.container {
-    max-width: 960px;
-    margin: auto;
-    padding: 20px;
-}
-
-/* === Filtros === */
+/* Filtros */
 .filtros {
     padding: 15px;
     background-color: #f1f1f1;
@@ -78,48 +63,38 @@ nav.menu a:hover {
     outline: none;
 }
 
-.filtros button {
+.filtros button,
+.btn {
     background-color: #28a745;
     color: white;
     border: none;
     cursor: pointer;
-}
-
-.filtros button:hover {
-    background-color: #218838;
-}
-
-/* === Botões genéricos reutilizáveis === */
-.btn {
-    background-color: #28a745;
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    display: inline-block;
-    margin: 5px;
     transition: background-color 0.3s ease;
 }
 
+.filtros button:hover,
 .btn:hover {
     background-color: #218838;
 }
 
-/* === Mapa === */
+/* Mapa */
 #map {
-    height: calc(100vh - 200px);
-    min-height: 500px;
+    flex: 1;
+    width: 100%;
+    min-height: 400px;
+    max-height: 100%;
 }
 
-/* === Rodapé === */
+/* Rodapé */
 footer {
     background-color: #007bff;
-    color: #fff;
+    color: white;
     text-align: center;
     padding: 15px;
+    font-size: 14px;
 }
 
-/* === Responsivo === */
+/* Responsividade */
 @media (max-width: 768px) {
     .filtros {
         flex-direction: column;
