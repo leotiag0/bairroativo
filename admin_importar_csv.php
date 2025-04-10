@@ -7,102 +7,101 @@ if (!isset($_SESSION['admin'])) {
 
 require 'conexao.php';
 
+$apiKey = '2923ef94f739425b96ec104bd6613eb5';
 $msg = '';
 $error = '';
 
+function getCoordinates($endereco, $apiKey, $pdo) {
+    $check = $pdo->prepare("SELECT latitude, longitude FROM geocache WHERE endereco = ?");
+    $check->execute([$endereco]);
+    $cache = $check->fetch();
+    if ($cache) return $cache;
+
+    $url = 'https://api.opencagedata.com/geocode/v1/json?q=' . urlencode($endereco . ', São Paulo, SP') . '&key=' . $apiKey . '&language=pt&limit=1';
+    $resposta = @file_get_contents($url);
+    $dados = json_decode($resposta, true);
+
+    if (isset($dados['results'][0]['geometry'])) {
+        $lat = $dados['results'][0]['geometry']['lat'];
+        $lng = $dados['results'][0]['geometry']['lng'];
+
+        $pdo->prepare("INSERT INTO geocache (endereco, latitude, longitude) VALUES (?, ?, ?)")
+            ->execute([$endereco, $lat, $lng]);
+
+        return ['latitude' => $lat, 'longitude' => $lng];
+    }
+
+    return ['latitude' => null, 'longitude' => null];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
-    // Validate file
-    if ($_FILES['arquivo']['error'] !== UPLOAD_ERR_OK) {
-        $error = "Erro no upload do arquivo: " . $_FILES['arquivo']['error'];
-    } elseif ($_FILES['arquivo']['type'] !== 'text/csv') {
-        $error = "Por favor, envie um arquivo CSV válido";
-    } else {
-        $file = $_FILES['arquivo']['tmp_name'];
-        $importedCount = 0;
-        $skippedCount = 0;
+    $file = $_FILES['arquivo']['tmp_name'];
 
-        try {
-            $pdo->beginTransaction();
+    if (($handle = fopen($file, "r")) !== FALSE) {
+        fgetcsv($handle); // pula cabeçalho
 
-            if (($handle = fopen($file, "r")) !== FALSE) {
-                // Skip header
-                fgetcsv($handle); // Using comma delimiter (default)
-                
-                while (($data = fgetcsv($handle)) !== FALSE) {
-                    // Skip empty or invalid lines (expecting 14 columns)
-                    if (count($data) < 14 || empty($data[0]) || empty($data[1])) {
-                        $skippedCount++;
-                        continue;
-                    }
+        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            // Espera-se 10 colunas no CSV:
+            // nome_servico,endereco,bairro,tipo,descricao_pt,descricao_es,descricao_en,horario_inicio,horario_fim,categorias
+            if (count($data) < 10) continue;
 
-                    // Trim all values
-                    $data = array_map('trim', $data);
+            [
+                $nome_servico,
+                $endereco,
+                $bairro,
+                $tipo,
+                $descricao_pt,
+                $descricao_es,
+                $descricao_en,
+                $horario_inicio,
+                $horario_fim,
+                $categorias
+            ] = $data;
 
-                    // Extract data with validation
-                    [
-                        $nome_servico,
-                        $rua,
-                        $bairro,
-                        $cidade,
-                        $estado,
-                        $tipo,
-                        $descricao,
-                        $horario_inicio,
-                        $horario_fim,
-                        $latitude,
-                        $longitude,
-                        $agendamento_pt,
-                        $agendamento_es,
-                        $agendamento_en
-                    ] = $data;
+            // Valores fixos para cidade e estado
+            $cidade = "São Paulo";
+            $estado = "SP";
 
-                    // Validate coordinates
-                    if (!is_numeric($latitude) || !is_numeric($longitude)) {
-                        $skippedCount++;
-                        continue;
-                    }
+            $coords = getCoordinates($endereco, $apiKey, $pdo);
+            $lat = $coords['latitude'];
+            $lng = $coords['longitude'];
 
-                    // Insert service
-                    $stmt = $pdo->prepare("INSERT INTO servicos (
-                        nome_servico, endereco, bairro, cidade, estado, tipo,
-                        descricao, horario_inicio, horario_fim,
-                        latitude, longitude,
-                        agendamento_pt, agendamento_es, agendamento_en
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO servicos (
+                nome_servico, endereco, bairro, cidade, estado, tipo,
+                descricao_pt, descricao_es, descricao_en,
+                horario_inicio, horario_fim,
+                latitude, longitude
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-                    $stmt->execute([
-                        $nome_servico, 
-                        $rua, 
-                        $bairro, 
-                        $cidade, 
-                        $estado, 
-                        $tipo,
-                        $descricao, 
-                        $horario_inicio, 
-                        $horario_fim,
-                        $latitude, 
-                        $longitude,
-                        $agendamento_pt,
-                        $agendamento_es,
-                        $agendamento_en
-                    ]);
+            $stmt->execute([
+                $nome_servico, 
+                $endereco, 
+                $bairro, 
+                $cidade, 
+                $estado, 
+                $tipo,
+                $descricao_pt, 
+                $descricao_es, 
+                $descricao_en,
+                $horario_inicio, 
+                $horario_fim,
+                $lat, 
+                $lng
+            ]);
 
-                    $importedCount++;
-                }
+            $id = $pdo->lastInsertId();
 
-                fclose($handle);
-                $pdo->commit();
-                
-                $msg = "✅ Importação concluída com sucesso. $importedCount registros importados";
-                if ($skippedCount > 0) {
-                    $msg .= ", $skippedCount registros ignorados (dados inválidos)";
+            foreach (explode(",", $categorias) as $catId) {
+                $catId = (int) trim($catId);
+                if ($catId > 0) {
+                    $pdo->prepare("INSERT INTO servico_categoria (servico_id, categoria_id) VALUES (?, ?)")
+                        ->execute([$id, $catId]);
                 }
             }
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            $error = "Erro durante a importação: " . $e->getMessage();
-            error_log("CSV Import Error: " . $e->getMessage());
         }
+
+        fclose($handle);
+        $msg = "✅ Importação concluída com sucesso.";
     }
 }
 ?>
@@ -125,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
         }
         header img { height: 50px; }
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 40px auto;
             background: white;
             padding: 30px;
@@ -159,18 +158,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
             font-weight: bold;
             margin-bottom: 15px;
             color: green;
-            padding: 10px;
-            background: #e8f5e9;
-            border-radius: 4px;
         }
         .error {
             text-align: center;
             font-weight: bold;
             margin-bottom: 15px;
             color: #dc3545;
-            padding: 10px;
-            background: #ffebee;
-            border-radius: 4px;
         }
         .back-link {
             margin-top: 20px;
@@ -180,8 +173,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
             text-decoration: none;
             color: #007bff;
             margin: 0 10px;
-            display: inline-block;
-            padding: 8px 15px;
         }
         .back-link a:hover {
             text-decoration: underline;
@@ -196,34 +187,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
         .file-requirements {
             background: #f8f9fa;
             border-left: 4px solid #007bff;
-            padding: 15px;
-            margin-bottom: 25px;
-            font-size: 14px;
-            border-radius: 4px;
-        }
-        .file-requirements h3 {
-            margin-top: 0;
-            color: #007bff;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 8px;
-        }
-        .file-requirements ul {
-            padding-left: 20px;
-            columns: 2;
-            column-gap: 30px;
-        }
-        .file-requirements li {
-            margin-bottom: 8px;
-            break-inside: avoid;
-        }
-        @media (max-width: 600px) {
-            .file-requirements ul {
-                columns: 1;
-            }
-            .container {
-                padding: 20px;
-                margin: 20px;
-            }
+            padding: 10px 15px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -236,35 +201,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
 
 <div class="container">
     <h2><i class="fas fa-file-import"></i> Importar CSV</h2>
-    
-    <?php if ($msg): ?>
-        <div class="msg"><?= htmlspecialchars($msg) ?></div>
-    <?php endif; ?>
-    
-    <?php if ($error): ?>
-        <div class="error"><?= htmlspecialchars($error) ?></div>
-    <?php endif; ?>
+    <?php if ($msg): ?><div class="msg"><?= htmlspecialchars($msg) ?></div><?php endif; ?>
+    <?php if ($error): ?><div class="error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
     
     <div class="file-requirements">
-        <h3>Estrutura do arquivo CSV (separado por vírgulas):</h3>
-        <ul>
-            <li><strong>nome_servico</strong>: Nome do serviço</li>
-            <li><strong>rua</strong>: Endereço completo</li>
-            <li><strong>bairro</strong>: Bairro</li>
-            <li><strong>cidade</strong>: Cidade</li>
-            <li><strong>estado</strong>: Estado (sigla)</li>
-            <li><strong>tipo</strong>: Tipo de serviço</li>
-            <li><strong>descricao</strong>: Descrição em português</li>
-            <li><strong>horario_inicio</strong>: Horário de abertura (HH:MM)</li>
-            <li><strong>horario_fim</strong>: Horário de fechamento (HH:MM)</li>
-            <li><strong>latitude</strong>: Coordenada geográfica (ex: -23.5505)</li>
-            <li><strong>longitude</strong>: Coordenada geográfica (ex: -46.6333)</li>
-            <li><strong>agendamento_pt</strong>: Info agendamento (PT)</li>
-            <li><strong>agendamento_es</strong>: Info agendamento (ES)</li>
-            <li><strong>agendamento_en</strong>: Info agendamento (EN)</li>
-        </ul>
-        <p style="margin-top: 15px; font-style: italic;">Dica: Use aspas para campos que contenham vírgulas (ex: "Serviço, com vírgula no nome")</p>
-        <p style="margin-top: 10px;"><a href="download_modelo.php"><i class="fas fa-download"></i> Baixar modelo CSV</a></p>
+        <h3>Estrutura do arquivo CSV:</h3>
+        <p>Formato esperado (separado por vírgulas):</p>
+        <ol>
+            <li>nome_servico</li>
+            <li>endereco (rua)</li>
+            <li>bairro</li>
+            <li>tipo</li>
+            <li>descricao_pt</li>
+            <li>descricao_es</li>
+            <li>descricao_en</li>
+            <li>horario_inicio</li>
+            <li>horario_fim</li>
+            <li>categorias (IDs separados por vírgula)</li>
+        </ol>
+        <p><strong>Observação:</strong> Todos os serviços serão importados com cidade="São Paulo" e estado="SP"</p>
     </div>
     
     <form method="POST" enctype="multipart/form-data">
@@ -273,8 +228,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     </form>
 
     <div class="back-link">
-        <a href="download_modelo.php"><i class="fas fa-file-csv"></i> Baixar modelo</a>
-        <a href="admin_gerenciar.php"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <a href="download_modelo.php"><i class="fas fa-file-csv"></i> Baixar modelo CSV</a>
+        <a href="admin_gerenciar.php"><i class="fas fa-arrow-left"></i> Voltar para gerenciamento</a>
     </div>
 </div>
 
