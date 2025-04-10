@@ -89,37 +89,38 @@ if ($json_servicos === false) $json_servicos = '[]';
 </header>
 
 <main>
-    <div class="filtros">
-        <form method="GET" style="display: flex; flex-wrap: wrap; gap: 10px;">
-            <input type="hidden" name="lang" value="<?= $lang ?>">
-            <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
+    <div class="filtros filtros-flex">
+    <form method="GET" class="filtros-form">
+        <input type="hidden" name="lang" value="<?= $lang ?>">
+        <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
 
-            <select name="bairro">
-                <option value="">Bairro</option>
-                <?php foreach ($bairros as $bairro): ?>
-                    <option value="<?= $bairro ?>" <?= ($_GET['bairro'] ?? '') === $bairro ? 'selected' : '' ?>><?= $bairro ?></option>
-                <?php endforeach; ?>
-            </select>
+        <select name="bairro">
+            <option value="">Bairro</option>
+            <?php foreach ($bairros as $bairro): ?>
+                <option value="<?= $bairro ?>" <?= ($_GET['bairro'] ?? '') === $bairro ? 'selected' : '' ?>><?= $bairro ?></option>
+            <?php endforeach; ?>
+        </select>
 
-            <select name="tipo">
-                <option value="">Tipo</option>
-                <?php foreach ($tipos as $tipo): ?>
-                    <option value="<?= $tipo ?>" <?= ($_GET['tipo'] ?? '') === $tipo ? 'selected' : '' ?>><?= $tipo ?></option>
-                <?php endforeach; ?>
-            </select>
+        <select name="tipo">
+            <option value="">Tipo</option>
+            <?php foreach ($tipos as $tipo): ?>
+                <option value="<?= $tipo ?>" <?= ($_GET['tipo'] ?? '') === $tipo ? 'selected' : '' ?>><?= $tipo ?></option>
+            <?php endforeach; ?>
+        </select>
 
-            <select name="categoria">
-                <option value="">Categoria</option>
-                <?php foreach ($categorias as $c): ?>
-                    <option value="<?= $c['id'] ?>" <?= ($_GET['categoria'] ?? '') == $c['id'] ? 'selected' : '' ?>><?= $c['nome'] ?></option>
-                <?php endforeach; ?>
-            </select>
+        <select name="categoria">
+            <option value="">Categoria</option>
+            <?php foreach ($categorias as $c): ?>
+                <option value="<?= $c['id'] ?>" <?= ($_GET['categoria'] ?? '') == $c['id'] ? 'selected' : '' ?>><?= $c['nome'] ?></option>
+            <?php endforeach; ?>
+        </select>
 
-            <button type="submit" class="btn">🔍 <?= $t['buscar'] ?></button>
-        </form>
+        <button type="submit" class="btn">🔍 <?= $t['buscar'] ?></button>
+    </form>
 
-        <button onclick="localizarUsuario()" class="btn">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
-    </div>
+    <button onclick="localizarUsuario()" class="btn btn-localizacao">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
+</div>
+
 
     <div id="map">
         <div id="map-loader">
