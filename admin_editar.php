@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
+include 'admin_menu.php';
+
 $dados = $pdo->prepare("SELECT * FROM servicos WHERE id=?");
 $dados->execute([$id]);
 $s = $dados->fetch();
