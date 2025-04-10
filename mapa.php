@@ -102,7 +102,7 @@ if ($json_servicos === false) $json_servicos = '[]';
         <button onclick="localizarUsuario()" class="btn">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
     </div>
 
-    <div id="map" style="height: 500px;"></div>
+    <div id="map"></div>
 </main>
 
 <footer>
@@ -175,6 +175,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 });
+</script>
+    
+<script>
+function ajustarAlturaMapa() {
+    const header = document.querySelector('header');
+    const filtros = document.querySelector('.filtros');
+    const footer = document.querySelector('footer');
+    const mapDiv = document.getElementById('map');
+
+    if (!mapDiv) return;
+
+    const headerHeight = header?.offsetHeight || 0;
+    const filtrosHeight = filtros?.offsetHeight || 0;
+    const footerHeight = footer?.offsetHeight || 0;
+
+    const alturaTotal = window.innerHeight;
+    const alturaMapa = alturaTotal - (headerHeight + filtrosHeight + footerHeight + 30); // margem de segurança
+
+    mapDiv.style.height = `${alturaMapa}px`;
+}
+
+// Executa ao carregar a página e ao redimensionar a janela
+window.addEventListener('resize', ajustarAlturaMapa);
+document.addEventListener('DOMContentLoaded', ajustarAlturaMapa);
 </script>
 
 </body>
