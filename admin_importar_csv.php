@@ -7,7 +7,7 @@ if (!isset($_SESSION['admin'])) {
 
 require 'conexao.php';
 
-$apiKey = 'SUA_CHAVE_OPENCAGE'; // Substitua pela sua chave de API
+$apiKey = '2923ef94f739425b96ec104bd6613eb5'; // Substitua pela sua chave de API
 $msg = '';
 
 function getCoordinates($endereco, $apiKey, $pdo) {
