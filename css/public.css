@@ -9,7 +9,6 @@ html, body {
     height: 100%;
 }
 
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -40,7 +39,7 @@ header {
     cursor: pointer;
 }
 
-/* === Navegação (opcional) === */
+/* === Navegação (se usar nav.menu) === */
 nav.menu a {
     color: white;
     text-decoration: none;
@@ -90,4 +89,40 @@ nav.menu a:hover {
     background-color: #218838;
 }
 
-/
+/* === Botões genéricos reutilizáveis === */
+.btn {
+    background-color: #28a745;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    display: inline-block;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+/* === Mapa === */
+#map {
+    height: calc(100vh - 200px);
+    min-height: 500px;
+}
+
+/* === Rodapé === */
+footer {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+}
+
+/* === Responsivo === */
+@media (max-width: 768px) {
+    .filtros {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
