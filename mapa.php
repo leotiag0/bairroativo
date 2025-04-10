@@ -2,66 +2,64 @@
 include 'lang.php';
 require 'conexao.php';
 
-// Filtros
-$bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT NULL ORDER BY bairro")->fetchAll(PDO::FETCH_COLUMN);
-$tipos   = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
-
-// Condições de busca
-$where = [];
-$params = [];
-
-if (!empty($_GET['q'])) {
-    $where[] = "(nome_servico LIKE :q OR tipo LIKE :q OR bairro LIKE :q OR cidade LIKE :q)";
-    $params[':q'] = '%' . $_GET['q'] . '%';
-}
-if (!empty($_GET['bairro'])) {
-    $where[] = "bairro = :bairro";
-    $params[':bairro'] = $_GET['bairro'];
-}
-if (!empty($_GET['tipo'])) {
-    $where[] = "tipo = :tipo";
-    $params[':tipo'] = $_GET['tipo'];
-}
-
-$sql = "SELECT * FROM servicos";
-if ($where) {
-    $sql .= " WHERE " . implode(" AND ", $where);
-}
-$stmt = $pdo->prepare($sql);
-$stmt->execute($params);
-$servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Consulta de serviços (simples, pode ser filtrado depois)
+$servicos = $pdo->query("SELECT * FROM servicos")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="<?= $lang ?>">
 <head>
     <meta charset="UTF-8">
-    <title>Mapa de Serviços</title>
-    <link rel="stylesheet" href="css/public.css">
+    <title><?= $t['titulo'] ?></title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <style>
-        html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
-        #map { flex: 1; min-height: 500px; }
+        html, body {
+            margin: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #map {
+            flex: 1;
+            height: 100%;
+            min-height: 500px;
+        }
+
         .filtros {
-            padding: 15px;
+            padding: 10px;
             background: #f9f9f9;
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
             gap: 10px;
         }
-        .filtros select, .filtros button {
+
+        footer {
+            background: #007bff;
+            color: white;
+            text-align: center;
             padding: 10px;
-            font-size: 14px;
-            border-radius: 5px;
         }
-        .filtros button {
+
+        .btn {
             background: #28a745;
             color: white;
             border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
             cursor: pointer;
         }
-        .filtros button:hover {
+
+        .btn:hover {
             background: #218838;
         }
     </style>
@@ -69,37 +67,18 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <header>
+    <div><strong><?= $t['titulo'] ?></strong></div>
     <div>
-        <img src="images/logo.png" alt="Logo">
+        <button class="btn" onclick="localizarUsuario()">📍 Próximo de mim</button>
     </div>
-    <form method="GET" action="mapa.php" style="display:flex; gap:10px;">
-        <input type="hidden" name="lang" value="<?= $lang ?>">
-        <input type="text" name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" placeholder="<?= $t['buscar'] ?>..." style="padding:8px; border-radius:5px; border:none;">
-        <button type="submit"><?= $t['buscar'] ?></button>
-    </form>
 </header>
 
 <div class="filtros">
-    <form method="GET" action="mapa.php" style="display:flex; flex-wrap:wrap; gap:10px;">
+    <form method="GET" action="mapa.php">
         <input type="hidden" name="lang" value="<?= $lang ?>">
-        <select name="bairro">
-            <option value="">Bairro</option>
-            <?php foreach ($bairros as $b): ?>
-                <option value="<?= $b ?>" <?= ($_GET['bairro'] ?? '') === $b ? 'selected' : '' ?>><?= $b ?></option>
-            <?php endforeach; ?>
-        </select>
-
-        <select name="tipo">
-            <option value="">Tipo</option>
-            <?php foreach ($tipos as $t): ?>
-                <option value="<?= $t ?>" <?= ($_GET['tipo'] ?? '') === $t ? 'selected' : '' ?>><?= $t ?></option>
-            <?php endforeach; ?>
-        </select>
-
-        <button type="submit">Filtrar</button>
+        <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." />
+        <button type="submit" class="btn"><?= $t['buscar'] ?></button>
     </form>
-
-    <button onclick="localizarUsuario()">📍 Próximo de mim</button>
 </div>
 
 <div id="map"></div>
@@ -108,6 +87,7 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     &copy; <?= date('Y') ?> Sistema Bairro Ativo. Todos os direitos reservados.
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 <script>
     const map = L.map('map').setView([-23.55, -46.63], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
