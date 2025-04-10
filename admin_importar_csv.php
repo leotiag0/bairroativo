@@ -7,7 +7,7 @@ if (!isset($_SESSION['admin'])) {
 
 require 'conexao.php';
 
-$apiKey = '2923ef94f739425b96ec104bd6613eb5'; // Substitua pela sua chave de API
+$apiKey = '2923ef94f739425b96ec104bd6613eb5';
 $msg = '';
 
 function getCoordinates($endereco, $apiKey, $pdo) {
@@ -17,7 +17,7 @@ function getCoordinates($endereco, $apiKey, $pdo) {
     if ($cache) return $cache;
 
     $url = 'https://api.opencagedata.com/geocode/v1/json?q=' . urlencode($endereco) . '&key=' . $apiKey . '&language=pt&limit=1';
-    $resposta = file_get_contents($url);
+    $resposta = @file_get_contents($url);
     $dados = json_decode($resposta, true);
 
     if (isset($dados['results'][0]['geometry'])) {
@@ -29,7 +29,8 @@ function getCoordinates($endereco, $apiKey, $pdo) {
 
         return ['latitude' => $lat, 'longitude' => $lng];
     }
-    return null;
+
+    return ['latitude' => null, 'longitude' => null];
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
@@ -39,21 +40,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
         fgetcsv($handle); // pula cabeçalho
 
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-            [$nome, $endereco, $bairro, $tipo, $descricao, $inicio, $fim, $categorias] = $data;
+            // Espera-se 10 colunas no CSV agora:
+            // nome,endereco,bairro,tipo,descricao_pt,descricao_es,descricao_en,inicio,fim,categorias
+            if (count($data) < 10) continue;
+
+            [
+                $nome,
+                $endereco,
+                $bairro,
+                $tipo,
+                $descricao_pt,
+                $descricao_es,
+                $descricao_en,
+                $inicio,
+                $fim,
+                $categorias
+            ] = $data;
 
             $coords = getCoordinates($endereco, $apiKey, $pdo);
-            $lat = $coords['latitude'] ?? null;
-            $lng = $coords['longitude'] ?? null;
+            $lat = $coords['latitude'];
+            $lng = $coords['longitude'];
 
-            $stmt = $pdo->prepare("INSERT INTO servicos (nome_servico, endereco, bairro, tipo, descricao, horario_inicio, horario_fim, latitude, longitude)
-                                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$nome, $endereco, $bairro, $tipo, $descricao, $inicio, $fim, $lat, $lng]);
+            $stmt = $pdo->prepare("INSERT INTO servicos (
+                nome_servico, endereco, bairro, tipo,
+                descricao_pt, descricao_es, descricao_en,
+                horario_inicio, horario_fim,
+                latitude, longitude
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+            $stmt->execute([
+                $nome, $endereco, $bairro, $tipo,
+                $descricao_pt, $descricao_es, $descricao_en,
+                $inicio, $fim,
+                $lat, $lng
+            ]);
 
             $id = $pdo->lastInsertId();
 
             foreach (explode(",", $categorias) as $catId) {
-                $pdo->prepare("INSERT INTO servico_categoria (servico_id, categoria_id) VALUES (?, ?)")
-                    ->execute([$id, (int)$catId]);
+                $catId = (int) trim($catId);
+                if ($catId > 0) {
+                    $pdo->prepare("INSERT INTO servico_categoria (servico_id, categoria_id) VALUES (?, ?)")
+                        ->execute([$id, $catId]);
+                }
             }
         }
 
@@ -62,7 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -147,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     </form>
 
     <div class="back-link">
+        <a href="download_modelo.php"><i class="fas fa-file-csv"></i> Baixar modelo CSV</a><br><br>
         <a href="admin_gerenciar.php"><i class="fas fa-arrow-left"></i> Voltar para gerenciamento</a>
     </div>
 </div>
