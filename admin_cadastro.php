@@ -7,7 +7,7 @@ if (!isset($_SESSION['admin'])) {
 
 require 'conexao.php';
 
-$apiKey = 'SUA_CHAVE_OPENCAGE'; // Substitua pela sua chave
+$apiKey = '2923ef94f739425b96ec104bd6613eb5'; // Substitua pela sua chave
 
 function getCoordinates($endereco, $apiKey, $pdo) {
     $check = $pdo->prepare("SELECT latitude, longitude FROM geocache WHERE endereco = ?");
