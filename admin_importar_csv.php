@@ -34,6 +34,8 @@ function getCoordinates($endereco, $apiKey, $pdo) {
     return null;
 }
 
+include 'admin_menu.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     $file = $_FILES['arquivo']['tmp_name'];
 
