@@ -2,17 +2,14 @@
 include 'lang.php';
 require 'conexao.php';
 
-// Categorias
-$categorias = $pdo->query("SELECT id, nome FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
-
-// Filtros únicos
+// Filtros
 $bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT NULL ORDER BY bairro")->fetchAll(PDO::FETCH_COLUMN);
 $tipos = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
+$categorias = $pdo->query("SELECT id, nome FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 
-// Filtros dinâmicos
+// Filtros recebidos
 $where = [];
 $params = [];
-$join_categoria = '';
 $order = 's.nome_servico ASC';
 
 if (!empty($_GET['q'])) {
@@ -28,10 +25,10 @@ if (!empty($_GET['tipo'])) {
     $params[':tipo'] = $_GET['tipo'];
 }
 if (!empty($_GET['categoria'])) {
-    $join_categoria = "INNER JOIN servico_categoria sc ON sc.servico_id = s.id";
     $where[] = "sc.categoria_id = :categoria";
     $params[':categoria'] = $_GET['categoria'];
 }
+
 if (!empty($_GET['ordenar'])) {
     $ordem = $_GET['ordenar'];
     if (in_array($ordem, ['nome', 'tipo', 'bairro'])) {
@@ -40,9 +37,12 @@ if (!empty($_GET['ordenar'])) {
 }
 
 // Consulta
-$sql = "SELECT s.*,
-            (SELECT categoria_id FROM servico_categoria WHERE servico_id = s.id LIMIT 1) AS categoria_id
-        FROM servicos s $join_categoria";
+$sql = "
+    SELECT s.*, c.nome AS categoria_nome, c.id AS categoria_id
+    FROM servicos s
+    LEFT JOIN servico_categoria sc ON sc.servico_id = s.id
+    LEFT JOIN categorias c ON c.id = sc.categoria_id
+";
 if ($where) {
     $sql .= " WHERE " . implode(" AND ", $where);
 }
@@ -59,44 +59,6 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title><?= $t['titulo'] ?> - Lista</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/public.css">
-    <style>
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-        }
-
-        .card-content {
-            padding: 15px;
-            flex: 1;
-        }
-
-        .card-content h3 {
-            margin-bottom: 8px;
-            font-size: 18px;
-        }
-
-        .card-content p {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
 <body>
 
@@ -112,6 +74,7 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main class="container">
     <h2><?= $t['titulo'] ?> - Lista</h2>
 
+    <!-- Filtros -->
     <form method="GET" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
         <input type="hidden" name="lang" value="<?= $lang ?>">
         <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
@@ -146,23 +109,20 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button type="submit" class="btn">🔍 <?= $t['buscar'] ?></button>
     </form>
 
-    <?php if (empty($servicos)): ?>
+    <!-- Lista de resultados -->
+    <?php if (count($servicos) === 0): ?>
         <p>Nenhum serviço encontrado.</p>
     <?php else: ?>
-        <div class="card-grid">
+        <div style="display: flex; flex-direction: column; gap: 15px;">
             <?php foreach ($servicos as $s): ?>
-                <?php
-                    $catId = $s['categoria_id'] ?? 0;
-                    $imgPath = file_exists("images/categorias/{$catId}.jpg")
-                        ? "images/categorias/{$catId}.jpg"
-                        : "images/categorias/default.jpg";
-                ?>
-                <div class="card">
-                    <img src="<?= $imgPath ?>" alt="Imagem da categoria">
-                    <div class="card-content">
-                        <h3><?= htmlspecialchars($s['nome_servico']) ?></h3>
-                        <p><?= htmlspecialchars($s['tipo']) ?> | <?= htmlspecialchars($s['bairro']) ?></p>
-                        <a href="detalhes.php?id=<?= $s['id'] ?>&lang=<?= $lang ?>" class="btn">ℹ️ <?= $t['detalhes'] ?></a>
+                <div class="card-servico">
+                    <div class="thumb">
+                        <img src="images/categorias/<?= $s['categoria_id'] ?? '0' ?>.png" alt="<?= $s['categoria_nome'] ?? 'Categoria' ?>">
+                    </div>
+                    <div class="info">
+                        <strong><?= htmlspecialchars($s['nome_servico']) ?></strong><br>
+                        <span><?= htmlspecialchars($s['tipo']) ?> | <?= htmlspecialchars($s['bairro']) ?></span><br>
+                        <a href="detalhes.php?id=<?= $s['id'] ?>&lang=<?= $lang ?>" class="btn" style="margin-top: 10px;">ℹ️ <?= $t['detalhes'] ?></a>
                     </div>
                 </div>
             <?php endforeach; ?>
