@@ -18,13 +18,15 @@ $instrucao = $lang == 'es' ? $s['agendamento_es'] : ($lang == 'en' ? $s['agendam
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <style>
-        #map { height: 300px; margin-top: 15px; }
+        #map { height: 300px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <header>
-    <img src="images/logo.png" alt="Logo">
+    <div>
+        <img src="images/logo.png" alt="Logo">
+    </div>
     <nav class="menu">
         <a href="mapa.php?lang=<?= $lang ?>">← <?= $t['titulo'] ?></a>
     </nav>
@@ -32,8 +34,8 @@ $instrucao = $lang == 'es' ? $s['agendamento_es'] : ($lang == 'en' ? $s['agendam
 
 <div class="container">
     <h2><?= $s['nome_servico'] ?></h2>
-    <p><strong><?= $t['descricao'] ?></strong>: <?= $s['descricao'] ?></p>
-    <p><strong><?= $t['horario'] ?></strong>: <?= $s['horario_inicio'] ?> - <?= $s['horario_fim'] ?></p>
+    <p><strong><?= $t['descricao'] ?>:</strong> <?= $s['descricao'] ?></p>
+    <p><strong><?= $t['horario'] ?>:</strong> <?= $s['horario_inicio'] ?> - <?= $s['horario_fim'] ?></p>
     <p><strong><?= $t['como_agendar'] ?></strong><br><?= nl2br($instrucao) ?></p>
 
     <div id="map"></div>
@@ -45,7 +47,7 @@ $instrucao = $lang == 'es' ? $s['agendamento_es'] : ($lang == 'en' ? $s['agendam
 </div>
 
 <footer>
-    &copy; <?= date('Y') ?> Sistema Bairro Ativo. Todos os direitos reservados.
+    &copy; <?= date('Y') ?> Sistema Bairro Ativo
 </footer>
 
 <script>
@@ -62,7 +64,7 @@ $instrucao = $lang == 'es' ? $s['agendamento_es'] : ($lang == 'en' ? $s['agendam
             });
         } else {
             navigator.clipboard.writeText(window.location.href);
-            alert("Link copiado.");
+            alert("Link copiado!");
         }
     }
 </script>
