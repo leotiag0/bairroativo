@@ -89,8 +89,8 @@ if ($json_servicos === false) $json_servicos = '[]';
 </header>
 
 <main>
-    <div class="filtros filtros-flex">
-    <form method="GET" class="filtros-form">
+<div class="filtros">
+    <form method="GET" class="filtros-flex">
         <input type="hidden" name="lang" value="<?= $lang ?>">
         <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
 
@@ -116,10 +116,10 @@ if ($json_servicos === false) $json_servicos = '[]';
         </select>
 
         <button type="submit" class="btn">🔍 <?= $t['buscar'] ?></button>
+        <button type="button" onclick="localizarUsuario()" class="btn btn-localizacao">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
     </form>
-
-    <button onclick="localizarUsuario()" class="btn btn-localizacao">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
 </div>
+
 
 
     <div id="map">
