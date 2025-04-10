@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             map.setView([lat, lng], 14);
 
-            fetch(`ajax/mapa.php?lat=${lat}&lng=${lng}`)
+            fetch(`ajax/proximos.php?lat=${lat}&lng=${lng}`)
                 .then(res => res.json())
                 .then(data => {
                     data.forEach(s => {
