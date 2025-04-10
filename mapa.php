@@ -1,4 +1,3 @@
-@ -1,109 +1,154 @@
 <?php
 include 'lang.php';
 require 'conexao.php';
