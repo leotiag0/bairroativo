@@ -102,7 +102,7 @@ if ($json_servicos === false) $json_servicos = '[]';
         <button onclick="localizarUsuario()" class="btn">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
     </div>
 
-    <div id="map"></div>
+    <div id="map" style="height: 500px;"></div>
 </main>
 
 <footer>
