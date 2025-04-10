@@ -6,56 +6,57 @@ if (!isset($_SESSION['admin'])) {
 }
 
 require 'conexao.php';
-
-$apiKey = '2923ef94f739425b96ec104bd6613eb5'; // Substitua pela sua chave
+require 'config.php'; // aqui está sua $apiKey
 
 function getCoordinates($endereco, $apiKey, $pdo) {
     $check = $pdo->prepare("SELECT latitude, longitude FROM geocache WHERE endereco = ?");
     $check->execute([$endereco]);
     $cache = $check->fetch();
-
     if ($cache) return $cache;
 
     $url = "https://api.opencagedata.com/geocode/v1/json?q=" . urlencode($endereco) . "&key=$apiKey&language=pt&limit=1";
-    $resposta = file_get_contents($url);
-    $dados = json_decode($resposta, true);
+    $res = file_get_contents($url);
+    $dados = json_decode($res, true);
 
     if (isset($dados['results'][0]['geometry'])) {
         $lat = $dados['results'][0]['geometry']['lat'];
         $lng = $dados['results'][0]['geometry']['lng'];
-
-        $save = $pdo->prepare("INSERT INTO geocache (endereco, latitude, longitude) VALUES (?, ?, ?)");
-        $save->execute([$endereco, $lat, $lng]);
-
+        $pdo->prepare("INSERT INTO geocache (endereco, latitude, longitude) VALUES (?, ?, ?)")
+            ->execute([$endereco, $lat, $lng]);
         return ['latitude' => $lat, 'longitude' => $lng];
     }
-
     return null;
 }
 
-include 'admin_menu.php';
-
 $msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome     = $_POST['nome'];
-    $endereco = $_POST['endereco'];
-    $bairro   = $_POST['bairro'];
-    $tipo     = $_POST['tipo'];
+    // Coleta
+    $nome      = $_POST['nome'];
+    $rua       = $_POST['rua'];
+    $bairro    = $_POST['bairro'];
+    $cidade    = $_POST['cidade'];
+    $estado    = $_POST['estado'];
+    $tipo      = $_POST['tipo'];
     $descricao = $_POST['descricao'];
-    $inicio   = $_POST['horario_inicio'];
-    $fim      = $_POST['horario_fim'];
+    $inicio    = $_POST['horario_inicio'];
+    $fim       = $_POST['horario_fim'];
+    $pt        = $_POST['agendamento_pt'];
+    $es        = $_POST['agendamento_es'];
+    $en        = $_POST['agendamento_en'];
     $categorias = $_POST['categorias'] ?? [];
 
-    $coords = getCoordinates($endereco, $apiKey, $pdo);
+    // Geocodificação
+    $enderecoCompleto = "$rua, $bairro, $cidade, $estado";
+    $coords = getCoordinates($enderecoCompleto, $apiKey, $pdo);
     $lat = $coords['latitude'] ?? null;
     $lng = $coords['longitude'] ?? null;
 
-    $stmt = $pdo->prepare("INSERT INTO servicos (nome_servico, endereco, bairro, tipo, descricao, horario_inicio, horario_fim, latitude, longitude)
-                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$nome, $endereco, $bairro, $tipo, $descricao, $inicio, $fim, $lat, $lng]);
+    // Inserção
+    $stmt = $pdo->prepare("INSERT INTO servicos (nome_servico, rua, bairro, cidade, estado, tipo, descricao, horario_inicio, horario_fim, latitude, longitude, agendamento_pt, agendamento_es, agendamento_en)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$nome, $rua, $bairro, $cidade, $estado, $tipo, $descricao, $inicio, $fim, $lat, $lng, $pt, $es, $en]);
 
     $servico_id = $pdo->lastInsertId();
-
     if (!empty($categorias)) {
         $vincular = $pdo->prepare("INSERT INTO servico_categoria (servico_id, categoria_id) VALUES (?, ?)");
         foreach ($categorias as $cat_id) {
@@ -66,63 +67,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $msg = "✅ Serviço cadastrado com sucesso!";
 }
 
+// Carregar categorias
 $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <title>Cadastrar Serviço</title>
-    <style>
-        body { font-family: Arial; background: #f7f7f7; padding: 20px; }
-        form { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px #ccc; }
-        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 15px; }
-        button { background: #007bff; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-        .msg { text-align: center; font-weight: bold; color: green; margin-bottom: 20px; }
-    </style>
+    <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
+<?php include 'admin_header.php'; ?>
 
-<h2 style="text-align:center;">Cadastro de Serviço</h2>
+<div class="container">
+    <h2>Cadastro de Serviço</h2>
+    <?php if ($msg): ?><div class="msg"><?= $msg ?></div><?php endif; ?>
 
-<?php if ($msg): ?><div class="msg"><?= $msg ?></div><?php endif; ?>
+    <form method="POST">
+        <label>Nome do Serviço</label>
+        <input type="text" name="nome" required>
 
-<form method="POST">
-    <label>Nome do Serviço</label>
-    <input type="text" name="nome" required>
+        <label>Rua</label><input type="text" name="rua" required>
+        <label>Bairro</label><input type="text" name="bairro" required>
+        <label>Cidade</label><input type="text" name="cidade" required>
+        <label>Estado</label><input type="text" name="estado" required>
 
-    <label>Endereço</label>
-    <input type="text" name="endereco" required>
+        <label>Tipo</label>
+        <input type="text" name="tipo" required>
 
-    <label>Bairro</label>
-    <input type="text" name="bairro" required>
+        <label>Descrição</label>
+        <textarea name="descricao" required></textarea>
 
-    <label>Tipo</label>
-    <input type="text" name="tipo" required>
+        <label>Horário de Funcionamento</label>
+        <input type="time" name="horario_inicio" required> até
+        <input type="time" name="horario_fim" required>
 
-    <label>Descrição</label>
-    <textarea name="descricao" required></textarea>
+        <label>Instruções para Agendamento (Português)</label>
+        <textarea name="agendamento_pt" required></textarea>
 
-    <label>Horário de Funcionamento</label>
-    <input type="time" name="horario_inicio" required>
-    até
-    <input type="time" name="horario_fim" required>
+        <label>Instrucciones de Agendamiento (Español)</label>
+        <textarea name="agendamento_es"></textarea>
 
-    <label>Categorias (múltiplas)</label><br>
-    <?php foreach ($categorias as $cat): ?>
-        <label>
-            <input type="checkbox" name="categorias[]" value="<?= $cat['id'] ?>"> <?= $cat['nome'] ?>
-        </label><br>
-    <?php endforeach; ?>
+        <label>Booking Instructions (English)</label>
+        <textarea name="agendamento_en"></textarea>
 
-    <br>
-    <button type="submit">Cadastrar</button>
-</form>
+        <label>Categorias</label><br>
+        <?php foreach ($categorias as $cat): ?>
+            <label>
+                <input type="checkbox" name="categorias[]" value="<?= $cat['id'] ?>">
+                <span style="color:<?= $cat['cor'] ?>; font-weight:bold;"><?= $cat['nome'] ?></span>
+            </label><br>
+        <?php endforeach; ?>
 
-<p style="text-align:center; margin-top: 20px;">
-    <a href="admin_gerenciar.php">← Voltar</a> | <a href="admin_logout.php">Sair</a>
-</p>
+        <button type="submit">Salvar</button>
+    </form>
 
+    <div style="margin-top:20px;">
+        <a href="admin_gerenciar.php" class="botao-voltar">← Voltar para gerenciamento</a>
+    </div>
+</div>
+
+<?php include 'admin_footer.php'; ?>
 </body>
 </html>
