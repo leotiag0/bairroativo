@@ -14,7 +14,6 @@
  <!DOCTYPE html>
  <html lang="<?= $lang ?>">
  <head>
- @@ -20,7 +7,60 @@
      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
      <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
      <style>
@@ -76,7 +75,6 @@
      </style>
  </head>
  <body>
- @@ -33,17 +73,14 @@
  </header>
  
  <div class="search-bar">
