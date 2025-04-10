@@ -7,49 +7,8 @@ if (!isset($_SESSION['admin'])) {
 
 require 'conexao.php';
 
-$apiKey = '2923ef94f739425b96ec104bd6613eb5';
 $msg = '';
 $error = '';
-
-// Improved geocaching function with error handling
-function getCoordinates($endereco, $apiKey, $pdo) {
-    // Check cache first
-    $check = $pdo->prepare("SELECT latitude, longitude FROM geocache WHERE endereco = ?");
-    $check->execute([trim($endereco)]);
-    $cache = $check->fetch();
-    if ($cache) return $cache;
-
-    // If not in cache, call API
-    $url = 'https://api.opencagedata.com/geocode/v1/json?q=' . urlencode($endereco) . '&key=' . $apiKey . '&language=pt&limit=1';
-    
-    try {
-        $resposta = file_get_contents($url);
-        if ($resposta === FALSE) {
-            throw new Exception("Failed to call geocoding API");
-        }
-        
-        $dados = json_decode($resposta, true);
-        
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new Exception("Invalid JSON response from API");
-        }
-
-        if (isset($dados['results'][0]['geometry'])) {
-            $lat = $dados['results'][0]['geometry']['lat'];
-            $lng = $dados['results'][0]['geometry']['lng'];
-
-            // Store in cache
-            $stmt = $pdo->prepare("INSERT INTO geocache (endereco, latitude, longitude) VALUES (?, ?, ?)");
-            $stmt->execute([trim($endereco), $lat, $lng]);
-
-            return ['latitude' => $lat, 'longitude' => $lng];
-        }
-    } catch (Exception $e) {
-        error_log("Geocoding error for address $endereco: " . $e->getMessage());
-    }
-
-    return ['latitude' => null, 'longitude' => null];
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     // Validate file
@@ -67,11 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
 
             if (($handle = fopen($file, "r")) !== FALSE) {
                 // Skip header
-                fgetcsv($handle);
+                fgetcsv($handle); // Using comma delimiter (default)
                 
-                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                    // Skip empty or invalid lines
-                    if (count($data) < 10 || empty($data[0]) || empty($data[1])) {
+                while (($data = fgetcsv($handle)) !== FALSE) {
+                    // Skip empty or invalid lines (expecting 14 columns)
+                    if (count($data) < 14 || empty($data[0]) || empty($data[1])) {
                         $skippedCount++;
                         continue;
                     }
@@ -81,52 +40,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
 
                     // Extract data with validation
                     [
-                        $nome,
-                        $endereco,
+                        $nome_servico,
+                        $rua,
                         $bairro,
+                        $cidade,
+                        $estado,
                         $tipo,
-                        $descricao_pt,
-                        $descricao_es,
-                        $descricao_en,
-                        $inicio,
-                        $fim,
-                        $categorias
+                        $descricao,
+                        $horario_inicio,
+                        $horario_fim,
+                        $latitude,
+                        $longitude,
+                        $agendamento_pt,
+                        $agendamento_es,
+                        $agendamento_en
                     ] = $data;
 
-                    // Get coordinates
-                    $coords = getCoordinates($endereco, $apiKey, $pdo);
+                    // Validate coordinates
+                    if (!is_numeric($latitude) || !is_numeric($longitude)) {
+                        $skippedCount++;
+                        continue;
+                    }
 
                     // Insert service
                     $stmt = $pdo->prepare("INSERT INTO servicos (
-                        nome_servico, endereco, bairro, tipo,
-                        descricao_pt, descricao_es, descricao_en,
-                        horario_inicio, horario_fim,
-                        latitude, longitude
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        nome_servico, endereco, bairro, cidade, estado, tipo,
+                        descricao, horario_inicio, horario_fim,
+                        latitude, longitude,
+                        agendamento_pt, agendamento_es, agendamento_en
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                     $stmt->execute([
-                        $nome, $endereco, $bairro, $tipo,
-                        $descricao_pt, $descricao_es, $descricao_en,
-                        $inicio, $fim,
-                        $coords['latitude'], $coords['longitude']
+                        $nome_servico, 
+                        $rua, 
+                        $bairro, 
+                        $cidade, 
+                        $estado, 
+                        $tipo,
+                        $descricao, 
+                        $horario_inicio, 
+                        $horario_fim,
+                        $latitude, 
+                        $longitude,
+                        $agendamento_pt,
+                        $agendamento_es,
+                        $agendamento_en
                     ]);
-
-                    $id = $pdo->lastInsertId();
-
-                    // Process categories
-                    if (!empty($categorias)) {
-                        $catIds = array_filter(
-                            array_map('intval', explode(",", $categorias)),
-                            function($catId) { return $catId > 0; }
-                        );
-                        
-                        if (!empty($catIds)) {
-                            $catStmt = $pdo->prepare("INSERT INTO servico_categoria (servico_id, categoria_id) VALUES (?, ?)");
-                            foreach ($catIds as $catId) {
-                                $catStmt->execute([$id, $catId]);
-                            }
-                        }
-                    }
 
                     $importedCount++;
                 }
@@ -166,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
         }
         header img { height: 50px; }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 40px auto;
             background: white;
             padding: 30px;
@@ -200,12 +159,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
             font-weight: bold;
             margin-bottom: 15px;
             color: green;
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 4px;
         }
         .error {
             text-align: center;
             font-weight: bold;
             margin-bottom: 15px;
             color: #dc3545;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 4px;
         }
         .back-link {
             margin-top: 20px;
@@ -215,6 +180,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
             text-decoration: none;
             color: #007bff;
             margin: 0 10px;
+            display: inline-block;
+            padding: 8px 15px;
         }
         .back-link a:hover {
             text-decoration: underline;
@@ -229,8 +196,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
         .file-requirements {
             background: #f8f9fa;
             border-left: 4px solid #007bff;
-            padding: 10px 15px;
-            margin-bottom: 20px;
+            padding: 15px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+        .file-requirements h3 {
+            margin-top: 0;
+            color: #007bff;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+        .file-requirements ul {
+            padding-left: 20px;
+            columns: 2;
+            column-gap: 30px;
+        }
+        .file-requirements li {
+            margin-bottom: 8px;
+            break-inside: avoid;
+        }
+        @media (max-width: 600px) {
+            .file-requirements ul {
+                columns: 1;
+            }
+            .container {
+                padding: 20px;
+                margin: 20px;
+            }
         }
     </style>
 </head>
@@ -253,12 +246,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     <?php endif; ?>
     
     <div class="file-requirements">
-        <h3>Requisitos do arquivo CSV:</h3>
+        <h3>Estrutura do arquivo CSV (separado por vírgulas):</h3>
         <ul>
-            <li>Formato: nome,endereco,bairro,tipo,descricao_pt,descricao_es,descricao_en,horario_inicio,horario_fim,categorias</li>
-            <li>Categorias devem ser IDs numéricos separados por vírgula</li>
-            <li>Use o <a href="download_modelo.php">modelo CSV</a> como referência</li>
+            <li><strong>nome_servico</strong>: Nome do serviço</li>
+            <li><strong>rua</strong>: Endereço completo</li>
+            <li><strong>bairro</strong>: Bairro</li>
+            <li><strong>cidade</strong>: Cidade</li>
+            <li><strong>estado</strong>: Estado (sigla)</li>
+            <li><strong>tipo</strong>: Tipo de serviço</li>
+            <li><strong>descricao</strong>: Descrição em português</li>
+            <li><strong>horario_inicio</strong>: Horário de abertura (HH:MM)</li>
+            <li><strong>horario_fim</strong>: Horário de fechamento (HH:MM)</li>
+            <li><strong>latitude</strong>: Coordenada geográfica (ex: -23.5505)</li>
+            <li><strong>longitude</strong>: Coordenada geográfica (ex: -46.6333)</li>
+            <li><strong>agendamento_pt</strong>: Info agendamento (PT)</li>
+            <li><strong>agendamento_es</strong>: Info agendamento (ES)</li>
+            <li><strong>agendamento_en</strong>: Info agendamento (EN)</li>
         </ul>
+        <p style="margin-top: 15px; font-style: italic;">Dica: Use aspas para campos que contenham vírgulas (ex: "Serviço, com vírgula no nome")</p>
+        <p style="margin-top: 10px;"><a href="download_modelo.php"><i class="fas fa-download"></i> Baixar modelo CSV</a></p>
     </div>
     
     <form method="POST" enctype="multipart/form-data">
@@ -267,8 +273,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     </form>
 
     <div class="back-link">
-        <a href="download_modelo.php"><i class="fas fa-file-csv"></i> Baixar modelo CSV</a>
-        <a href="admin_gerenciar.php"><i class="fas fa-arrow-left"></i> Voltar para gerenciamento</a>
+        <a href="download_modelo.php"><i class="fas fa-file-csv"></i> Baixar modelo</a>
+        <a href="admin_gerenciar.php"><i class="fas fa-arrow-left"></i> Voltar</a>
     </div>
 </div>
 
