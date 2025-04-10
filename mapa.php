@@ -33,6 +33,11 @@ $tipos = $pdo->query("SELECT DISTINCT tipo FROM servicos ORDER BY tipo")->fetchA
 </head>
 <body>
 
+<header style="background:#007bff; color:white; padding:10px 20px; display:flex; justify-content:space-between; align-items:center;">
+    <img src="images/logo.png" alt="Logo" style="height:60px;">
+    <div style="font-size:18px; font-weight:bold;">Mapa de Serviços</div>
+</header>
+
 <div class="filtros">
   <input type="text" id="filtro-nome" placeholder="Buscar por nome...">
   <select id="filtro-bairro">
