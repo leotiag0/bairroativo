@@ -62,9 +62,9 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-<header>
+
     <?php include 'header.php'; ?>
-</header>
+
 
 <main class="container">
     <h2><?= $t['titulo'] ?> - Lista</h2>
@@ -125,9 +125,9 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
 </main>
 
-<footer>
+
     <?php include 'footer.php'; ?>
-</footer>
+
 
 </body>
 </html>
