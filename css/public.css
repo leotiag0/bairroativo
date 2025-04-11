@@ -44,8 +44,12 @@ header {
 }
 .flag-icon {
     height: 22px;
+    width: auto;
     margin-left: 10px;
     cursor: pointer;
+    vertical-align: middle;
+    display: inline-block;
+    border: none; /* padrão sem borda */
 }
 .menu a {
     color: white;
