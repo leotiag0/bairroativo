@@ -2,12 +2,10 @@
 include 'lang.php';
 require 'conexao.php';
 
-// Filtros
 $bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT NULL ORDER BY bairro")->fetchAll(PDO::FETCH_COLUMN);
 $tipos = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
 $categorias = $pdo->query("SELECT id, nome FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 
-// Filtros recebidos
 $where = [];
 $params = [];
 $order = 's.nome_servico ASC';
@@ -28,7 +26,6 @@ if (!empty($_GET['categoria'])) {
     $where[] = "sc.categoria_id = :categoria";
     $params[':categoria'] = $_GET['categoria'];
 }
-
 if (!empty($_GET['ordenar'])) {
     $ordem = $_GET['ordenar'];
     if (in_array($ordem, ['nome', 'tipo', 'bairro'])) {
@@ -36,7 +33,6 @@ if (!empty($_GET['ordenar'])) {
     }
 }
 
-// Consulta
 $sql = "
     SELECT s.*, c.nome AS categoria_nome, c.id AS categoria_id
     FROM servicos s
@@ -58,19 +54,17 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title><?= $t['titulo'] ?> - Lista</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/public.css">
+    <link rel="stylesheet" href="css/public.css?v=<?= filemtime('css/public.css') ?>">
 </head>
 <body>
 
-
-    <?php include 'header.php'; ?>
-
+<?php include 'header.php'; ?>
 
 <main class="container">
     <h2><?= $t['titulo'] ?> - Lista</h2>
 
     <!-- Filtros -->
-    <form method="GET" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+    <form method="GET" class="filtros filtros-flex">
         <input type="hidden" name="lang" value="<?= $lang ?>">
         <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
 
@@ -108,7 +102,7 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php if (count($servicos) === 0): ?>
         <p>Nenhum serviço encontrado.</p>
     <?php else: ?>
-        <div style="display: flex; flex-direction: column; gap: 15px;">
+        <div class="lista-servicos">
             <?php foreach ($servicos as $s): ?>
                 <div class="card-servico">
                     <div class="thumb">
@@ -125,9 +119,7 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
 </main>
 
-
-    <?php include 'footer.php'; ?>
-
+<?php include 'footer.php'; ?>
 
 </body>
 </html>
