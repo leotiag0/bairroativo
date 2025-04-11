@@ -244,10 +244,6 @@ body.contraste-alto footer {
 
 /* Botão de contraste */
 #toggle-contraste {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 999;
     background: #222;
     color: #fff;
     border: none;
@@ -255,7 +251,9 @@ body.contraste-alto footer {
     border-radius: 4px;
     font-size: 13px;
     cursor: pointer;
+    margin-left: 10px;
 }
+
 
 /* Responsivo extra */
 @media (max-width: 768px) {
