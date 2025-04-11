@@ -88,6 +88,18 @@ if ($json_servicos === false) $json_servicos = '[]';
     </div>
 </header>
 
+    <button id="toggle-contraste">♿ Contraste</button>
+<script>
+document.getElementById('toggle-contraste').onclick = () => {
+    document.body.classList.toggle('contraste-alto');
+    localStorage.setItem('contrasteAtivo', document.body.classList.contains('contraste-alto'));
+};
+if (localStorage.getItem('contrasteAtivo') === 'true') {
+    document.body.classList.add('contraste-alto');
+}
+</script>
+
+
 <main>
 <div class="filtros">
     <form method="GET" class="filtros-flex">
