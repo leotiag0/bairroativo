@@ -70,10 +70,7 @@ $categorias = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <header>
-    <a href="index.php?lang=<?= $lang ?>"><img src="images/logo.png" alt="Logo" class="logo"></a>
-    <nav class="menu">
-        <a href="mapa.php?lang=<?= $lang ?>">← <?= htmlspecialchars($t['titulo']) ?></a>
-    </nav>
+    <?php include 'header.php'; ?>
 </header>
 
 <main class="container">
@@ -103,7 +100,7 @@ $categorias = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
 </main>
 
 <footer>
-    &copy; <?= date('Y') ?> Sistema Bairro Ativo
+    <?php include 'footer.php'; ?>
 </footer>
 
 <script>
