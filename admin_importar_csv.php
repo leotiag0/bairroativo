@@ -76,11 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
                 $lng = $coords['longitude'];
 
                 $stmt = $pdo->prepare("INSERT INTO servicos (
-                    nome_servico, endereco, bairro, cidade, estado, tipo,
+                    nome_servico, rua, bairro, cidade, estado, tipo,
                     descricao_pt, descricao_es, descricao_en,
                     horario_inicio, horario_fim,
                     latitude, longitude
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
 
                 $stmt->execute([
                     $nome_servico, $endereco, $bairro, $cidade, $estado, $tipo,
