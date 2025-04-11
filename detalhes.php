@@ -69,9 +69,7 @@ $categorias = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-<header>
     <?php include 'header.php'; ?>
-</header>
 
 <main class="container">
     <h2><?= htmlspecialchars($s['nome_servico']) ?></h2>
@@ -99,9 +97,7 @@ $categorias = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </main>
 
-<footer>
-    <?php include 'footer.php'; ?>
-</footer>
+        <?php include 'footer.php'; ?>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
