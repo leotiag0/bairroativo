@@ -1,191 +1,32 @@
-/* Reset e base */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+body.contraste-alto {
+    background-color: #000 !important;
+    color: #fff !important;
 }
 
-html, body {
-    height: 100%;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    display: flex;
-    flex-direction: column;
+body.contraste-alto a, 
+body.contraste-alto .btn,
+body.contraste-alto select,
+body.contraste-alto input {
+    color: #fff !important;
+    background: #000 !important;
+    border: 2px solid #fff !important;
 }
 
-/* Header */
-header {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
+body.contraste-alto header,
+body.contraste-alto footer {
+    background: #111 !important;
 }
 
-.logo {
-    height: 60px;
-}
-
-.flag-icon {
-    height: 22px;
-    margin-left: 10px;
-    cursor: pointer;
-}
-
-/* Menu */
-.menu a {
-    color: white;
-    text-decoration: none;
-    margin-left: 10px;
-    font-weight: bold;
-}
-
-.menu a:hover {
-    text-decoration: underline;
-}
-
-/* Layout principal */
-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.container {
-    max-width: 960px;
-    margin: auto;
-    padding: 20px;
-}
-
-/* Rodapé */
-footer {
-    background-color: #007bff;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    font-size: 14px;
-}
-
-/* Botões */
-.btn {
-    background-color: #28a745;
-    color: white;
-    text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    display: inline-block;
-    font-size: 14px;
+#toggle-contraste {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 999;
+    background: #222;
+    color: #fff;
     border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    white-space: nowrap;
-}
-
-.btn:hover {
-    background-color: #218838;
-}
-
-/* Filtros */
-.filtros {
-    background-color: #f1f1f1;
-    padding: 15px;
-}
-
-/* Filtros com layout flexível (para mapa.php) */
-.filtros-flex {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.filtros-flex input[type="text"],
-.filtros-flex select,
-.filtros-flex .btn {
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    outline: none;
-}
-
-.filtros-flex .btn {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.filtros-flex .btn:hover {
-    background-color: #218838;
-}
-
-/* Mapa */
-#map {
-    width: 100%;
-    min-height: 400px;
-    max-height: 90vh;
-    border-radius: 6px;
-    margin: 0 auto;
-}
-
-/* Card de serviço (usado em lista.php) */
-.card-servico {
-    display: flex;
-    gap: 15px;
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 6px;
-    background: #fff;
-    align-items: center;
-}
-
-.card-servico .thumb {
-    width: 60px;
-    height: 60px;
-    flex-shrink: 0;
-    border-radius: 6px;
-    overflow: hidden;
-    background: #eee;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.card-servico .thumb img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-}
-
-.card-servico .info {
-    flex-grow: 1;
-}
-
-/* Responsivo */
-@media (max-width: 768px) {
-    .filtros-flex {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .filtros-flex .btn {
-        width: 100%;
-    }
-
-    .card-servico {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .card-servico .thumb {
-        width: 100%;
-        height: auto;
-        margin-bottom: 10px;
-    }
 }
