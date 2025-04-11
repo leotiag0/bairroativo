@@ -3,11 +3,28 @@ include 'lang.php';
 require 'conexao.php';
 
 $id = $_GET['id'] ?? null;
+
 $stmt = $pdo->prepare("SELECT * FROM servicos WHERE id = ?");
 $stmt->execute([$id]);
 $s = $stmt->fetch();
 
-$instrucao = $lang == 'es' ? $s['agendamento_es'] : ($lang == 'en' ? $s['agendamento_en'] : $s['agendamento_pt']);
+if (!$s) {
+    echo "Serviço não encontrado.";
+    exit;
+}
+
+// Descrição conforme idioma
+$descricao = $lang == 'es' ? $s['descricao_es'] : ($lang == 'en' ? $s['descricao_en'] : $s['descricao_pt']);
+
+// Buscar categorias associadas
+$stmtCat = $pdo->prepare("
+    SELECT c.nome, c.cor 
+    FROM categorias c
+    JOIN servico_categoria sc ON sc.categoria_id = c.id
+    WHERE sc.servico_id = ?
+");
+$stmtCat->execute([$id]);
+$categorias = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="<?= $lang ?>">
@@ -16,10 +33,8 @@ $instrucao = $lang == 'es' ? $s['agendamento_es'] : ($lang == 'en' ? $s['agendam
     <title><?= htmlspecialchars($s['nome_servico']) ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- CSS principal -->
+    <!-- CSS -->
     <link rel="stylesheet" href="css/public.css">
-
-    <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
@@ -30,18 +45,25 @@ $instrucao = $lang == 'es' ? $s['agendamento_es'] : ($lang == 'en' ? $s['agendam
             margin-top: 20px;
             border-radius: 6px;
         }
-
         .btn-group {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-top: 20px;
         }
-
         @media (max-width: 600px) {
             .btn-group {
                 flex-direction: column;
             }
+        }
+        .categoria-badge {
+            display: inline-block;
+            background: #ccc;
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 13px;
+            margin: 2px 5px 2px 0;
         }
     </style>
 </head>
@@ -57,9 +79,19 @@ $instrucao = $lang == 'es' ? $s['agendamento_es'] : ($lang == 'en' ? $s['agendam
 <main class="container">
     <h2><?= htmlspecialchars($s['nome_servico']) ?></h2>
 
-    <p><strong><?= $t['descricao'] ?>:</strong> <?= nl2br(htmlspecialchars($s['descricao'])) ?></p>
+    <p><strong><?= $t['descricao'] ?>:</strong><br><?= nl2br(htmlspecialchars($descricao)) ?></p>
     <p><strong><?= $t['horario'] ?>:</strong> <?= htmlspecialchars($s['horario_inicio']) ?> - <?= htmlspecialchars($s['horario_fim']) ?></p>
-    <p><strong><?= $t['como_agendar'] ?></strong><br><?= nl2br(htmlspecialchars($instrucao)) ?></p>
+    <p><strong>Local:</strong> <?= htmlspecialchars($s['endereco']) ?>, <?= htmlspecialchars($s['bairro']) ?>, <?= htmlspecialchars($s['cidade']) ?>/<?= htmlspecialchars($s['estado']) ?></p>
+
+    <?php if (!empty($categorias)): ?>
+        <p><strong>Categorias:</strong><br>
+            <?php foreach ($categorias as $cat): ?>
+                <span class="categoria-badge" style="background: <?= htmlspecialchars($cat['cor']) ?>;">
+                    <?= htmlspecialchars($cat['nome']) ?>
+                </span>
+            <?php endforeach; ?>
+        </p>
+    <?php endif; ?>
 
     <div id="map"></div>
 
