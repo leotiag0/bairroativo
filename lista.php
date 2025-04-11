@@ -2,10 +2,18 @@
 include 'lang.php';
 require 'conexao.php';
 
+// Filtros
 $bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT NULL ORDER BY bairro")->fetchAll(PDO::FETCH_COLUMN);
 $tipos = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
-$categorias = $pdo->query("SELECT id, nome FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
+$categorias = $pdo->query("SELECT id, nome, cor FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 
+// Mapeia cores
+$cores = [];
+foreach ($categorias as $cat) {
+    $cores[$cat['id']] = $cat['cor'];
+}
+
+// Filtros recebidos
 $where = [];
 $params = [];
 $order = 's.nome_servico ASC';
@@ -33,6 +41,7 @@ if (!empty($_GET['ordenar'])) {
     }
 }
 
+// Consulta
 $sql = "
     SELECT s.*, c.nome AS categoria_nome, c.id AS categoria_id
     FROM servicos s
@@ -54,7 +63,8 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title><?= $t['titulo'] ?> - Lista</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/public.css?v=<?= filemtime('css/public.css') ?>">
+    <link rel="stylesheet" href="css/public.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -64,7 +74,7 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h2><?= $t['titulo'] ?> - Lista</h2>
 
     <!-- Filtros -->
-    <form method="GET" class="filtros filtros-flex">
+    <form method="GET" class="filtros-flex" style="margin-bottom: 20px;">
         <input type="hidden" name="lang" value="<?= $lang ?>">
         <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
 
@@ -98,7 +108,7 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button type="submit" class="btn">🔍 <?= $t['buscar'] ?></button>
     </form>
 
-    <!-- Lista de resultados -->
+    <!-- Lista -->
     <?php if (count($servicos) === 0): ?>
         <p>Nenhum serviço encontrado.</p>
     <?php else: ?>
@@ -109,9 +119,13 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <img src="images/categorias/<?= $s['categoria_id'] ?? '0' ?>.png" alt="<?= $s['categoria_nome'] ?? 'Categoria' ?>">
                     </div>
                     <div class="info">
-                        <strong><?= htmlspecialchars($s['nome_servico']) ?></strong><br>
-                        <span><?= htmlspecialchars($s['tipo']) ?> | <?= htmlspecialchars($s['bairro']) ?></span><br>
-                        <a href="detalhes.php?id=<?= $s['id'] ?>&lang=<?= $lang ?>" class="btn" style="margin-top: 10px;">ℹ️ <?= $t['detalhes'] ?></a>
+                        <strong>
+                            <i class="fas fa-circle" style="font-size:10px;color:<?= $cores[$s['categoria_id']] ?? '#999' ?>;"></i>
+                            <?= htmlspecialchars($s['nome_servico']) ?>
+                        </strong>
+                        <span><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($s['bairro']) ?> | <i class="fas fa-tag"></i> <?= htmlspecialchars($s['tipo']) ?></span>
+                        <span><i class="far fa-clock"></i> <?= htmlspecialchars($s['horario_inicio']) ?> - <?= htmlspecialchars($s['horario_fim']) ?></span>
+                        <a href="detalhes.php?id=<?= $s['id'] ?>&lang=<?= $lang ?>" class="btn">ℹ️ <?= $t['detalhes'] ?></a>
                     </div>
                 </div>
             <?php endforeach; ?>
