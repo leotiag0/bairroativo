@@ -5,18 +5,12 @@
     <meta charset="UTF-8">
     <title><?= $t['titulo'] ?></title>
     <link rel="stylesheet" href="css/public.css">
+    <meta name="robots" content="noindex">
 </head>
 <body>
 
 <header>
-    <div>
-        <img src="images/logo.png" alt="Logo">
-    </div>
-    <nav class="menu">
-        <a href="?lang=pt"><img src="images/brasil-flag.jpg" class="flag-icon"></a>
-        <a href="?lang=es"><img src="images/spain-flag.jpg" class="flag-icon"></a>
-        <a href="?lang=en"><img src="images/uk-flag.jpg" class="flag-icon"></a>
-    </nav>
+    <?php include 'header.php'; ?>
 </header>
 
     <button id="toggle-contraste">♿ Contraste</button>
