@@ -25,26 +25,24 @@ a:hover {
 
 /* Header */
 header {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
     display: flex;
-    justify-content: space-between; /* separa esquerda e direita */
+    justify-content: space-between;
     align-items: center;
+    padding: 10px 20px;
     flex-wrap: wrap;
 }
 
-.header-left {
+.header-left,
+.header-right {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
 .header-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    margin-left: auto;
 }
+
 
 .logo {
     height: 60px;
