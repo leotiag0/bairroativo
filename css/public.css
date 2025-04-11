@@ -252,6 +252,13 @@ body.contraste-alto header,
 body.contraste-alto footer {
     background: #111 !important;
 }
+body.contraste-alto .flag-icon {
+    border: 2px solid #fff;
+    padding: 2px;
+    border-radius: 4px;
+    background-color: #000;
+}
+
 
 /* Botão de contraste */
 #toggle-contraste {
