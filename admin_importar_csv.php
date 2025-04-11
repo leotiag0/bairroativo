@@ -11,6 +11,7 @@ $apiKey = '2923ef94f739425b96ec104bd6613eb5';
 $msg = '';
 $errors = [];
 
+// Função para buscar coordenadas com cache
 function getCoordinates($endereco, $apiKey, $pdo) {
     $check = $pdo->prepare("SELECT latitude, longitude FROM geocache WHERE endereco = ?");
     $check->execute([$endereco]);
@@ -34,6 +35,7 @@ function getCoordinates($endereco, $apiKey, $pdo) {
     return ['latitude' => null, 'longitude' => null];
 }
 
+// Processamento do arquivo
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     $file = $_FILES['arquivo']['tmp_name'];
 
@@ -63,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
             ] = $data;
 
             if (!$nome_servico || !$endereco || !$bairro || !$tipo || !$descricao_pt || !$horario_inicio || !$horario_fim || !$categorias) {
-                $errors[] = "❌ Linha $linha: campos obrigatórios em branco.";
+                $errors[] = "❌ Linha $linha: campos obrigatórios ausentes.";
                 continue;
             }
 
@@ -76,30 +78,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
                 $lng = $coords['longitude'];
 
                 $stmt = $pdo->prepare("INSERT INTO servicos (
-                    nome_servico, rua, bairro, cidade, estado, tipo,
-                    agendamento_pt, agendamento_es, agendamento_en,
+                    nome_servico, endereco, bairro, cidade, estado, tipo,
+                    descricao_pt, descricao_es, descricao_en,
                     horario_inicio, horario_fim,
                     latitude, longitude
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-
                 $stmt->execute([
                     $nome_servico, $endereco, $bairro, $cidade, $estado, $tipo,
-                    $agendamento_pt, $agendamento_es, $agendamento_en,
+                    $descricao_pt, $descricao_es, $descricao_en,
                     $horario_inicio, $horario_fim, $lat, $lng
                 ]);
 
                 $id = $pdo->lastInsertId();
 
+                // Relacionar categorias
                 foreach (explode(",", $categorias) as $catId) {
                     $catId = (int) trim($catId);
-                    if ($catId <= 0) {
-                        $errors[] = "⚠️ Linha $linha: categoria inválida ($catId).";
-                        continue;
+                    if ($catId > 0) {
+                        $pdo->prepare("INSERT INTO servico_categoria (servico_id, categoria_id) VALUES (?, ?)")
+                            ->execute([$id, $catId]);
                     }
-
-                    $pdo->prepare("INSERT INTO servico_categoria (servico_id, categoria_id) VALUES (?, ?)")
-                        ->execute([$id, $catId]);
                 }
 
             } catch (Exception $e) {
@@ -120,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
 <head>
     <meta charset="UTF-8">
     <title>Importar CSV - Bairro Ativo</title>
-    <link rel="icon" href="images/logo.png">
+    <link rel="icon" type="image/png" href="images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
@@ -158,7 +157,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
             border-radius: 6px;
         }
         button:hover { background: #218838; }
-        .msg, .error { text-align: center; font-weight: bold; margin: 10px 0; }
+        .msg, .error {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
         .msg { color: green; }
         .error { color: red; }
         .file-requirements {
@@ -166,13 +169,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
             border-left: 4px solid #007bff;
             padding: 10px 15px;
             margin-bottom: 20px;
-        }
-        footer {
-            background: #007bff;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            margin-top: 60px;
         }
         .back-link {
             margin-top: 20px;
@@ -182,6 +178,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
             text-decoration: none;
             color: #007bff;
             margin: 0 10px;
+        }
+        .back-link a:hover { text-decoration: underline; }
+        footer {
+            background: #007bff;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 60px;
         }
     </style>
 </head>
@@ -198,8 +202,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     <?php if ($msg): ?><div class="msg"><?= htmlspecialchars($msg) ?></div><?php endif; ?>
     <?php if ($errors): ?>
         <div class="error">
-            <?php foreach ($errors as $err): ?>
-                <div><?= htmlspecialchars($err) ?></div>
+            <?php foreach ($errors as $e): ?>
+                <div><?= htmlspecialchars($e) ?></div>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
@@ -218,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
             <li>horario_fim</li>
             <li>categorias (IDs separados por vírgula)</li>
         </ol>
-        <p><b>Obs:</b> Os serviços serão importados com cidade = São Paulo e estado = SP</p>
+        <p><b>Observação:</b> Todos os serviços serão registrados como <b>cidade = São Paulo</b> e <b>estado = SP</b>.</p>
     </div>
 
     <form method="POST" enctype="multipart/form-data">
@@ -227,8 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     </form>
 
     <div class="back-link">
-        <a href="pre_visualizar_csv.php"><i class="fas fa-eye"></i> Pré-visualizar CSV</a>
-        <a href="admin_gerenciar.php"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <a href="admin_gerenciar.php"><i class="fas fa-arrow-left"></i> Voltar ao gerenciamento</a>
     </div>
 </div>
 
