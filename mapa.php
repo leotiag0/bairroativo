@@ -127,7 +127,7 @@ function ajustarAlturaMapa() {
         - (header?.offsetHeight || 0)
         - (filtros?.offsetHeight || 0)
         - (footer?.offsetHeight || 0)
-        - 40;
+        - 20;
 
     mapDiv.style.height = `${alturaMapa}px`;
 
