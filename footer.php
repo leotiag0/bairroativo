@@ -1,6 +1,8 @@
 <footer>
-    &copy; <?= date('Y') ?> Sistema Bairro Ativo. Todos os direitos reservados.
-        <script>
+    &copy; <?= date('Y') ?> Sistema Bairro Ativo. Todos os direitos reservados.  
+</footer>
+
+      <script>
     document.addEventListener("DOMContentLoaded", function () {
         const btnContraste = document.getElementById("toggle-contraste");
     
@@ -15,4 +17,3 @@
         });
     });
     </script>
-</footer>
