@@ -71,6 +71,18 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </nav>
 </header>
 
+    <button id="toggle-contraste">♿ Contraste</button>
+<script>
+document.getElementById('toggle-contraste').onclick = () => {
+    document.body.classList.toggle('contraste-alto');
+    localStorage.setItem('contrasteAtivo', document.body.classList.contains('contraste-alto'));
+};
+if (localStorage.getItem('contrasteAtivo') === 'true') {
+    document.body.classList.add('contraste-alto');
+}
+</script>
+
+
 <main class="container">
     <h2><?= $t['titulo'] ?> - Lista</h2>
 
