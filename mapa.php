@@ -81,11 +81,7 @@ if ($json_servicos === false) $json_servicos = '[]';
 <body>
 
 <header>
-    <a href="index.php"><img src="images/logo.png" alt="Logo" class="logo"></a>
-    <div class="flags">
-        <a href="?lang=pt"><img src="images/brasil-flag.jpg" alt="Português"></a>
-        <a href="?lang=es"><img src="images/spain-flag.jpg" alt="Español"></a>
-    </div>
+    <?php include 'header.php'; ?>
 </header>
 
     <button id="toggle-contraste">♿ Contraste</button>
@@ -143,7 +139,7 @@ if (localStorage.getItem('contrasteAtivo') === 'true') {
 </main>
 
 <footer>
-    &copy; <?= date('Y') ?> Sistema Bairro Ativo. Todos os direitos reservados.
+    <?php include 'footer.php'; ?>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
