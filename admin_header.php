@@ -9,6 +9,7 @@
         <a href="admin_cadastro.php" style="color:white; text-decoration:none;">➕ Cadastrar</a>
         <a href="admin_gerenciar.php" style="color:white; text-decoration:none;">📂 Gerenciar</a>
         <a href="admin_importar_csv.php" style="color:white; text-decoration:none;">📥 Importar CSV</a>
+        <a href="admin_estatisticas.php" class="btn">📊 Estatísticas</a>
         <a href="admin_logout.php" style="color:white; text-decoration:none;">🚪 Sair</a>
     </nav>
 </header>
