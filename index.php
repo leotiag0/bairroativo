@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title><?= $t['titulo'] ?></title>
-    <link rel="stylesheet" href="css/public.css">
+    <link rel="stylesheet" href="css/public.css?v=<?= filemtime('css/public.css') ?>">
     <meta name="robots" content="noindex">
 </head>
 <body>
