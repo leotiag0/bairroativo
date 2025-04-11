@@ -44,7 +44,7 @@ if (localStorage.getItem('contrasteAtivo') === 'true') {
 </div>
 
 <footer>
-    &copy; <?= date('Y') ?> Sistema Bairro Ativo
+    <?php include 'footer.php'; ?>
 </footer>
 </body>
 </html>
