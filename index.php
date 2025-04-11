@@ -19,6 +19,18 @@
     </nav>
 </header>
 
+    <button id="toggle-contraste">♿ Contraste</button>
+<script>
+document.getElementById('toggle-contraste').onclick = () => {
+    document.body.classList.toggle('contraste-alto');
+    localStorage.setItem('contrasteAtivo', document.body.classList.contains('contraste-alto'));
+};
+if (localStorage.getItem('contrasteAtivo') === 'true') {
+    document.body.classList.add('contraste-alto');
+}
+</script>
+
+
 <div class="container">
     <h2><?= $t['titulo'] ?></h2>
     <p><?= $t['bem_vindo'] ?> ao sistema!</p>
