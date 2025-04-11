@@ -1,10 +1,20 @@
 <header>
-    <a href="index.php"><img src="images/logo.png" alt="Logo" class="logo"></a>
+    <div class="header-left">
+        <a href="index.php">
+            <img src="imagens/logo_bairro_ativo.png" alt="Logo Bairro Ativo" class="logo">
+        </a>
+    </div>
 
-    <nav class="menu">
-        <a href="?lang=pt"><img src="images/brasil-flag.jpg" alt="Português" class="flag-icon"></a>
-        <a href="?lang=es"><img src="images/spain-flag.jpg" alt="Español" class="flag-icon"></a>
-        <a href="?lang=en"><img src="images/uk-flag.jpg" alt="English" class="flag-icon"></a>
-        <button id="toggle-contraste" title="Ativar alto contraste">🌓 Contraste</button>
-    </nav>
+    <div class="header-right">
+        <a href="?lang=pt">
+            <img src="imagens/br.png" alt="Português" class="flag-icon">
+        </a>
+        <a href="?lang=es">
+            <img src="imagens/es.png" alt="Español" class="flag-icon">
+        </a>
+        <a href="?lang=en">
+            <img src="imagens/en.png" alt="English" class="flag-icon">
+        </a>
+        <button id="toggle-contraste">Contraste</button>
+    </div>
 </header>
