@@ -1,17 +1,14 @@
 <?php if (!isset($lang)) include 'lang.php'; ?>
 <header>
-    <div class="logo-area">
-        <a href="index.php?lang=<?= $lang ?>">
-            <img src="images/logo.png" alt="Logo Bairro Ativo" class="logo">
-        </a>
-    </div>
-    <div class="right-items">
-        <nav class="menu">
-            <a href="?lang=pt"><img src="images/brasil-flag.jpg" alt="Português" class="flag-icon"></a>
-            <a href="?lang=es"><img src="images/spain-flag.jpg" alt="Español" class="flag-icon"></a>
-            <a href="?lang=en"><img src="images/uk-flag.jpg" alt="English" class="flag-icon"></a>
-        </nav>
-        <button id="toggle-contraste" title="Ativar alto contraste">🌓 Contraste</button>
+    <a href="index.php"><img src="images/logo.png" alt="Logo" class="logo"></a>
+    
+    <div class="header-right">
+        <div class="flags">
+            <a href="?lang=pt"><img src="images/brasil-flag.jpg" class="flag-icon" alt="Português"></a>
+            <a href="?lang=es"><img src="images/spain-flag.jpg" class="flag-icon" alt="Español"></a>
+            <a href="?lang=en"><img src="images/uk-flag.jpg" class="flag-icon" alt="English"></a>
+        </div>
+        <button id="toggle-contraste">Alto Contraste</button>
     </div>
 </header>
 
