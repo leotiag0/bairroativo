@@ -99,7 +99,7 @@ main {
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 .filtros-flex input[type="text"],
 .filtros-flex select,
