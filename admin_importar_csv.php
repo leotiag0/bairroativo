@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
 
                 $stmt = $pdo->prepare("INSERT INTO servicos (
                     nome_servico, rua, bairro, cidade, estado, tipo,
-                    descricao_pt, descricao_es, descricao_en,
+                    agendamento_pt, agendamento_es, agendamento_en,
                     horario_inicio, horario_fim,
                     latitude, longitude
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
