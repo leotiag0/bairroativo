@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
 
                 $stmt->execute([
                     $nome_servico, $endereco, $bairro, $cidade, $estado, $tipo,
-                    $descricao_pt, $descricao_es, $descricao_en,
+                    $agendamento_pt, $agendamento_es, $agendamento_en,
                     $horario_inicio, $horario_fim, $lat, $lng
                 ]);
 
