@@ -9,9 +9,8 @@
 </head>
 <body>
 
-<header>
     <?php include 'header.php'; ?>
-</header>
+
 
 <div class="container">
     <h2><?= $t['titulo'] ?></h2>
@@ -25,8 +24,7 @@
 
 </div>
 
-<footer>
     <?php include 'footer.php'; ?>
-</footer>
+
 </body>
 </html>
