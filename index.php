@@ -8,10 +8,7 @@
     <meta name="robots" content="noindex">
 </head>
 <body>
-
     <?php include 'header.php'; ?>
-
-
 <div class="container">
     <h2><?= $t['titulo'] ?></h2>
     <p><?= $t['bem_vindo'] ?> ao sistema!</p>
@@ -23,8 +20,6 @@
 </div>
 
 </div>
-
     <?php include 'footer.php'; ?>
-
 </body>
 </html>
