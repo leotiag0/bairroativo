@@ -3,32 +3,42 @@
 <html lang="<?= $lang ?>">
 <head>
     <meta charset="UTF-8">
-    <title><?= $t['titulo'] ?> - Bairro Ativo</title>
+    <title><?= $t['titulo'] ?> | Bairro Ativo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/public.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="css/public-dark.css?v=<?= time() ?>">
-    <link rel="icon" href="images/logo.png" type="image/png">
     <meta name="robots" content="noindex">
 </head>
 <body>
 
 <?php include 'header.php'; ?>
 
-<main class="container" style="text-align: center;">
-    <h2 style="margin-top: 30px;"><?= $t['titulo'] ?></h2>
-    <p style="margin: 10px 0 20px; font-size: 1.1em;"><?= $t['bem_vindo'] ?> ao sistema!</p>
+<main class="container">
+    <section class="boas-vindas">
+        <h1><?= $t['titulo'] ?></h1>
+        <p><?= $t['bem_vindo'] ?> ao sistema! Encontre serviços públicos e gratuitos próximos de você.</p>
+        <img src="images/como_funciona.jpg" alt="Como Funciona" class="imagem-explicativa">
+    </section>
 
-    <div class="index-hero">
-        <img src="images/como_funciona.jpg" alt="Como Funciona" class="index-banner">
-    </div>
-
-    <div class="index-buttons">
-        <a href="mapa.php?lang=<?= $lang ?>" class="btn">🗺️ <?= $t['ver_mapa'] ?? 'Ver Mapa' ?></a>
-        <a href="lista.php?lang=<?= $lang ?>" class="btn">📋 <?= $t['ver_lista'] ?? 'Ver Lista' ?></a>
-        <a href="admin_login.php" class="btn">🔐 <?= $t['admin'] ?? 'Admin' ?></a>
-    </div>
+    <section class="acoes">
+        <a href="mapa.php?lang=<?= $lang ?>" class="card-acao">
+            <div class="icone">🗺️</div>
+            <div class="titulo">Ver Mapa</div>
+            <div class="desc">Explore serviços geolocalizados no mapa interativo.</div>
+        </a>
+        <a href="lista.php?lang=<?= $lang ?>" class="card-acao">
+            <div class="icone">📋</div>
+            <div class="titulo">Ver Lista</div>
+            <div class="desc">Veja todos os serviços em formato de lista filtrável.</div>
+        </a>
+        <a href="admin_login.php" class="card-acao">
+            <div class="icone">🔐</div>
+            <div class="titulo">Admin</div>
+            <div class="desc">Acesse a área administrativa do sistema.</div>
+        </a>
+    </section>
 </main>
 
 <?php include 'footer.php'; ?>
+
 </body>
 </html>
