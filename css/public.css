@@ -252,7 +252,7 @@ footer {
 
 /* Imagem explicativa (index) */
 .imagem-explicativa {
-    max-width: 100%;
+    max-width: 80%;
     margin-top: 20px;
     border-radius: 6px;
 }
