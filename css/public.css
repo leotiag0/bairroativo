@@ -32,38 +32,30 @@ header {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    width: 100%;
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
 }
 
 .logo {
-    height: 50px;
+    height: 60px;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .flag-icon {
     height: 22px;
-    border: none;
-    transition: border 0.2s ease;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: transform 0.2s;
 }
 
 .flag-icon:hover {
-    border: 2px solid #fff;
-    border-radius: 3px;
+    transform: scale(1.1);
 }
 
-/* Botão de contraste */
+/* Contraste botão */
 #toggle-contraste {
     background: #222;
     color: #fff;
@@ -72,11 +64,27 @@ header {
     border-radius: 4px;
     font-size: 13px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    margin-left: 10px;
 }
 
-#toggle-contraste:hover {
-    background-color: #000;
+/* Contraste alto */
+body.contraste-alto {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+body.contraste-alto a,
+body.contraste-alto .btn,
+body.contraste-alto select,
+body.contraste-alto input {
+    color: #fff !important;
+    background-color: #000 !important;
+    border: 2px solid #fff !important;
+}
+
+body.contraste-alto header,
+body.contraste-alto footer {
+    background: #111 !important;
 }
 
 /* Layout principal */
@@ -126,7 +134,6 @@ footer {
     padding: 15px;
 }
 
-/* Filtros com layout flexível */
 .filtros-flex {
     display: flex;
     flex-wrap: wrap;
@@ -154,21 +161,25 @@ footer {
     margin: 0 auto;
 }
 
-/* Card de serviço */
+/* Card de serviço (lista.php) */
 .card-servico {
     display: flex;
-    flex-wrap: wrap;
     gap: 15px;
     border: 1px solid #ccc;
     padding: 15px;
     border-radius: 6px;
     background: #fff;
     align-items: center;
+    transition: box-shadow 0.2s ease;
+}
+
+.card-servico:hover {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .card-servico .thumb {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     flex-shrink: 0;
     border-radius: 6px;
     overflow: hidden;
@@ -188,124 +199,22 @@ footer {
     flex-grow: 1;
 }
 
-/* Tabelas responsivas */
-.responsive-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 14px;
-}
-
-.responsive-table thead {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.responsive-table th,
-.responsive-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
-
-@media (max-width: 768px) {
-    .filtros-flex {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .filtros-flex .btn {
-        width: 100%;
-    }
-
-    .card-servico {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .card-servico .thumb {
-        width: 100%;
-        height: auto;
-        margin-bottom: 10px;
-    }
-
-    .responsive-table thead {
-        display: none;
-    }
-
-    .responsive-table tr {
-        display: block;
-        margin-bottom: 15px;
-        background: #fff;
-        border-radius: 6px;
-        box-shadow: 0 0 5px #ccc;
-    }
-
-    .responsive-table td {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        border: none;
-        border-bottom: 1px solid #eee;
-    }
-
-    .responsive-table td::before {
-        content: attr(data-label);
-        font-weight: bold;
-        flex-basis: 40%;
-        color: #555;
-    }
-    .index-hero {
-    margin: 20px auto;
-    max-width: 600px;
-}
-
-.index-banner {
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.index-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-
-.index-buttons .btn {
-    font-size: 1.1em;
-    padding: 12px 20px;
-}
-/* Página Inicial - Boas-vindas */
-.boas-vindas {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.boas-vindas h1 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-.boas-vindas p {
+.card-servico .info strong {
     font-size: 16px;
+}
+
+.card-servico .info span {
+    font-size: 14px;
     color: #555;
 }
 
-.imagem-explicativa {
-    max-width: 100%;
-    margin-top: 20px;
-    border-radius: 6px;
-}
-
-/* Cartões de ação */
+/* Ações (index) */
 .acoes {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
+    margin-top: 30px;
 }
 
 .card-acao {
@@ -341,15 +250,94 @@ footer {
     color: #666;
 }
 
-/* Responsivo */
-@media (max-width: 768px) {
-    .card-acao {
-        width: 100%;
-    }
+/* Imagem explicativa (index) */
+.imagem-explicativa {
+    max-width: 100%;
+    margin-top: 20px;
+    border-radius: 6px;
 }
 
+/* Tabelas responsivas */
+.responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+.responsive-table thead {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.responsive-table th,
+.responsive-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .responsive-table thead {
+        display: none;
+    }
+
+    .responsive-table tr {
+        display: block;
+        margin-bottom: 15px;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 0 5px #ccc;
+    }
+
+    .responsive-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .responsive-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        flex-basis: 40%;
+        color: #555;
+    }
 
     .responsive-table td:last-child {
         border-bottom: none;
+    }
+
+    .filtros-flex {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filtros-flex .btn,
+    .filtros-flex select,
+    .filtros-flex input[type="text"] {
+        width: 100%;
+    }
+
+    .card-servico {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-servico .thumb {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .card-acao {
+        width: 100%;
+    }
+
+    #toggle-contraste {
+        position: static;
+        margin: 10px auto 0;
+        display: block;
     }
 }
