@@ -255,6 +255,29 @@ footer {
         flex-basis: 40%;
         color: #555;
     }
+    .index-hero {
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.index-banner {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.index-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.index-buttons .btn {
+    font-size: 1.1em;
+    padding: 12px 20px;
+}
 
     .responsive-table td:last-child {
         border-bottom: none;
