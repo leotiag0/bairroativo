@@ -8,6 +8,7 @@ if (!isset($_SESSION['admin'])) {
 require 'conexao.php';
 include 'admin_header.php';
 
+
 // Filtros
 $filtro_bairro = $_GET['bairro'] ?? '';
 $filtro_tipo = $_GET['tipo'] ?? '';
@@ -47,8 +48,6 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
-<link rel="stylesheet" href="css/admin.css?v=<?= time() ?>">
 
 <div class="container">
     <h2>📋 Gerenciar Serviços</h2>
