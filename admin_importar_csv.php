@@ -6,6 +6,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 require 'conexao.php';
+include 'admin_header.php';
 
 $apiKey = '2923ef94f739425b96ec104bd6613eb5';
 $msg = '';
@@ -116,85 +117,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Importar CSV - Bairro Ativo</title>
-    <link rel="icon" type="image/png" href="images/logo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
-        header {
-            background: #007bff;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        header img { height: 50px; }
-        .container {
-            max-width: 700px;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #ccc;
-        }
-        h2 { text-align: center; margin-bottom: 20px; }
-        input[type="file"] {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-        }
-        button {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            width: 100%;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 6px;
-        }
-        button:hover { background: #218838; }
-        .msg, .error {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        .msg { color: green; }
-        .error { color: red; }
-        .file-requirements {
-            background: #f8f9fa;
-            border-left: 4px solid #007bff;
-            padding: 10px 15px;
-            margin-bottom: 20px;
-        }
-        .back-link {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .back-link a {
-            text-decoration: none;
-            color: #007bff;
-            margin: 0 10px;
-        }
-        .back-link a:hover { text-decoration: underline; }
-        footer {
-            background: #007bff;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            margin-top: 60px;
-        }
-    </style>
-</head>
+
 <body>
 
-<header>
-    <img src="images/logo.png" alt="Logo">
     <div>Administração - Importar Serviços CSV</div>
-</header>
 
 <div class="container">
     <h2><i class="fas fa-file-import"></i> Importar CSV</h2>
