@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     <link rel="stylesheet" href="css/admin.css?v=<?= time() ?>">
 </head>
 
-<?php include 'admin_header.php';>
+<?php include 'admin_header.php'; ?>
     
 <body>
 
@@ -167,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     </div>
 </div>
 
-<?php include 'admin_footer.php';>
+<?php include 'admin_footer.php'; ?>
 
 </body>
 </html>
