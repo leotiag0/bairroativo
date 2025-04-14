@@ -49,6 +49,14 @@ $stmt->execute($params);
 $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Serviço</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
 <div class="container">
     <h2>📋 Gerenciar Serviços</h2>
 
@@ -122,3 +130,4 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <?php include 'admin_footer.php'; ?>
+</html>
