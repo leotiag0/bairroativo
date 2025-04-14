@@ -28,10 +28,11 @@ $porBairro = $pdo->query("
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Estatísticas - Bairro Ativo</title>
-    <link rel="stylesheet" href="css/public.css">
+    <link rel="stylesheet" href="css/admin.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         canvas {
@@ -41,6 +42,7 @@ $porBairro = $pdo->query("
         }
     </style>
 </head>
+    
 <body>
 <header>
     <img src="images/logo.png" alt="Logo">
