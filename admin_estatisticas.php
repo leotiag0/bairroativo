@@ -44,10 +44,8 @@ $porBairro = $pdo->query("
 </head>
     
 <body>
-<header>
-    <img src="images/logo.png" alt="Logo">
-    <div>Administração - Estatísticas</div>
-</header>
+
+<?php include 'admin_header.php'?>
 
 <div class="container">
     <h2>📊 Estatísticas do Sistema</h2>
