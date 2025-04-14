@@ -161,9 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     </div>
 </div>
 
-<footer>
-    &copy; <?= date('Y') ?> Sistema Bairro Ativo. Todos os direitos reservados.
-</footer>
+<?php include 'admin_footer.php';>
 
 </body>
 </html>
