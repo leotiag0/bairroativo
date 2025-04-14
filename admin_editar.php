@@ -33,6 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Serviço</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
 <div class="container">
     <h2>Editar Serviço</h2>
     <form method="POST">
@@ -55,3 +63,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
  <?php include 'admin_footer.php'; ?>
+</html>
