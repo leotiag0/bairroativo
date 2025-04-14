@@ -6,7 +6,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 require 'conexao.php';
-include 'admin_header.php';
+<?php include 'admin_header.php'; ?>
 
 $id = $_GET['id'] ?? null;
 $stmt = $pdo->prepare("SELECT * FROM servicos WHERE id = ?");
