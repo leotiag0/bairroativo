@@ -119,8 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
 <head>
     <meta charset="UTF-8">
     <title>Impoortar Serviços</title>
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css?v=<?= time() ?>">
 </head>
+
 <?php include 'admin_header.php';>
     
 <body>
