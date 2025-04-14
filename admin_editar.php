@@ -6,7 +6,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 require 'conexao.php';
-<?php include 'admin_header.php'; ?>
+include 'admin_header.php';
 
 $id = $_GET['id'] ?? null;
 $stmt = $pdo->prepare("SELECT * FROM servicos WHERE id = ?");
@@ -54,4 +54,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 </div>
 
-<?php include 'admin_footer.php'; ?>
+include 'admin_footer.php'; ?>
