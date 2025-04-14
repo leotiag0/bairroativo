@@ -1,6 +1,6 @@
 <!-- admin_header.php -->
 <?php if (session_status() !== PHP_SESSION_ACTIVE) session_start(); ?>
-<link rel="stylesheet" href="css/admin.css?v=<?= time() ?>">
+
 <header style="background:#007bff; color:white; padding:10px 20px; display:flex; justify-content:space-between; align-items:center;">
     <div style="display:flex; align-items:center; gap:10px;">
         <img src="images/logo.png" alt="Logo" style="height:50px;">
