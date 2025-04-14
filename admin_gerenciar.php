@@ -112,7 +112,7 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tr>
                             <td><input type="checkbox" name="excluir_ids[]" value="<?= $s['id'] ?>"></td>
                             <td data-label="Nome"><?= htmlspecialchars($s['nome_servico']) ?></td>
-                            <td data-label="Endereço"><?= htmlspecialchars({$s['endereco']) ?></td>
+                            <td data-label="Endereço"><?= htmlspecialchars($s['endereco']) ?></td>
                             <td data-label="Bairro"><?= htmlspecialchars($s['bairro']) ?></td>
                             <td data-label="Tipo"><?= htmlspecialchars($s['tipo']) ?></td>
                             <td data-label="Categorias"><?= htmlspecialchars($s['categorias'] ?? '-') ?></td>
