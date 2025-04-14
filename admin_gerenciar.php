@@ -100,6 +100,7 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <th><input type="checkbox" onclick="toggleCheckboxes(this)"></th>
                         <th>Nome</th>
                         <th>Endereço</th>
+                        <th>Bairro</th>
                         <th>Tipo</th>
                         <th>Categorias</th>
                         <th>Coordenadas</th>
@@ -111,7 +112,8 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tr>
                             <td><input type="checkbox" name="excluir_ids[]" value="<?= $s['id'] ?>"></td>
                             <td data-label="Nome"><?= htmlspecialchars($s['nome_servico']) ?></td>
-                            <td data-label="Endereço"><?= htmlspecialchars("{$s['rua']}, {$s['bairro']}") ?></td>
+                            <td data-label="Endereço"><?= htmlspecialchars({$s['rua']) ?></td>
+                            <td data-label="Bairro"><?= htmlspecialchars($s['bairro']) ?></td>
                             <td data-label="Tipo"><?= htmlspecialchars($s['tipo']) ?></td>
                             <td data-label="Categorias"><?= htmlspecialchars($s['categorias'] ?? '-') ?></td>
                             <td data-label="Coordenadas"><?= $s['latitude'] ?>, <?= $s['longitude'] ?></td>
