@@ -92,6 +92,6 @@ const grafico = new Chart(ctx, {
     }
 });
 </script>
-
+<?php include 'admin_footer.php'?>
 </body>
 </html>
