@@ -54,4 +54,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 </div>
 
-include 'admin_footer.php'; ?>
+ <?php include 'admin_footer.php'; ?>
