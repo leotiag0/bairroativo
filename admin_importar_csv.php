@@ -6,7 +6,6 @@ if (!isset($_SESSION['admin'])) {
 }
 
 require 'conexao.php';
-include 'admin_header.php';
 
 $apiKey = '2923ef94f739425b96ec104bd6613eb5';
 $msg = '';
