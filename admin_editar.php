@@ -85,9 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="tipo">Tipo:</label>
         <input type="text" name="tipo" id="tipo" value="<?= htmlspecialchars($s['tipo']) ?>" required>
 
-        <label for="descricao">Descrição:</label>
-        <textarea name="descricao" id="descricao" required><?= htmlspecialchars($s['descricao']) ?></textarea>
-
         <label for="horario_inicio">Horário Início:</label>
         <input type="time" name="horario_inicio" id="horario_inicio" value="<?= htmlspecialchars($s['horario_inicio']) ?>" required>
 
