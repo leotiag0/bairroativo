@@ -126,8 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
     
 <body>
 
-    <div>Administração - Importar Serviços CSV</div>
-
 <div class="container">
     <h2><i class="fas fa-file-import"></i> Importar CSV</h2>
 
