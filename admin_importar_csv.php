@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Impoortar Serviços</title>
+    <title>Importar Serviços</title>
     <link rel="stylesheet" href="css/admin.css?v=<?= time() ?>">
 </head>
 
@@ -159,6 +159,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['arquivo'])) {
         <input type="file" name="arquivo" accept=".csv" required>
         <button type="submit"><i class="fas fa-upload"></i> Importar</button>
     </form>
+
+    <div class="preview-link">
+    <a href="pre_visualizar_csv.php" target="_blank"><i class="fas fa-eye"></i> Pré-visualizar CSV antes de importar</a>
+    </div>
 
     <div class="back-link">
         <a href="admin_gerenciar.php"><i class="fas fa-arrow-left"></i> Voltar ao gerenciamento</a>
