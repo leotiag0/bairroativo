@@ -8,7 +8,6 @@ if (!isset($_SESSION['admin'])) {
 require 'conexao.php';
 include 'admin_header.php';
 
-
 // Filtros
 $filtro_bairro = $_GET['bairro'] ?? '';
 $filtro_tipo = $_GET['tipo'] ?? '';
@@ -60,6 +59,12 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="container">
     <h2>📋 Gerenciar Serviços</h2>
 
+    <?php if (isset($_GET['msg']) && $_GET['msg'] === 'excluidos'): ?>
+        <div class="msg">✅ <?= htmlspecialchars($_GET['qt']) ?> serviço(s) excluído(s) com sucesso.</div>
+    <?php endif; ?>
+
+    <p><?= count($servicos) ?> serviço(s) encontrado(s)</p>
+
     <!-- Filtros -->
     <form method="GET" class="filtros">
         <select name="bairro">
@@ -86,48 +91,57 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
     </form>
 
-    <!-- Mensagem após exclusão -->
-    <?php if (isset($_GET['excluir'])):
-        $id = (int) $_GET['excluir'];
-        $pdo->prepare("DELETE FROM servicos WHERE id = ?")->execute([$id]);
-        echo '<div class="msg">✅ Serviço excluído com sucesso.</div>';
-    endif; ?>
-
-    <!-- Tabela -->
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Endereço</th>
-                    <th>Tipo</th>
-                    <th>Categorias</th>
-                    <th>Coordenadas</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($servicos as $s): ?>
+    <!-- Tabela com formulário para múltiplas exclusões -->
+    <form method="POST" action="admin_excluir.php" onsubmit="return confirm('Deseja excluir os serviços selecionados?')">
+        <div class="table-responsive">
+            <table>
+                <thead>
                     <tr>
-                        <td data-label="Nome"><?= htmlspecialchars($s['nome_servico']) ?></td>
-                        <td data-label="Endereço"><?= "{$s['rua']}, {$s['bairro']}, {$s['cidade']}/{$s['estado']}" ?></td>
-                        <td data-label="Tipo"><?= htmlspecialchars($s['tipo']) ?></td>
-                        <td data-label="Categorias"><?= htmlspecialchars($s['categorias'] ?? '-') ?></td>
-                        <td data-label="Coordenadas"><?= $s['latitude'] ?>, <?= $s['longitude'] ?></td>
-                        <td data-label="Ações">
-                            <a class="btn" href="admin_editar.php?id=<?= $s['id'] ?>">✏️ Editar</a>
-                            <a class="btn btn-danger" href="?excluir=<?= $s['id'] ?>" onclick="return confirm('Deseja excluir este serviço?')">🗑️ Excluir</a>
-                        </td>
+                        <th><input type="checkbox" onclick="toggleCheckboxes(this)"></th>
+                        <th>Nome</th>
+                        <th>Endereço</th>
+                        <th>Tipo</th>
+                        <th>Categorias</th>
+                        <th>Coordenadas</th>
+                        <th>Ações</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    <?php foreach ($servicos as $s): ?>
+                        <tr>
+                            <td><input type="checkbox" name="excluir_ids[]" value="<?= $s['id'] ?>"></td>
+                            <td data-label="Nome"><?= htmlspecialchars($s['nome_servico']) ?></td>
+                            <td data-label="Endereço"><?= htmlspecialchars("{$s['rua']}, {$s['bairro']}") ?></td>
+                            <td data-label="Tipo"><?= htmlspecialchars($s['tipo']) ?></td>
+                            <td data-label="Categorias"><?= htmlspecialchars($s['categorias'] ?? '-') ?></td>
+                            <td data-label="Coordenadas"><?= $s['latitude'] ?>, <?= $s['longitude'] ?></td>
+                            <td data-label="Ações">
+                                <a class="btn" href="admin_editar.php?id=<?= $s['id'] ?>">✏️ Editar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <?php if (count($servicos) > 0): ?>
+            <div style="margin-top: 10px;">
+                <button type="submit" class="btn btn-danger">🗑️ Excluir selecionados</button>
+            </div>
+        <?php endif; ?>
+    </form>
 
     <div style="margin-top: 20px; text-align:center;">
         <a class="botao-voltar" href="admin_cadastro.php">← Voltar ao cadastro</a>
     </div>
 </div>
+
+<script>
+function toggleCheckboxes(source) {
+    const checkboxes = document.querySelectorAll('input[name="excluir_ids[]"]');
+    checkboxes.forEach(cb => cb.checked = source.checked);
+}
+</script>
 
 <?php include 'admin_footer.php'; ?>
 </html>
