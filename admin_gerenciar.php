@@ -48,7 +48,7 @@ $stmt->execute($params);
 $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/admin.css?v=<?= time() ?>">
 
 <div class="container">
     <h2>📋 Gerenciar Serviços</h2>
