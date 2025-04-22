@@ -76,30 +76,36 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Filtros -->
     <form method="GET" class="filtros-flex" style="margin-bottom: 20px;">
         <input type="hidden" name="lang" value="<?= $lang ?>">
+        
+        <!-- Filtro de busca -->
         <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
 
-        <select name="bairro">
-            <option value="">Bairro</option>
+        <!-- Filtro de bairro -->
+        <select name="bairro" aria-label="Escolha um bairro">
+            <option value="" disabled <?= !isset($_GET['bairro']) ? 'selected' : '' ?>>Escolha o bairro</option>
             <?php foreach ($bairros as $bairro): ?>
                 <option value="<?= $bairro ?>" <?= ($_GET['bairro'] ?? '') === $bairro ? 'selected' : '' ?>><?= $bairro ?></option>
             <?php endforeach; ?>
         </select>
 
-        <select name="tipo">
-            <option value="">Tipo</option>
+        <!-- Filtro de tipo -->
+        <select name="tipo" aria-label="Escolha um tipo">
+            <option value="" disabled <?= !isset($_GET['tipo']) ? 'selected' : '' ?>>Escolha o tipo</option>
             <?php foreach ($tipos as $tipo): ?>
                 <option value="<?= $tipo ?>" <?= ($_GET['tipo'] ?? '') === $tipo ? 'selected' : '' ?>><?= $tipo ?></option>
             <?php endforeach; ?>
         </select>
 
-        <select name="categoria">
-            <option value="">Categoria</option>
+        <!-- Filtro de categoria -->
+        <select name="categoria" aria-label="Escolha uma categoria">
+            <option value="" disabled <?= !isset($_GET['categoria']) ? 'selected' : '' ?>>Escolha a categoria</option>
             <?php foreach ($categorias as $c): ?>
                 <option value="<?= $c['id'] ?>" <?= ($_GET['categoria'] ?? '') == $c['id'] ? 'selected' : '' ?>><?= $c['nome'] ?></option>
             <?php endforeach; ?>
         </select>
 
-        <select name="ordenar">
+        <!-- Filtro de ordenação -->
+        <select name="ordenar" aria-label="Escolha uma ordem">
             <option value="nome" <?= ($_GET['ordenar'] ?? '') === 'nome' ? 'selected' : '' ?>>Ordenar por Nome</option>
             <option value="tipo" <?= ($_GET['ordenar'] ?? '') === 'tipo' ? 'selected' : '' ?>>Tipo</option>
             <option value="bairro" <?= ($_GET['ordenar'] ?? '') === 'bairro' ? 'selected' : '' ?>>Bairro</option>
@@ -110,21 +116,30 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Lista -->
     <?php if (count($servicos) === 0): ?>
-        <p>Nenhum serviço encontrado.</p>
+        <div class="alert alert-warning">Nenhum serviço encontrado.</div>
     <?php else: ?>
         <div class="lista-servicos">
             <?php foreach ($servicos as $s): ?>
                 <div class="card-servico">
                     <div class="thumb">
-                        <img src="images/categorias/<?= $s['categoria_id'] ?? '0' ?>.png" alt="<?= $s['categoria_nome'] ?? 'Categoria' ?>">
+                        <!-- Ícone da categoria -->
+                        <img src="images/categorias/<?= $s['categoria_id'] ?? '0' ?>.png" alt="<?= $s['categoria_nome'] ?? 'Categoria' ?>" class="categoria-icon">
                     </div>
                     <div class="info">
+                        <!-- Nome do serviço e categoria -->
                         <strong>
                             <i class="fas fa-circle" style="font-size:10px;color:<?= $cores[$s['categoria_id']] ?? '#999' ?>;"></i>
                             <?= htmlspecialchars($s['nome_servico']) ?>
                         </strong>
-                        <span><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($s['bairro']) ?> | <i class="fas fa-tag"></i> <?= htmlspecialchars($s['tipo']) ?></span>
-                        <span><i class="far fa-clock"></i> <?= htmlspecialchars($s['horario_inicio']) ?> - <?= htmlspecialchars($s['horario_fim']) ?></span>
+                        
+                        <!-- Informações adicionais -->
+                        <div class="detalhes">
+                            <span><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($s['bairro']) ?></span>
+                            <span><i class="fas fa-tag"></i> <?= htmlspecialchars($s['tipo']) ?></span>
+                            <span><i class="far fa-clock"></i> <?= htmlspecialchars($s['horario_inicio']) ?> - <?= htmlspecialchars($s['horario_fim']) ?></span>
+                        </div>
+
+                        <!-- Botão de detalhes -->
                         <a href="detalhes.php?id=<?= $s['id'] ?>&lang=<?= $lang ?>" class="btn">ℹ️ <?= $t['detalhes'] ?></a>
                     </div>
                 </div>
