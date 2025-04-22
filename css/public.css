@@ -507,3 +507,45 @@ body.large-font .btn { padding: var(--space-md) var(--space-lg); }
 .a11y-btn:hover {
     background: var(--primary-dark);
 }
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f9fa; /* Cor de fundo do cabeçalho */
+}
+
+.header-branding {
+    flex: 1;
+}
+
+.header-branding .logo {
+    max-height: 60px; /* Ajuste a altura do logotipo */
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaçamento entre os controles */
+}
+
+.lang-btn {
+    background: none;
+    border: 1px solid #007bff; /* Borda do botão de idioma */
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.a11y-btn {
+    background-color: #007bff; /* Cor do botão de acessibilidade */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px; /* Bordas arredondadas */
+    cursor: pointer;
+}
+
+.a11y-btn:hover {
+    background-color: #0056b3; /* Cor ao passar o mouse */
+}
