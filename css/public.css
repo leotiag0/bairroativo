@@ -1,212 +1,355 @@
-/* Adicionar no início do arquivo */
-/* ===== ÍNDICE ===== */
-/*
-1. VARIÁVEIS GLOBAIS
-2. RESET E BASE
-3. COMPONENTES
-   - Header
-   - Filtros
-   - Botões
-   - Cards
-4. PÁGINAS ESPECÍFICAS
-   - Mapa
-   - Lista
-5. ACESSIBILIDADE
-   - Modos
-   - Utilitários
-6. RESPONSIVIDADE
-*/
+# Unificação Visual e Melhorias de UX/Acessibilidade
 
-/* Adicionar ou modificar */
-:focus-visible {
-    outline: 3px solid var(--primary-color);
-    outline-offset: 2px;
+Vou analisar as duas páginas e sugerir melhorias para unificá-las visualmente e aprimorar a experiência do usuário e acessibilidade.
+
+## Análise Comparativa
+
+As duas páginas têm propósitos diferentes (lista vs. mapa), mas compartilham muitos elementos que podem ser unificados:
+
+1. **Header e Footer**: Já estão consistentes
+2. **Sistema de Filtros**: Similar, mas com implementações diferentes
+3. **Exibição de Serviços**: Lista vs. Mapa
+4. **Estilo Visual**: Cores, tipografia e componentes
+
+## Sugestões de Unificação Visual
+
+### 1. Sistema de Filtros Unificado
+
+```html
+<!-- Filtros consistentes para ambas as páginas -->
+<div class="filtros-container">
+    <form method="GET" class="filtros-grid">
+        <input type="hidden" name="lang" value="<?= $lang ?>">
+        
+        <!-- Campo de busca -->
+        <div class="filtro-grupo">
+            <label for="busca"><?= $t['buscar'] ?></label>
+            <input type="text" id="busca" name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>"
+                   placeholder="<?= $t['buscar_placeholder'] ?? 'Buscar serviços...' ?>">
+        </div>
+        
+        <!-- Bairro -->
+        <div class="filtro-grupo">
+            <label for="bairro">Bairro</label>
+            <select id="bairro" name="bairro">
+                <option value="">Todos</option>
+                <?php foreach ($bairros as $b): ?>
+                    <option value="<?= $b ?>" <?= ($_GET['bairro'] ?? '') === $b ? 'selected' : '' ?>>
+                        <?= $b ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        
+        <!-- Tipo -->
+        <div class="filtro-grupo">
+            <label for="tipo">Tipo</label>
+            <select id="tipo" name="tipo">
+                <option value="">Todos</option>
+                <?php foreach ($tipos as $tipo): ?>
+                    <option value="<?= $tipo ?>" <?= ($_GET['tipo'] ?? '') === $tipo ? 'selected' : '' ?>>
+                        <?= $tipo ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        
+        <!-- Categoria -->
+        <div class="filtro-grupo">
+            <label for="categoria">Categoria</label>
+            <select id="categoria" name="categoria">
+                <option value="">Todas</option>
+                <?php foreach ($categorias as $c): ?>
+                    <option value="<?= $c['id'] ?>" <?= ($_GET['categoria'] ?? '') == $c['id'] ? 'selected' : '' ?>>
+                        <?= $c['nome'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        
+        <!-- Botões de ação -->
+        <div class="filtro-acoes">
+            <button type="submit" class="btn btn-primario">
+                <i class="fas fa-search"></i> <?= $t['buscar'] ?>
+            </button>
+            <a href="?" class="btn btn-secundario">
+                <i class="fas fa-undo"></i> Limpar
+            </a>
+            <button type="button" onclick="localizarUsuario()" class="btn btn-terciario">
+                <i class="fas fa-location-arrow"></i> <?= $t['proximo'] ?? 'Perto de mim' ?>
+            </button>
+        </div>
+    </form>
+</div>
+```
+
+### 2. CSS Unificado para Ambas as Páginas
+
+```css
+/* Estilos base consistentes */
+:root {
+    --cor-primaria: #2c3e50;
+    --cor-secundaria: #3498db;
+    --cor-texto: #333;
+    --cor-fundo: #f9f9f9;
+    --cor-borda: #ddd;
+    --sombra: 0 2px 8px rgba(0,0,0,0.1);
+    --raio-borda: 6px;
+    --espacamento: 1rem;
 }
 
-/* Garantir contraste mínimo para texto */
-body {
-    color: var(--text-dark);
-    background-color: var(--bg-light);
+/* Filtros */
+.filtros-container {
+    background: white;
+    padding: var(--espacamento);
+    border-radius: var(--raio-borda);
+    box-shadow: var(--sombra);
+    margin-bottom: var(--espacamento);
 }
 
-/* Melhorar legibilidade de links */
-a {
-    color: var(--primary-color);
-    text-decoration: underline;
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 2px;
+.filtros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--espacamento);
+    align-items: end;
 }
 
-a:hover {
-    text-decoration-thickness: 2px;
+.filtro-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-/* Indicadores visuais para interações */
-button, .btn, [role="button"] {
-    transition: 
-        background-color var(--transition-fast),
-        transform var(--transition-fast),
-        box-shadow var(--transition-fast);
+.filtro-grupo label {
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
-button:hover, .btn:hover, [role="button"]:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
+.filtro-acoes {
+    display: flex;
+    gap: 0.5rem;
+    align-self: end;
 }
 
-button:active, .btn:active, [role="button"]:active {
-    transform: translateY(1px);
-}
-
-/* Adicionar seção de componentes */
-/* ===== COMPONENTES ===== */
-
-/* Card de serviço (para lista e mapa) */
-.service-card {
-    background: var(--bg-white);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-    transition: all var(--transition-normal);
-    position: relative;
-}
-
-.service-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-}
-
-.service-card__header {
-    padding: var(--space-sm) var(--space-md);
-    background: var(--primary-extra-light);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.service-card__body {
-    padding: var(--space-md);
-}
-
-.service-card__footer {
-    padding: var(--space-sm) var(--space-md);
-    background: var(--bg-light);
-    border-top: 1px solid var(--border-color);
-}
-
-/* Badge de categoria */
-.category-badge {
+/* Botões consistentes */
+.btn {
+    padding: 0.6rem 1rem;
+    border-radius: var(--raio-borda);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
     display: inline-flex;
     align-items: center;
-    gap: var(--space-xs);
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--border-radius);
-    font-size: 0.8rem;
-    font-weight: 500;
-    background-color: var(--primary-extra-light);
-    color: var(--primary-dark);
+    gap: 0.5rem;
+    min-height: 44px; /* Acessibilidade */
 }
 
-.category-badge__color {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    display: inline-block;
+.btn-primario {
+    background: var(--cor-primaria);
+    color: white;
 }
 
-/* Atualizar estilos do mapa */
-/* Tooltip acessível */
-.leaflet-tooltip {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--border-radius);
-    background-color: var(--bg-white);
-    color: var(--text-dark);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-sm);
+.btn-secundario {
+    background: var(--cor-borda);
+    color: var(--cor-texto);
 }
 
-/* Marcadores personalizados */
-.leaflet-marker-icon {
-    transition: transform var(--transition-fast);
+.btn-terciario {
+    background: var(--cor-secundaria);
+    color: white;
 }
 
-.leaflet-marker-icon:hover {
-    transform: scale(1.1);
-    z-index: 1000 !important;
+/* Cards de serviço (para a página de lista) */
+.card-servico {
+    background: white;
+    border-radius: var(--raio-borda);
+    box-shadow: var(--sombra);
+    overflow: hidden;
+    transition: transform 0.2s;
 }
 
-/* Popup acessível */
-.leaflet-popup-content-wrapper {
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-md);
-    font-family: 'Inter', sans-serif;
+.card-servico:hover {
+    transform: translateY(-3px);
 }
 
-.leaflet-popup-content {
-    min-width: 200px;
-    margin: var(--space-sm);
+/* Mapa (para a página de mapa) */
+#map {
+    height: 600px;
+    border-radius: var(--raio-borda);
+    box-shadow: var(--sombra);
 }
 
-.leaflet-popup-content h3 {
-    margin-bottom: var(--space-xs);
-    color: var(--primary-dark);
-}
-
-.leaflet-popup-content p {
-    margin-bottom: var(--space-xs);
-}
-
-.leaflet-popup-content a {
-    display: inline-block;
-    margin-top: var(--space-sm);
-}
-
-/* Adicionar sistema de grid */
-.grid {
-    display: grid;
-    gap: var(--space-md);
-}
-
-.grid-cols-2 {
-    grid-template-columns: repeat(2, 1fr);
-}
-
-.grid-cols-3 {
-    grid-template-columns: repeat(3, 1fr);
-}
-
-.grid-cols-4 {
-    grid-template-columns: repeat(4, 1fr);
-}
-
-@media (max-width: 768px) {
-    .grid-cols-2,
-    .grid-cols-3,
-    .grid-cols-4 {
-        grid-template-columns: 1fr;
+/* Modo escuro */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --cor-primaria: #3498db;
+        --cor-texto: #f0f0f0;
+        --cor-fundo: #222;
+        --cor-borda: #444;
+    }
+    
+    body {
+        background: var(--cor-fundo);
+        color: var(--cor-texto);
+    }
+    
+    .filtros-container, .card-servico {
+        background: #333;
     }
 }
+```
 
-/* Melhorar feedback visual */
-.loading-spinner {
-    display: inline-block;
-    width: 1.5rem;
-    height: 1.5rem;
-    border: 3px solid rgba(0,0,0,0.1);
-    border-radius: 50%;
-    border-top-color: var(--primary-color);
-    animation: spin 1s ease-in-out infinite;
+## Melhorias de UX e Acessibilidade
+
+### 1. Navegação por Teclado
+
+```javascript
+// Adicionar em ambas as páginas
+document.addEventListener('keydown', (e) => {
+    // Pular se estiver em campo de formulário
+    if (['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'].includes(e.target.tagName)) return;
+    
+    switch(e.key) {
+        case '1':
+            window.location.href = 'lista.php?lang=<?= $lang ?>';
+            break;
+        case '2':
+            window.location.href = 'mapa.php?lang=<?= $lang ?>';
+            break;
+        case '/':
+            document.querySelector('input[type="search"], input[type="text"]').focus();
+            break;
+        case '?':
+            showHelpModal();
+            break;
+    }
+});
+
+function showHelpModal() {
+    // Implementar modal de ajuda com atalhos
 }
+```
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
+### 2. Feedback Visual Consistente
+
+```javascript
+// Função para mostrar feedback (usar em ambas páginas)
+function showFeedback(message, type = 'info', timeout = 5000) {
+    const feedback = document.createElement('div');
+    feedback.className = `feedback feedback-${type}`;
+    feedback.setAttribute('role', 'alert');
+    feedback.innerHTML = message;
+    
+    document.body.appendChild(feedback);
+    
+    setTimeout(() => {
+        feedback.classList.add('fade-out');
+        setTimeout(() => feedback.remove(), 500);
+    }, timeout);
 }
+```
 
-/* Estados de formulário */
-input:disabled, select:disabled, button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
+### 3. Alternância entre Lista e Mapa
 
-.input-error {
-    border-color: var(--danger-color) !
+Adicionar um seletor de visualização consistente:
+
+```html
+<div class="view-toggle">
+    <a href="lista.php?<?= $_SERVER['QUERY_STRING'] ?>" 
+       class="btn <?= basename($_SERVER['PHP_SELF']) === 'lista.php' ? 'active' : '' ?>"
+       aria-label="Visualização em lista">
+        <i class="fas fa-list"></i> Lista
+    </a>
+    <a href="mapa.php?<?= $_SERVER['QUERY_STRING'] ?>" 
+       class="btn <?= basename($_SERVER['PHP_SELF']) === 'mapa.php' ? 'active' : '' ?>"
+       aria-label="Visualização em mapa">
+        <i class="fas fa-map"></i> Mapa
+    </a>
+</div>
+```
+
+### 4. Paginação/Ordenação Consistente
+
+```html
+<div class="resultados-acoes">
+    <div class="ordenacao">
+        <label for="ordenar">Ordenar por:</label>
+        <select id="ordenar" name="ordenar" onchange="this.form.submit()">
+            <option value="nome" <?= ($_GET['ordenar'] ?? '') === 'nome' ? 'selected' : '' ?>>Nome</option>
+            <option value="bairro" <?= ($_GET['ordenar'] ?? '') === 'bairro' ? 'selected' : '' ?>>Bairro</option>
+            <option value="tipo" <?= ($_GET['ordenar'] ?? '') === 'tipo' ? 'selected' : '' ?>>Tipo</option>
+        </select>
+    </div>
+    
+    <div class="paginacao">
+        <span>Página 1 de 5</span>
+        <a href="?pagina=1" aria-label="Primeira página">&laquo;</a>
+        <a href="?pagina=1">1</a>
+        <a href="?pagina=2" aria-current="page">2</a>
+        <a href="?pagina=3">3</a>
+        <a href="?pagina=5" aria-label="Última página">&raquo;</a>
+    </div>
+</div>
+```
+
+### 5. Melhorias de Acessibilidade Adicionais
+
+1. **Landmarks ARIA**:
+   ```html
+   <main role="main">
+       <section aria-labelledby="filtros-titulo">
+           <h2 id="filtros-titulo" class="sr-only">Filtros</h2>
+           <!-- Filtros aqui -->
+       </section>
+       
+       <section aria-labelledby="resultados-titulo">
+           <h2 id="resultados-titulo" class="sr-only">Resultados</h2>
+           <!-- Resultados aqui -->
+       </section>
+   </main>
+   ```
+
+2. **Foco gerenciado**:
+   ```javascript
+   // Após filtragem/submissão de formulário
+   function focusOnResults() {
+       const firstResult = document.querySelector('.card-servico, .map-marker');
+       if (firstResult) {
+           firstResult.setAttribute('tabindex', '-1');
+           firstResult.focus();
+       }
+   }
+   ```
+
+3. **Contraste de cores**:
+   ```css
+   /* Garantir contraste mínimo 4.5:1 */
+   :root {
+       --cor-primaria: #0056b3; /* Azul mais escuro para melhor contraste */
+       --cor-texto: #212529;
+   }
+   
+   .btn-primario {
+       background: var(--cor-primaria);
+       color: white; /* Contraste garantido */
+   }
+   ```
+
+## Implementação Recomendada
+
+1. **Crie um arquivo CSS unificado** (`styles.css`) com todos os estilos compartilhados
+2. **Desenvolva componentes reutilizáveis**:
+   - `filtros.php` - Para incluir o sistema de filtros em ambas páginas
+   - `paginacao.php` - Para a paginação consistente
+   - `feedback.php` - Para mensagens de feedback
+
+3. **JavaScript modular**:
+   - `filtros.js` - Lógica comum de filtragem
+   - `acessibilidade.js` - Funções compartilhadas de acessibilidade
+   - `feedback.js` - Sistema de feedback
+
+4. **Header/Footer consistentes**:
+   - Garanta que ambos os arquivos incluam os mesmos recursos e estilos
+
+Essas mudanças criarão uma experiência coesa entre as duas visualizações (lista e mapa), tornando a navegação mais intuitiva e acessível para todos os usuários.
