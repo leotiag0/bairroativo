@@ -129,35 +129,27 @@ footer {
 }
 
 /* Filtros */
-/* Filtros */
+.filtros {
+    background-color: #f1f1f1;
+    padding: 15px;
+}
+
 .filtros-flex {
     display: flex;
-    gap: 10px;
     flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
     justify-content: space-between;
 }
 
+.filtros-flex input[type="text"],
 .filtros-flex select,
-.filtros-flex input {
-    padding: 8px;
+.filtros-flex .btn {
+    padding: 10px;
     font-size: 14px;
-    width: 100%;
-    max-width: 180px;
-    border-radius: 4px;
+    border-radius: 5px;
     border: 1px solid #ccc;
-}
-
-.filtros-flex button {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.filtros-flex button:hover {
-    background-color: #0056b3;
+    outline: none;
 }
 
 /* Mapa */
@@ -172,71 +164,90 @@ footer {
 /* Card de serviço (lista.php) */
 .card-servico {
     display: flex;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    gap: 15px;
+    border: 1px solid #ccc;
     padding: 15px;
-    transition: box-shadow 0.3s ease;
+    border-radius: 6px;
+    background: #fff;
+    align-items: center;
+    transition: box-shadow 0.2s ease;
 }
 
 .card-servico:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.thumb {
-    width: 50px;
-    height: 50px;
-    margin-right: 15px;
-}
-
-.thumb img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 50%;
-}
-
-.info {
-    flex: 1;
-}
-
-strong {
-    font-size: 16px;
+.card-servico .thumb {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #eee;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
-.info .detalhes {
-    margin-top: 10px;
+.card-servico .thumb img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.card-servico .info {
+    flex-grow: 1;
+}
+
+.card-servico .info strong {
+    font-size: 16px;
+}
+
+.card-servico .info span {
     font-size: 14px;
     color: #555;
 }
 
-.card-servico .btn {
-    margin-top: 15px;
-    background-color: #007bff;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 4px;
+/* Ações (index) */
+.acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.card-acao {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    width: 250px;
+    transition: transform 0.2s, box-shadow 0.2s;
     text-decoration: none;
-    display: inline-block;
+    color: inherit;
 }
 
-.card-servico .btn:hover {
-    background-color: #0056b3;
+.card-acao:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-/* Alerta de mensagem quando não há serviços */
-.alert {
-    padding: 10px;
-    background-color: #f8d7da;
-    color: #721c24;
-    border-radius: 4px;
-    margin-top: 15px;
+.card-acao .icone {
+    font-size: 36px;
+    margin-bottom: 10px;
 }
 
-.alert-warning {
-    background-color: #fff3cd;
-    color: #856404;
+.card-acao .titulo {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.card-acao .desc {
+    font-size: 14px;
+    color: #666;
 }
 
 /* Imagem explicativa (index) */
