@@ -11,8 +11,8 @@
         <a href="?lang=es"><img src="images/spain-flag.jpg" class="flag-icon" alt="Español"></a>
         <a href="?lang=en"><img src="images/uk-flag.jpg" class="flag-icon" alt="English"></a>
 
-        <button id="toggle-contraste" title="Ativar/desativar alto contraste">Alto Contraste</button>
-        <button id="toggle-darkmode">Modo Escuro</button>
+        <button id="toggle-contraste" title="Ativar/desativar alto contraste" class="btn">Alto Contraste</button>
+        <button id="toggle-darkmode" class="btn">Modo Escuro</button>
     </div>
 </header>
 
