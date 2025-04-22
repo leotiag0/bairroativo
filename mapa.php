@@ -68,45 +68,6 @@ $json_cores = json_encode($categorias_cores);
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" type="image/png" href="images/logo.png">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        #toggle-darkmode {
-            background: #444;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 13px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-        body.modo-escuro {
-            background-color: #1c1c1c;
-            color: #f1f1f1;
-        }
-        body.modo-escuro header,
-        body.modo-escuro footer {
-            background-color: #2a2a2a !important;
-        }
-        body.modo-escuro .filtros,
-        body.modo-escuro .card,
-        body.modo-escuro .container {
-            background-color: #2c2c2c;
-            color: #f1f1f1;
-        }
-        body.modo-escuro a {
-            color: #89c9ff;
-        }
-        body.modo-escuro .btn {
-            background-color: #555;
-            color: #fff;
-        }
-        body.modo-escuro .btn:hover {
-            background-color: #666;
-        }
-    </style>
 </head>
 <body>
 <?php include 'header.php'; ?>
