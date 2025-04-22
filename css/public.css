@@ -164,90 +164,71 @@ footer {
 /* Card de serviço (lista.php) */
 .card-servico {
     display: flex;
-    gap: 15px;
-    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     padding: 15px;
-    border-radius: 6px;
-    background: #fff;
-    align-items: center;
-    transition: box-shadow 0.2s ease;
+    transition: box-shadow 0.3s ease;
 }
 
 .card-servico:hover {
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.card-servico .thumb {
-    width: 80px;
-    height: 80px;
-    flex-shrink: 0;
-    border-radius: 6px;
-    overflow: hidden;
-    background: #eee;
+.thumb {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+}
+
+.thumb img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+.info {
+    flex: 1;
+}
+
+strong {
+    font-size: 16px;
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
-.card-servico .thumb img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-}
-
-.card-servico .info {
-    flex-grow: 1;
-}
-
-.card-servico .info strong {
-    font-size: 16px;
-}
-
-.card-servico .info span {
+.info .detalhes {
+    margin-top: 10px;
     font-size: 14px;
     color: #555;
 }
 
-/* Ações (index) */
-.acoes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 30px;
-}
-
-.card-acao {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    width: 250px;
-    transition: transform 0.2s, box-shadow 0.2s;
+.card-servico .btn {
+    margin-top: 15px;
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
     text-decoration: none;
-    color: inherit;
+    display: inline-block;
 }
 
-.card-acao:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+.card-servico .btn:hover {
+    background-color: #0056b3;
 }
 
-.card-acao .icone {
-    font-size: 36px;
-    margin-bottom: 10px;
+/* Alerta de mensagem quando não há serviços */
+.alert {
+    padding: 10px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border-radius: 4px;
+    margin-top: 15px;
 }
 
-.card-acao .titulo {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.card-acao .desc {
-    font-size: 14px;
-    color: #666;
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
 }
 
 /* Imagem explicativa (index) */
