@@ -372,3 +372,97 @@ body.modo-escuro .btn {
 body.modo-escuro .btn:hover {
     background-color: #666;
 }
+
+/* Estilo para o popup do mapa */
+.leaflet-popup-content-wrapper {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+}
+
+.leaflet-popup-content {
+    font-size: 14px;
+    color: #333;
+}
+
+.leaflet-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.leaflet-popup-header .popup-title {
+    font-size: 16px;
+}
+
+.leaflet-popup-header .popup-close {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #007bff;
+}
+
+.leaflet-popup-header .popup-close:hover {
+    color: #0056b3;
+}
+
+/* Estilo para ícones dentro do popup */
+.leaflet-popup-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+/* Botões dentro do popup */
+.leaflet-popup-content .btn {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+}
+
+.leaflet-popup-content .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Animação para o popup */
+.leaflet-popup {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Popup responsivo */
+@media (max-width: 768px) {
+    .leaflet-popup-content-wrapper {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .leaflet-popup-content .btn {
+        padding: 6px 10px;
+    }
+}
+
