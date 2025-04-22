@@ -574,3 +574,59 @@ footer {
         font-size: 1.75rem;
     }
 }
+/* Estilos mínimos para o header funcionar */
+.accessible-header {
+    background: #fff;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    height: 50px;
+}
+
+.header-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.language-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.lang-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0.3rem;
+}
+
+.a11y-btn {
+    background: #f0f0f0;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
