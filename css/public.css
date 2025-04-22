@@ -8,14 +8,6 @@
 html, body {
     height: 100%;
     font-family: 'Inter', sans-serif;
-    
-        body.modo-escuro .btn {
-            background-color: #555;
-            color: #fff;
-  
-        body.modo-escuro .btn:hover {
-            background-color: #666;
-
     background-color: #f4f4f4;
     color: #333;
     display: flex;
