@@ -1,42 +1,345 @@
-/* Geral */
-body {
-    font-family: 'Inter', sans-serif;
+/* Reset e base */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 /* Header */
 header {
-    background-color: #fff;
-    padding: 15px 20px;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
 }
 
-header .header-left .logo {
-    max-height: 40px;
+.logo {
+    height: 60px;
 }
 
-header .header-right a {
-    margin-left: 10px;
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-header .header-right .flag-icon {
-    width: 30px;
-    height: 20px;
+.flag-icon {
+    height: 22px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: transform 0.2s;
 }
 
-header #toggle-contraste {
-    background: #444;
+.flag-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Contraste botão */
+#toggle-contraste {
+    background: #222;
     color: #fff;
     border: none;
     padding: 6px 12px;
     border-radius: 4px;
     font-size: 13px;
     cursor: pointer;
+    margin-left: 10px;
+}
+
+/* Contraste alto */
+body.contraste-alto {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+body.contraste-alto a,
+body.contraste-alto .btn,
+body.contraste-alto select,
+body.contraste-alto input {
+    color: #fff !important;
+    background-color: #000 !important;
+    border: 2px solid #fff !important;
+}
+
+body.contraste-alto header,
+body.contraste-alto footer {
+    background: #111 !important;
+}
+
+/* Layout principal */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 960px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Rodapé */
+footer {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+}
+
+/* Botões */
+.btn {
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    display: inline-block;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+/* Filtros */
+.filtros {
+    background-color: #f1f1f1;
+    padding: 15px;
+}
+
+.filtros-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.filtros-flex input[type="text"],
+.filtros-flex select,
+.filtros-flex .btn {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+/* Mapa */
+#map {
+    width: 100%;
+    min-height: 400px;
+    max-height: 90vh;
+    border-radius: 6px;
+    margin: 0 auto;
+}
+
+/* Card de serviço (lista.php) */
+.card-servico {
+    display: flex;
+    gap: 15px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 6px;
+    background: #fff;
+    align-items: center;
+    transition: box-shadow 0.2s ease;
+}
+
+.card-servico:hover {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card-servico .thumb {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-servico .thumb img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.card-servico .info {
+    flex-grow: 1;
+}
+
+.card-servico .info strong {
+    font-size: 16px;
+}
+
+.card-servico .info span {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Ações (index) */
+.acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.card-acao {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    width: 250px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-acao:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.card-acao .icone {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.card-acao .titulo {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.card-acao .desc {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Imagem explicativa (index) */
+.imagem-explicativa {
+    max-width: 100%;
+    margin-top: 20px;
+    border-radius: 6px;
+}
+
+/* Tabelas responsivas */
+.responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+.responsive-table thead {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.responsive-table th,
+.responsive-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .responsive-table thead {
+        display: none;
+    }
+
+    .responsive-table tr {
+        display: block;
+        margin-bottom: 15px;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 0 5px #ccc;
+    }
+
+    .responsive-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .responsive-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        flex-basis: 40%;
+        color: #555;
+    }
+
+    .responsive-table td:last-child {
+        border-bottom: none;
+    }
+
+    .filtros-flex {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filtros-flex .btn,
+    .filtros-flex select,
+    .filtros-flex input[type="text"] {
+        width: 100%;
+    }
+
+    .card-servico {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-servico .thumb {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .card-acao {
+        width: 100%;
+    }
+
+    #toggle-contraste {
+        position: static;
+        margin: 10px auto 0;
+        display: block;
+    }
 }
 
 /* Modo Escuro */
@@ -68,94 +371,4 @@ body.modo-escuro .btn {
 
 body.modo-escuro .btn:hover {
     background-color: #666;
-}
-
-/* Contraste Alto */
-body.contraste-alto {
-    background-color: #fff;
-    color: #000;
-}
-
-body.contraste-alto header {
-    background-color: #000;
-    color: #fff;
-}
-
-body.contraste-alto footer {
-    background-color: #000;
-    color: #fff;
-}
-
-/* Filtros */
-.filtros {
-    margin: 20px 0;
-    padding: 15px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.filtros select,
-.filtros input {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-}
-
-.filtros button {
-    padding: 10px 20px;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.filtros button:hover {
-    background-color: #0056b3;
-}
-
-/* Mapa */
-#map {
-    height: 500px;
-    width: 100%;
-}
-
-/* Footer */
-footer.site-footer {
-    background-color: #f8f8f8;
-    padding: 20px 0;
-    text-align: center;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-footer.site-footer .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-footer.site-footer p {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
-}
-
-footer.site-footer p a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-footer.site-footer p a:hover {
-    text-decoration: underline;
-}
-
-body.modo-escuro footer.site-footer {
-    background-color: #2a2a2a;
-    color: #f1f1f1;
-}
-
-body.modo-escuro footer.site-footer a {
-    color: #89c9ff;
 }
