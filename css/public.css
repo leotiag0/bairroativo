@@ -1,88 +1,42 @@
-/* Reset de margens e padding */
-* {
+/* Geral */
+body {
+    font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Corpo e fontes principais */
-body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-/* Filtros */
-.filtros {
-    padding: 15px;
+/* Header */
+header {
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-.filtros-flex {
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.filtros input,
-.filtros select {
-    padding: 8px;
-    font-size: 14px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+header .header-left .logo {
+    max-height: 40px;
 }
 
-.filtros button {
-    padding: 8px 16px;
-    font-size: 14px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 4px;
+header .header-right a {
+    margin-left: 10px;
 }
 
-.filtros button:hover {
-    background-color: #0056b3;
+header .header-right .flag-icon {
+    width: 30px;
+    height: 20px;
 }
 
-/* Mapa */
-#map {
-    width: 100%;
-    height: 400px;
-    margin-top: 20px;
-}
-
-/* Cartões de serviço */
-.card {
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-}
-
-.card a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.card a:hover {
-    text-decoration: underline;
-}
-
-/* Estilos do footer */
-footer {
-    background-color: #333;
+header #toggle-contraste {
+    background: #444;
     color: #fff;
-    padding: 20px;
-    text-align: center;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
 }
 
 /* Modo Escuro */
@@ -93,7 +47,7 @@ body.modo-escuro {
 
 body.modo-escuro header,
 body.modo-escuro footer {
-    background-color: #2a2a2a !important;
+    background-color: #2a2a2a;
 }
 
 body.modo-escuro .filtros,
@@ -116,114 +70,92 @@ body.modo-escuro .btn:hover {
     background-color: #666;
 }
 
-/* Botão de alternância do modo escuro */
-#toggle-darkmode {
-    background: #444;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 13px;
-    cursor: pointer;
-    margin-left: 10px;
+/* Contraste Alto */
+body.contraste-alto {
+    background-color: #fff;
+    color: #000;
 }
 
-/* Estilos do cabeçalho */
-header {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-}
-
-/* Estilo para os links de navegação */
-header a {
-    color: white;
-    text-decoration: none;
-    padding: 10px;
-}
-
-header a:hover {
-    background-color: #0056b3;
-    border-radius: 4px;
-}
-
-/* Estilo para o ícone de localização */
-.leaflet-marker-icon {
-    width: 32px;
-    height: 32px;
-    background-size: contain;
-}
-
-/* Estilo para o botão de localização */
-.btn-localizacao {
-    background-color: #28a745;
+body.contraste-alto header {
+    background-color: #000;
     color: #fff;
 }
 
-.btn-localizacao:hover {
-    background-color: #218838;
+body.contraste-alto footer {
+    background-color: #000;
+    color: #fff;
 }
 
-/* Estilo para o input de pesquisa */
-.filtros input[type="text"] {
-    width: 250px;
+/* Filtros */
+.filtros {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Ajuste para o filtro de categoria */
-.filtros select[name="categoria"] {
-    width: 150px;
-}
-
-/* Ajuste de responsividade para os filtros */
-@media (max-width: 768px) {
-    .filtros-flex {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .filtros input,
-    .filtros select,
-    .filtros button {
-        margin-bottom: 10px;
-    }
-}
-
-/* Ajuste para o mapa em telas menores */
-@media (max-width: 768px) {
-    #map {
-        height: 300px;
-    }
-}
-
-/* Estilos do popup do mapa */
-.leaflet-popup-content {
-    font-size: 14px;
+.filtros select,
+.filtros input {
     padding: 10px;
-}
-
-.leaflet-popup-content a {
-    color: #007bff;
-}
-
-.leaflet-popup-content a:hover {
-    text-decoration: underline;
-}
-
-/* Estilos adicionais */
-.leaflet-container {
-    border-radius: 8px;
-}
-
-.filtros-flex {
-    flex-wrap: wrap;
-}
-
-.filtros input,
-.filtros select {
-    margin-bottom: 10px;
-    width: 100%;
+    margin: 5px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
 }
 
 .filtros button {
-    margin-top: 10px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.filtros button:hover {
+    background-color: #0056b3;
+}
+
+/* Mapa */
+#map {
+    height: 500px;
+    width: 100%;
+}
+
+/* Footer */
+footer.site-footer {
+    background-color: #f8f8f8;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+footer.site-footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+footer.site-footer p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+footer.site-footer p a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+footer.site-footer p a:hover {
+    text-decoration: underline;
+}
+
+body.modo-escuro footer.site-footer {
+    background-color: #2a2a2a;
+    color: #f1f1f1;
+}
+
+body.modo-escuro footer.site-footer a {
+    color: #89c9ff;
 }
