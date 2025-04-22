@@ -95,6 +95,7 @@ $json_cores = json_encode($categorias_cores);
                 <?php endforeach; ?>
             </select>
             <button type="submit" class="btn">🔍 <?= $t['buscar'] ?></button>
+            <button type="button" onclick="localizarUsuario()" class="btn btn-localizacao">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
         </form>
     </div>
     <div id="map"></div>
