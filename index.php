@@ -1,44 +1,177 @@
-<?php include 'lang.php'; ?>
-<!DOCTYPE html>
-<html lang="<?= $lang ?>">
-<head>
-    <meta charset="UTF-8">
-    <title><?= $t['titulo'] ?> | Bairro Ativo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/public.css?v=<?= time() ?>">
-    <meta name="robots" content="noindex">
-</head>
-<body>
+/* ===== ESTILOS DA PÁGINA INICIAL ===== */
+.home-page {
+    --hero-bg: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
 
-<?php include 'header.php'; ?>
+.hero-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    padding: var(--space-xl) 0;
+    align-items: center;
+}
 
-<main class="container">
-    <section class="boas-vindas">
-        <h1><?= $t['titulo'] ?></h1>
-        <p><?= $t['bem_vindo'] ?> ao sistema! Encontre serviços públicos e gratuitos próximos de você.</p>
-        <img src="images/como_funciona.jpg" alt="Como Funciona" class="imagem-explicativa">
-    </section>
+.hero-content {
+    order: 2;
+}
 
-    <section class="acoes">
-        <a href="mapa.php?lang=<?= $lang ?>" class="card-acao">
-            <div class="icone">🗺️</div>
-            <div class="titulo">Ver Mapa</div>
-            <div class="desc">Explore serviços geolocalizados no mapa interativo.</div>
-        </a>
-        <a href="lista.php?lang=<?= $lang ?>" class="card-acao">
-            <div class="icone">📋</div>
-            <div class="titulo">Ver Lista</div>
-            <div class="desc">Veja todos os serviços em formato de lista filtrável.</div>
-        </a>
-        <a href="admin_login.php" class="card-acao">
-            <div class="icone">🔐</div>
-            <div class="titulo">Admin</div>
-            <div class="desc">Acesse a área administrativa do sistema.</div>
-        </a>
-    </section>
-</main>
+.hero-image {
+    order: 1;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
 
-<?php include 'footer.php'; ?>
+.hero-section h1 {
+    font-size: 2.5rem;
+    color: var(--primary-dark);
+    margin-bottom: var(--space-md);
+}
 
-</body>
-</html>
+.lead {
+    font-size: 1.25rem;
+    color: var(--text-medium);
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.imagem-explicativa {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-lg);
+    transition: transform 0.3s ease;
+}
+
+.imagem-explicativa:hover {
+    transform: scale(1.02);
+}
+
+.features-section {
+    padding: var(--space-xl) 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: var(--space-sm);
+    color: var(--primary-dark);
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-medium);
+    margin-bottom: var(--space-xl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+}
+
+.feature-card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-sm);
+    color: var(--primary-color);
+}
+
+.feature-card p {
+    margin-bottom: var(--space-lg);
+    flex-grow: 1;
+    color: var(--text-medium);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    align-self: flex-start;
+}
+
+.btn-outline:hover {
+    background: var(--primary-light);
+}
+
+.btn-geolocation {
+    background: var(--primary-dark);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.localizacao-section {
+    padding: var(--space-xl) 0;
+    text-align: center;
+}
+
+.localizacao-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.localizacao-content p {
+    margin-bottom: var(--space-lg);
+    color: var(--text-medium);
+}
+
+/* Responsividade */
+@media (min-width: 992px) {
+    .hero-section {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .hero-content {
+        order: 1;
+    }
+    
+    .hero-image {
+        order: 2;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .lead {
+        font-size: 1.1rem;
+    }
+    
+    .section-title {
+        font-size: 1.75rem;
+    }
+}
