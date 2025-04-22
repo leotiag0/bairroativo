@@ -34,15 +34,14 @@ if (!empty($_GET['tipo'])) {
     $params[':tipo'] = $_GET['tipo'];
 }
 if (!empty($_GET['categoria'])) {
-    $join_categoria = "INNER JOIN servico_categoria sc ON sc.servico_id = s.id";
+    // Não adiciona novamente o JOIN, apenas usa o existente
     $where[] = "sc.categoria_id = :categoria";
     $params[':categoria'] = $_GET['categoria'];
 }
 
 // Consulta
 $sql = "SELECT s.*, sc.categoria_id FROM servicos s
-        LEFT JOIN servico_categoria sc ON sc.servico_id = s.id
-        $join_categoria";
+        LEFT JOIN servico_categoria sc ON sc.servico_id = s.id";
 
 if ($where) {
     $sql .= " WHERE " . implode(" AND ", $where);
