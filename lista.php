@@ -74,7 +74,7 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h2><?= $t['titulo'] ?> - Lista</h2>
 
     <!-- Filtros -->
-    <form method="GET" class="filtros-flex" style="margin-bottom: 20px;">
+    <form method="GET" class="filtros-flex filtros-margin">
         <input type="hidden" name="lang" value="<?= $lang ?>">
         
         <!-- Filtro de busca -->
@@ -128,7 +128,7 @@ $servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="info">
                         <!-- Nome do serviço e categoria -->
                         <strong>
-                            <i class="fas fa-circle" style="font-size:10px;color:<?= $cores[$s['categoria_id']] ?? '#999' ?>;"></i>
+                            <i class="fas fa-circle categoria-cor-<?= $s['categoria_id'] ?? 'default' ?>" style="font-size:10px;"></i>
                             <?= htmlspecialchars($s['nome_servico']) ?>
                         </strong>
                         
