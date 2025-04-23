@@ -1,66 +1,8 @@
-<?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-include 'lang.php';
-require 'conexao.php';
-
-// Filtros
-$bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT NULL ORDER BY bairro")->fetchAll(PDO::FETCH_COLUMN);
-$tipos = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
-$categorias = $pdo->query("SELECT id, nome, cor FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
-
-// Mapeia cores
-$categorias_cores = [];
-foreach ($categorias as $cat) {
-    $categorias_cores[$cat['id']] = $cat['cor'];
-}
-
-// Filtros dinâmicos
-$where = [];
-$params = [];
-$join_categoria = '';
-
-if (!empty($_GET['q'])) {
-    $where[] = "(s.nome_servico LIKE :q OR s.tipo LIKE :q OR s.bairro LIKE :q OR s.cidade LIKE :q)";
-    $params[':q'] = '%' . $_GET['q'] . '%';
-}
-if (!empty($_GET['bairro'])) {
-    $where[] = "s.bairro = :bairro";
-    $params[':bairro'] = $_GET['bairro'];
-}
-if (!empty($_GET['tipo'])) {
-    $where[] = "s.tipo = :tipo";
-    $params[':tipo'] = $_GET['tipo'];
-}
-if (!empty($_GET['categoria'])) {
-    // Não adiciona novamente o JOIN, apenas usa o existente
-    $where[] = "sc.categoria_id = :categoria";
-    $params[':categoria'] = $_GET['categoria'];
-}
-
-// Consulta
-$sql = "SELECT s.*, sc.categoria_id FROM servicos s
-        LEFT JOIN servico_categoria sc ON sc.servico_id = s.id";
-
-if ($where) {
-    $sql .= " WHERE " . implode(" AND ", $where);
-}
-$sql .= " GROUP BY s.id";
-
-$stmt = $pdo->prepare($sql);
-$stmt->execute($params);
-$servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// JSONs
-$json_servicos = json_encode($servicos, JSON_UNESCAPED_UNICODE);
-$json_cores = json_encode($categorias_cores);
-?>
 <!DOCTYPE html>
 <html lang="<?= $lang ?>">
 <head>
     <meta charset="UTF-8">
-    <title><?= $t['titulo'] ?> | Bairro Ativo</title>
+    <title><?= $t['titulo'] ?> | <?= $t['bairro_ativo'] ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
@@ -116,26 +58,26 @@ $json_cores = json_encode($categorias_cores);
             <input type="hidden" name="lang" value="<?= $lang ?>">
             <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
             <select name="bairro">
-                <option value="">Bairro</option>
+                <option value=""><?= $t['bairro'] ?></option>
                 <?php foreach ($bairros as $bairro): ?>
                     <option value="<?= $bairro ?>" <?= ($_GET['bairro'] ?? '') === $bairro ? 'selected' : '' ?>><?= $bairro ?></option>
                 <?php endforeach; ?>
             </select>
             <select name="tipo">
-                <option value="">Tipo</option>
+                <option value=""><?= $t['tipo'] ?></option>
                 <?php foreach ($tipos as $tipo): ?>
                     <option value="<?= $tipo ?>" <?= ($_GET['tipo'] ?? '') === $tipo ? 'selected' : '' ?>><?= $tipo ?></option>
                 <?php endforeach; ?>
             </select>
             <select name="categoria">
-                <option value="">Categoria</option>
+                <option value=""><?= $t['categoria'] ?></option>
                 <?php foreach ($categorias as $c): ?>
                     <option value="<?= $c['id'] ?>" <?= ($_GET['categoria'] ?? '') == $c['id'] ? 'selected' : '' ?>><?= $c['nome'] ?></option>
                 <?php endforeach; ?>
             </select>
             <button type="submit" class="btn">🔍 <?= $t['buscar'] ?></button>
             <button type="button" onclick="localizarUsuario()" class="btn btn-localizacao">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
-            <button type="button" id="toggle-darkmode">🌓 Modo Escuro</button>
+            <button type="button" id="toggle-darkmode">🌓 <?= $t['modo_escuro'] ?></button>
         </form>
     </div>
     <div id="map"></div>
@@ -188,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 function localizarUsuario() {
     if (!navigator.geolocation) {
-        alert("Navegador não suporta geolocalização.");
+        alert("<?= $t['erro_geolocalizacao'] ?>");
         return;
     }
     navigator.geolocation.getCurrentPosition(pos => {
@@ -200,7 +142,7 @@ function localizarUsuario() {
                 iconSize: [32, 32],
                 iconAnchor: [16, 32]
             })
-        }).addTo(map).bindPopup("📍 Você está aqui").openPopup();
+        }).addTo(map).bindPopup("📍 <?= $t['voce_esta_aqui'] ?>").openPopup();
         map.setView([lat, lng], 14);
         fetch(`ajax/proximos.php?lat=${lat}&lng=${lng}`)
             .then(res => res.json())
@@ -223,9 +165,9 @@ function localizarUsuario() {
                     marker.bindPopup(popup);
                 });
             })
-            .catch(() => alert("Erro ao buscar serviços próximos."));
+            .catch(() => alert("<?= $t['erro_servicos_proximos'] ?>"));
     }, () => {
-        alert("Erro ao obter sua localização.");
+        alert("<?= $t['erro_obter_localizacao'] ?>");
     });
 }
 </script>
