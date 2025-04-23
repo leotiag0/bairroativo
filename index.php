@@ -1,110 +1,177 @@
-<?php include 'lang.php'; ?>
-<!DOCTYPE html>
-<html lang="<?= $lang ?>" dir="<?= ($lang == 'ar' || $lang == 'he') ? 'rtl' : 'ltr' ?>">
-<head>
-    <meta charset="UTF-8">
-    <title><?= htmlspecialchars($t['titulo']) ?> | Bairro Ativo - <?= htmlspecialchars($t['slogan']) ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?= htmlspecialchars($t['meta_descricao'] ?? 'Encontre serviços públicos e gratuitos na cidade de São Paulo') ?>">
-    <meta name="robots" content="noindex">
-    <link rel="stylesheet" href="css/public.css?v=<?= filemtime('css/public.css') ?>">
-    <link rel="preload" href="images/como_funciona.jpg" as="image">
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-</head>
-<body class="home-page">
+/* ===== ESTILOS DA PÁGINA INICIAL ===== */
+.home-page {
+    --hero-bg: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
 
-<?php include 'header.php'; ?>
+.hero-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    padding: var(--space-xl) 0;
+    align-items: center;
+}
 
-<main class="container" id="main-content">
-    <section class="hero-section" aria-labelledby="main-heading">
-        <div class="hero-content">
-            <h1 id="main-heading"><?= htmlspecialchars($t['titulo']) ?></h1>
-            <p class="lead"><?= htmlspecialchars($t['bem_vindo']) ?> <?= htmlspecialchars($t['descricao_sistema']) ?></p>
-            
-            <div class="cta-buttons">
-                <a href="#features" class="btn btn-secondary"><?= htmlspecialchars($t['saiba_mais']) ?></a>
-                <a href="mapa.php?lang=<?= $lang ?>" class="btn btn-primary">
-                    <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
-                    <?= htmlspecialchars($t['ver_mapa']) ?>
-                </a>
-            </div>
-        </div>
-        
-        <figure class="hero-image">
-            <img src="images/como_funciona.jpg" alt="<?= htmlspecialchars($t['como_funciona_alt']) ?>" 
-                 loading="lazy" class="imagem-explicativa">
-            <figcaption class="sr-only"><?= htmlspecialchars($t['como_funciona_alt']) ?></figcaption>
-        </figure>
-    </section>
+.hero-content {
+    order: 2;
+}
 
-    <section id="features" class="features-section" aria-labelledby="features-heading">
-        <h2 id="features-heading" class="section-title"><?= htmlspecialchars($t['como_utilizar']) ?></h2>
-        <p class="section-subtitle"><?= htmlspecialchars($t['escolha_opcao']) ?></p>
-        
-        <div class="features-grid">
-            <article class="feature-card" aria-labelledby="feature-map">
-                <div class="card-icon" aria-hidden="true">🗺️</div>
-                <h3 id="feature-map"><?= htmlspecialchars($t['ver_mapa']) ?></h3>
-                <p><?= htmlspecialchars($t['desc_mapa']) ?></p>
-                <a href="mapa.php?lang=<?= $lang ?>" class="btn btn-outline" aria-label="<?= htmlspecialchars($t['acessar_mapa']) ?>">
-                    <?= htmlspecialchars($t['acessar']) ?>
-                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                </a>
-            </article>
-            
-            <article class="feature-card" aria-labelledby="feature-list">
-                <div class="card-icon" aria-hidden="true">📋</div>
-                <h3 id="feature-list"><?= htmlspecialchars($t['ver_lista']) ?></h3>
-                <p><?= htmlspecialchars($t['desc_lista']) ?></p>
-                <a href="lista.php?lang=<?= $lang ?>" class="btn btn-outline" aria-label="<?= htmlspecialchars($t['acessar_lista']) ?>">
-                    <?= htmlspecialchars($t['acessar']) ?>
-                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                </a>
-            </article>
-            
-            <article class="feature-card" aria-labelledby="feature-admin">
-                <div class="card-icon" aria-hidden="true">🔐</div>
-                <h3 id="feature-admin"><?= htmlspecialchars($t['area_admin']) ?></h3>
-                <p><?= htmlspecialchars($t['desc_admin']) ?></p>
-                <a href="admin_login.php" class="btn btn-outline" aria-label="<?= htmlspecialchars($t['acessar_admin']) ?>">
-                    <?= htmlspecialchars($t['acessar']) ?>
-                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                </a>
-            </article>
-        </div>
-    </section>
+.hero-image {
+    order: 1;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
 
-    <section class="localizacao-section" aria-labelledby="localizacao-heading">
-        <h2 id="localizacao-heading" class="section-title"><?= htmlspecialchars($t['servicos_proximos']) ?></h2>
-        <div class="localizacao-content">
-            <p><?= htmlspecialchars($t['desc_servicos_proximos']) ?></p>
-            <button id="detect-localizacao" class="btn btn-geolocation">
-                <i class="fas fa-location-arrow" aria-hidden="true"></i>
-                <?= htmlspecialchars($t['detectar_localizacao']) ?>
-            </button>
-        </div>
-    </section>
-</main>
+.hero-section h1 {
+    font-size: 2.5rem;
+    color: var(--primary-dark);
+    margin-bottom: var(--space-md);
+}
 
-<?php include 'footer.php'; ?>
+.lead {
+    font-size: 1.25rem;
+    color: var(--text-medium);
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+}
 
-<script>
-// Detecção de geolocalização
-document.getElementById('detect-localizacao').addEventListener('click', function() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                window.location.href = `mapa.php?lang=<?= $lang ?>&lat=${position.coords.latitude}&lng=${position.coords.longitude}`;
-            },
-            function(error) {
-                alert('<?= htmlspecialchars($t['erro_geolocalizacao']) ?>');
-            }
-        );
-    } else {
-        alert('<?= htmlspecialchars($t['geolocalizacao_nao_suportada']) ?>');
+.cta-buttons {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.imagem-explicativa {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-lg);
+    transition: transform 0.3s ease;
+}
+
+.imagem-explicativa:hover {
+    transform: scale(1.02);
+}
+
+.features-section {
+    padding: var(--space-xl) 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: var(--space-sm);
+    color: var(--primary-dark);
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-medium);
+    margin-bottom: var(--space-xl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+}
+
+.feature-card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-sm);
+    color: var(--primary-color);
+}
+
+.feature-card p {
+    margin-bottom: var(--space-lg);
+    flex-grow: 1;
+    color: var(--text-medium);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    align-self: flex-start;
+}
+
+.btn-outline:hover {
+    background: var(--primary-light);
+}
+
+.btn-geolocation {
+    background: var(--primary-dark);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.localizacao-section {
+    padding: var(--space-xl) 0;
+    text-align: center;
+}
+
+.localizacao-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.localizacao-content p {
+    margin-bottom: var(--space-lg);
+    color: var(--text-medium);
+}
+
+/* Responsividade */
+@media (min-width: 992px) {
+    .hero-section {
+        grid-template-columns: 1fr 1fr;
     }
-});
-</script>
+    
+    .hero-content {
+        order: 1;
+    }
+    
+    .hero-image {
+        order: 2;
+    }
+}
 
-</body>
-</html>
+@media (max-width: 576px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .lead {
+        font-size: 1.1rem;
+    }
+    
+    .section-title {
+        font-size: 1.75rem;
+    }
+}
