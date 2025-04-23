@@ -4,6 +4,7 @@ $lang = $_GET['lang'] ?? 'pt';
 $textos = [
     'pt' => [
         'titulo' => 'Mapeamento de Serviços Públicos e Privados',
+        'bairro_ativo' => 'Bairro Ativo',
         'bem_vindo' => 'Bem-vindo',
         'buscar' => 'Buscar',
         'agendar' => 'Agendar',
@@ -45,6 +46,7 @@ $textos = [
     ],
     'es' => [
         'titulo' => 'Mapeo de Servicios Públicos y Privados',
+        'bairro_ativo' => 'Barrio Activo',
         'bem_vindo' => 'Bienvenido',
         'buscar' => 'Buscar',
         'agendar' => 'Reservar',
@@ -85,6 +87,7 @@ $textos = [
    ],
     'en' => [
         'titulo' => 'Mapping Public and Private Services',
+        'bairro_ativo' => 'Active Neighborhood',        
         'bem_vindo' => 'Welcome',
         'buscar' => 'Search',
         'agendar' => 'Book',

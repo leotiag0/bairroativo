@@ -1,3 +1,62 @@
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+include 'lang.php';
+require 'conexao.php';
+
+// Filtros
+$bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT NULL ORDER BY bairro")->fetchAll(PDO::FETCH_COLUMN);
+$tipos = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
+$categorias = $pdo->query("SELECT id, nome, cor FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
+
+// Mapeia cores
+$categorias_cores = [];
+foreach ($categorias as $cat) {
+    $categorias_cores[$cat['id']] = $cat['cor'];
+}
+
+// Filtros dinâmicos
+$where = [];
+$params = [];
+$join_categoria = '';
+
+if (!empty($_GET['q'])) {
+    $where[] = "(s.nome_servico LIKE :q OR s.tipo LIKE :q OR s.bairro LIKE :q OR s.cidade LIKE :q)";
+    $params[':q'] = '%' . $_GET['q'] . '%';
+}
+if (!empty($_GET['bairro'])) {
+    $where[] = "s.bairro = :bairro";
+    $params[':bairro'] = $_GET['bairro'];
+}
+if (!empty($_GET['tipo'])) {
+    $where[] = "s.tipo = :tipo";
+    $params[':tipo'] = $_GET['tipo'];
+}
+if (!empty($_GET['categoria'])) {
+    // Não adiciona novamente o JOIN, apenas usa o existente
+    $where[] = "sc.categoria_id = :categoria";
+    $params[':categoria'] = $_GET['categoria'];
+}
+
+// Consulta
+$sql = "SELECT s.*, sc.categoria_id FROM servicos s
+        LEFT JOIN servico_categoria sc ON sc.servico_id = s.id";
+
+if ($where) {
+    $sql .= " WHERE " . implode(" AND ", $where);
+}
+$sql .= " GROUP BY s.id";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// JSONs
+$json_servicos = json_encode($servicos, JSON_UNESCAPED_UNICODE);
+$json_cores = json_encode($categorias_cores);
+?>
+
 <!DOCTYPE html>
 <html lang="<?= $lang ?>">
 <head>
