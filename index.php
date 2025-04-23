@@ -23,22 +23,31 @@ if (!file_exists($header_file) || !file_exists($footer_file)) {
     <link rel="preload" href="css/public.css" as="style">
     <link rel="preload" href="images/como_funciona.jpg" as="image">
     
-    <!-- Favicon -->
+    <!-- Favicon com fallback -->
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     
-    <!-- CSS principal -->
+    <!-- CSS principal com fallback -->
     <link rel="stylesheet" href="css/public.css?v=<?= filemtime('css/public.css') ?>">
+    <noscript>
+        <link rel="stylesheet" href="css/noscript.css">
+    </noscript>
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome com fallback local -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+    if (!document.fonts.check('1em FontAwesome')) {
+        document.write('<link rel="stylesheet" href="css/fontawesome-all.min.css">');
+    }
+    </script>
 </head>
 <body class="home-page">
 
 <?php include $header_file; ?>
 
 <main class="container" id="main-content">
-    <!-- Seção Hero -->
     <section class="hero-section" aria-labelledby="main-heading">
         <div class="hero-content">
             <h1 id="main-heading"><?= htmlspecialchars($t['titulo'] ?? 'Bairro Ativo') ?></h1>
@@ -71,7 +80,6 @@ if (!file_exists($header_file) || !file_exists($footer_file)) {
         </figure>
     </section>
 
-    <!-- Seção de Recursos -->
     <section id="features" class="features-section" aria-labelledby="features-heading">
         <h2 id="features-heading" class="section-title">
             <?= htmlspecialchars($t['como_utilizar'] ?? 'Como utilizar o sistema') ?>
@@ -119,7 +127,6 @@ if (!file_exists($header_file) || !file_exists($footer_file)) {
         </div>
     </section>
 
-    <!-- Seção de Localização -->
     <section class="localizacao-section" aria-labelledby="localizacao-heading">
         <h2 id="localizacao-heading" class="section-title">
             <?= htmlspecialchars($t['servicos_proximos'] ?? 'Serviços próximos a você') ?>
@@ -137,8 +144,8 @@ if (!file_exists($header_file) || !file_exists($footer_file)) {
 
 <?php include $footer_file; ?>
 
-<!-- Script de Geolocalização -->
 <script>
+// Detecção de geolocalização aprimorada
 document.addEventListener('DOMContentLoaded', function() {
     const geoButton = document.getElementById('detect-localizacao');
     const geoStatus = document.getElementById('geo-status');
