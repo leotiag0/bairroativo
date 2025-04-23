@@ -26,6 +26,7 @@
                 </button>
             </div>
 
+<<<<<<< HEAD
             <!-- Controles de Acessibilidade -->
             <div class="accessibility-tools" role="group" aria-label="Ferramentas de acessibilidade">
                 <button id="toggle-contraste" class="a11y-btn" aria-label="Alternar alto contraste">
@@ -43,6 +44,10 @@
                 </button>
             </div>
         </div>
+=======
+        <button id="toggle-contraste" title="Ativar/desativar alto contraste">Alto Contraste</button>
+        <button type="button" id="toggle-darkmode">Modo Escuro</button>
+>>>>>>> parent of 632e031 (Update header.php)
     </div>
 </header>
 
