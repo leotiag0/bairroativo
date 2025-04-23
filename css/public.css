@@ -1,635 +1,193 @@
-/* ===== VARIÁVEIS GLOBAIS ===== */
-:root {
-    /* Cores principais */
-    --primary-color: #0066cc;
-    --primary-dark: #004d99;
-    --primary-light: #e6f2ff;
-    --primary-extra-light: #f5faff;
-    
-    /* Cores de texto */
-    --text-dark: #333333;
-    --text-medium: #555555;
-    --text-light: #777777;
-    --text-white: #ffffff;
-    
-    /* Cores de fundo */
-    --bg-light: #f8f9fa;
-    --bg-white: #ffffff;
-    --bg-dark: #1a1a1a;
-    --bg-dark-secondary: #2a2a2a;
-    
-    /* Cores de estado */
-    --success-color: #28a745;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --info-color: #17a2b8;
-    
-    /* Cores de borda */
-    --border-color: #dddddd;
-    --border-dark: #444444;
-    
-    /* Espaçamentos */
-    --space-xs: 0.25rem;
-    --space-sm: 0.5rem;
-    --space-md: 1rem;
-    --space-lg: 1.5rem;
-    --space-xl: 2rem;
-    
-    /* Bordas */
-    --border-radius: 6px;
-    --border-radius-lg: 10px;
-    --border-radius-xl: 15px;
-    
-    /* Sombras */
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 8px rgba(0,0,0,0.15);
-    --shadow-lg: 0 6px 12px rgba(0,0,0,0.2);
-    --shadow-inset: inset 0 1px 2px rgba(0,0,0,0.1);
-    
-    /* Transições */
-    --transition-fast: 0.15s ease;
-    --transition-normal: 0.3s ease;
-    --transition-slow: 0.5s ease;
-}
-
-/* ===== RESET E BASE ===== */
-*,
-*::before,
-*::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-    font-size: 16px;
-}
-
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    line-height: 1.5;
-    color: var(--text-dark);
-    background-color: var(--bg-light);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-/* ===== HEADER ===== */
-.accessible-header {
-    background-color: var(--primary-color);
-    color: var(--text-white);
-    padding: var(--space-md) 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: var(--shadow-md);
-}
-
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--space-lg);
-}
-
-.header-branding {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-}
-
-.logo-link {
-    display: inline-block;
-    transition: transform var(--transition-normal);
-}
-
-.logo-link:hover {
-    transform: scale(1.03);
-}
-
-.logo {
-    height: 50px;
-    width: auto;
-    max-width: 100%;
-}
-
-.header-controls {
-    display: flex;
-    align-items: center;
-    gap: var(--space-lg);
-}
-
-/* ===== CONTROLES DE IDIOMA ===== */
-.language-selector {
-    display: flex;
-    gap: var(--space-sm);
-    align-items: center;
-}
-
-.lang-btn {
-    background: none;
-    border: none;
-    padding: var(--space-xs);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    position: relative;
-}
-
-.lang-btn:hover {
-    transform: scale(1.1);
-}
-
-.lang-btn.active {
-    box-shadow: 0 0 0 2px var(--text-white);
-}
-
-.flag-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
-    border: 2px solid transparent;
-    transition: border-color var(--transition-fast);
-}
-
-.lang-btn:hover .flag-icon {
-    border-color: rgba(255,255,255,0.7);
-}
-
-/* ===== BOTÕES DE ACESSIBILIDADE ===== */
-.accessibility-tools {
-    display: flex;
-    gap: var(--space-sm);
-}
-
-.a11y-btn {
-    background-color: rgba(255,255,255,0.1);
-    color: var(--text-white);
-    border: none;
-    border-radius: var(--border-radius);
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.a11y-btn:hover {
-    background-color: rgba(255,255,255,0.2);
-    transform: scale(1.1);
-}
-
-.a11y-btn .btn-text {
-    margin-left: var(--space-xs);
-    font-size: 0.875rem;
-}
-
-.a11y-btn i {
-    font-size: 1rem;
-}
-
-/* ===== FILTROS ===== */
-.filtros {
-    background-color: var(--bg-white);
-    padding: var(--space-md);
-    box-shadow: var(--shadow-sm);
-    position: relative;
-    z-index: 500;
-}
-
-.filtros-flex {
-    display: flex;
-    gap: var(--space-sm);
-    align-items: center;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.filtros input[type="text"],
-.filtros select {
-    padding: var(--space-sm) var(--space-md);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    font-size: 0.9rem;
-    flex-grow: 1;
-    min-width: 150px;
-    transition: border-color var(--transition-fast);
-}
-
-.filtros input[type="text"]:focus,
-.filtros select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
-}
-
-.filtros select {
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right var(--space-sm) center;
-    background-size: 1rem;
-    padding-right: var(--space-xl);
-}
-
-/* ===== MAPA ===== */
-#map {
-    width: 100%;
-    flex-grow: 1;
-    z-index: 100;
-}
-
-/* Leaflet Customizations */
-.leaflet-popup-content {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    min-width: 200px;
-}
-
-.leaflet-popup-content a {
-    color: var(--primary-color);
-    text-decoration: none;
-    display: inline-block;
-    margin-top: var(--space-sm);
-}
-
-.leaflet-popup-content a:hover {
-    text-decoration: underline;
-}
-
-/* ===== BOTÕES ===== */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--border-radius);
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition-normal);
-    border: 2px solid transparent;
-    white-space: nowrap;
-    background-color: var(--primary-color);
-    color: var(--text-white);
-}
-
-.btn:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
-}
-
-.btn-localizacao {
-    background-color: var(--success-color);
-}
-
-.btn-localizacao:hover {
-    background-color: #218838;
-}
-
-/* ===== PÁGINA INICIAL ===== */
-.hero-section {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
-    padding: var(--space-xl) 0;
-    align-items: center;
-    background: linear-gradient(135deg, var(--primary-extra-light) 0%, var(--bg-white) 100%);
-}
-
-.hero-content {
-    order: 2;
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.hero-image {
-    order: 1;
-    border-radius: var(--border-radius-xl);
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    max-width: 100%;
-    height: auto;
-    margin: 0 auto;
-}
-
-.hero-section h1 {
-    font-size: 2.5rem;
-    color: var(--primary-dark);
-    margin-bottom: var(--space-md);
-    line-height: 1.2;
-}
-
-.lead {
-    font-size: 1.25rem;
-    color: var(--text-medium);
-    margin-bottom: var(--space-lg);
-    line-height: 1.6;
-}
-
-.cta-buttons {
-    display: flex;
-    gap: var(--space-md);
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.features-section {
-    padding: var(--space-xl) 0;
-    background-color: var(--bg-white);
-}
-
-.section-title {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: var(--space-sm);
-    color: var(--primary-dark);
-    position: relative;
-    padding-bottom: var(--space-md);
-}
-
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background-color: var(--primary-color);
-    border-radius: 2px;
-}
-
-.section-subtitle {
-    text-align: center;
-    color: var(--text-medium);
-    margin-bottom: var(--space-xl);
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 1.1rem;
-}
-
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-lg);
-    margin-top: var(--space-xl);
-}
-
-.feature-card {
-    background: var(--bg-white);
-    border-radius: var(--border-radius-lg);
-    padding: var(--space-xl);
-    box-shadow: var(--shadow-sm);
-    transition: all var(--transition-normal);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    border: 1px solid var(--border-color);
-    text-align: center;
-}
-
-.feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--primary-color);
-}
-
-.card-icon {
-    font-size: 3rem;
-    margin-bottom: var(--space-md);
-    color: var(--primary-color);
-    transition: transform var(--transition-normal);
-}
-
-.feature-card:hover .card-icon {
-    transform: scale(1.1);
-}
-
-.feature-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: var(--space-md);
-    color: var(--primary-dark);
-}
-
-.feature-card p {
-    margin-bottom: var(--space-lg);
-    flex-grow: 1;
-    color: var(--text-medium);
-    line-height: 1.6;
-}
-
-.localizacao-section {
-    padding: var(--space-xl) 0;
-    text-align: center;
-    background-color: var(--primary-extra-light);
-}
-
-.localizacao-content {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 var(--space-lg);
-}
-
-.localizacao-content p {
-    margin-bottom: var(--space-lg);
-    color: var(--text-medium);
-    font-size: 1.1rem;
-    line-height: 1.6;
-}
-
-/* ===== MODOS DE ACESSIBILIDADE ===== */
-/* Alto Contraste */
-body.high-contrast {
-    background-color: #000 !important;
-    color: #fff !important;
-}
-
-body.high-contrast .filtros,
-body.high-contrast .feature-card,
-body.high-contrast .features-section {
-    background-color: #000 !important;
-    border-bottom: 2px solid #fff;
-}
-
-body.high-contrast input,
-body.high-contrast select,
-body.high-contrast .btn {
-    border: 2px solid #fff !important;
-}
-
-/* Modo Escuro */
-body.dark-mode {
-    background-color: var(--bg-dark);
-    color: #e0e0e0;
-}
-
-body.dark-mode .filtros,
-body.dark-mode .feature-card,
-body.dark-mode .features-section {
-    background-color: var(--bg-dark-secondary);
-    border-color: var(--border-dark);
-}
-
-body.dark-mode input,
-body.dark-mode select {
-    background-color: var(--bg-dark-secondary);
-    color: #e0e0e0;
-    border-color: var(--border-dark);
-}
-
-body.dark-mode .leaflet-popup-content {
-    background-color: var(--bg-dark-secondary);
-    color: #e0e0e0;
-}
-
-body.dark-mode .leaflet-popup-content-wrapper {
-    background-color: var(--bg-dark-secondary);
-}
-
-body.dark-mode .leaflet-popup-tip {
-    background-color: var(--bg-dark-secondary);
-}
-
-body.dark-mode .hero-section {
-    background: linear-gradient(135deg, #1a3a5a 0%, var(--bg-dark) 100%);
-}
-
-body.dark-mode .localizacao-section {
-    background-color: #1a3a5a;
-}
-
-/* Texto Grande */
-body.large-font {
-    font-size: 18px;
-}
-
-body.large-font h1 { font-size: 2.8rem; }
-body.large-font h2 { font-size: 2.3rem; }
-body.large-font h3 { font-size: 2rem; }
-body.large-font .btn { padding: var(--space-md) var(--space-lg); }
-
-/* ===== CLASSES UTILITÁRIAS ===== */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-.text-center { text-align: center; }
-.text-right { text-align: right; }
-.text-left { text-align: left; }
-
-.mt-1 { margin-top: var(--space-sm); }
-.mt-2 { margin-top: var(--space-md); }
-.mt-3 { margin-top: var(--space-lg); }
-.mt-4 { margin-top: var(--space-xl); }
-
-.mb-1 { margin-bottom: var(--space-sm); }
-.mb-2 { margin-bottom: var(--space-md); }
-.mb-3 { margin-bottom: var(--space-lg); }
-.mb-4 { margin-bottom: var(--space-xl); }
-
-/* ===== RESPONSIVIDADE ===== */
-@media (min-width: 992px) {
-    .hero-section {
-        grid-template-columns: 1fr 1fr;
-        align-items: center;
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+include 'lang.php';
+require 'conexao.php';
+
+// Filtros
+$bairros = $pdo->query("SELECT DISTINCT bairro FROM servicos WHERE bairro IS NOT NULL ORDER BY bairro")->fetchAll(PDO::FETCH_COLUMN);
+$tipos = $pdo->query("SELECT DISTINCT tipo FROM servicos WHERE tipo IS NOT NULL ORDER BY tipo")->fetchAll(PDO::FETCH_COLUMN);
+$categorias = $pdo->query("SELECT id, nome, cor FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
+
+// Mapeia cores
+$categorias_cores = [];
+foreach ($categorias as $cat) {
+    $categorias_cores[$cat['id']] = $cat['cor'];
+}
+
+// Filtros dinâmicos
+$where = [];
+$params = [];
+$join_categoria = '';
+
+if (!empty($_GET['q'])) {
+    $where[] = "(s.nome_servico LIKE :q OR s.tipo LIKE :q OR s.bairro LIKE :q OR s.cidade LIKE :q)";
+    $params[':q'] = '%' . $_GET['q'] . '%';
+}
+if (!empty($_GET['bairro'])) {
+    $where[] = "s.bairro = :bairro";
+    $params[':bairro'] = $_GET['bairro'];
+}
+if (!empty($_GET['tipo'])) {
+    $where[] = "s.tipo = :tipo";
+    $params[':tipo'] = $_GET['tipo'];
+}
+if (!empty($_GET['categoria'])) {
+    // Não adiciona novamente o JOIN, apenas usa o existente
+    $where[] = "sc.categoria_id = :categoria";
+    $params[':categoria'] = $_GET['categoria'];
+}
+
+// Consulta
+$sql = "SELECT s.*, sc.categoria_id FROM servicos s
+        LEFT JOIN servico_categoria sc ON sc.servico_id = s.id";
+
+if ($where) {
+    $sql .= " WHERE " . implode(" AND ", $where);
+}
+$sql .= " GROUP BY s.id";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$servicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// JSONs
+$json_servicos = json_encode($servicos, JSON_UNESCAPED_UNICODE);
+$json_cores = json_encode($categorias_cores);
+?>
+<!DOCTYPE html>
+<html lang="<?= $lang ?>">
+<head>
+    <meta charset="UTF-8">
+    <title><?= $t['titulo'] ?> | Bairro Ativo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+    <link rel="stylesheet" href="css/public.css?v=<?= filemtime('css/public.css') ?>">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+<body>
+<?php include 'header.php'; ?>
+<main>
+    <div class="filtros">
+        <form method="GET" class="filtros-flex">
+            <input type="hidden" name="lang" value="<?= $lang ?>">
+            <input type="text" name="q" placeholder="<?= $t['buscar'] ?>..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
+            <select name="bairro">
+                <option value="">Bairro</option>
+                <?php foreach ($bairros as $bairro): ?>
+                    <option value="<?= $bairro ?>" <?= ($_GET['bairro'] ?? '') === $bairro ? 'selected' : '' ?>><?= $bairro ?></option>
+                <?php endforeach; ?>
+            </select>
+            <select name="tipo">
+                <option value="">Tipo</option>
+                <?php foreach ($tipos as $tipo): ?>
+                    <option value="<?= $tipo ?>" <?= ($_GET['tipo'] ?? '') === $tipo ? 'selected' : '' ?>><?= $tipo ?></option>
+                <?php endforeach; ?>
+            </select>
+            <select name="categoria">
+                <option value="">Categoria</option>
+                <?php foreach ($categorias as $c): ?>
+                    <option value="<?= $c['id'] ?>" <?= ($_GET['categoria'] ?? '') == $c['id'] ? 'selected' : '' ?>><?= $c['nome'] ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit" class="btn">🔍 <?= $t['buscar'] ?></button>
+            <button type="button" onclick="localizarUsuario()" class="btn btn-localizacao">📍 <?= $t['proximo'] ?? 'Perto de mim' ?></button>
+        </form>
+    </div>
+    <div id="map"></div>
+</main>
+<?php include 'footer.php'; ?>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script>
+const servicos = <?= $json_servicos ?>;
+const coresPorCategoria = <?= $json_cores ?>;
+let map;
+function ajustarAlturaMapa() {
+    const header = document.querySelector('header');
+    const filtros = document.querySelector('.filtros');
+    const footer = document.querySelector('footer');
+    const mapDiv = document.getElementById('map');
+    const alturaMapa = window.innerHeight - (header?.offsetHeight || 0) - (filtros?.offsetHeight || 0) - (footer?.offsetHeight || 0);
+    mapDiv.style.height = `${alturaMapa}px`;
+    if (map) map.invalidateSize();
+}
+window.addEventListener('resize', ajustarAlturaMapa);
+document.addEventListener("DOMContentLoaded", () => {
+    ajustarAlturaMapa();
+    map = L.map('map').setView([-23.55, -46.63], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    servicos.forEach(s => {
+        if (!s.latitude || !s.longitude) return;
+        const cor = coresPorCategoria[s.categoria_id] || '#007bff';
+        const marker = L.circleMarker([s.latitude, s.longitude], {
+            radius: 8,
+            color: cor,
+            fillColor: cor,
+            fillOpacity: 0.9
+        }).addTo(map);
+        const popup = `
+            <strong>${s.nome_servico}</strong><br>
+            ${s.endereco}, ${s.bairro}<br>
+            <i class="fa fa-layer-group"></i> ${s.tipo}<br>
+            <a href="detalhes.php?id=${s.id}&lang=<?= $lang ?>">ℹ️ <?= htmlspecialchars($t['detalhes']) ?></a>
+        `;
+        marker.bindPopup(popup);
+    });
+    document.getElementById('toggle-darkmode').addEventListener('click', () => {
+        document.body.classList.toggle('modo-escuro');
+        const darkModeActive = document.body.classList.contains('modo-escuro');
+        localStorage.setItem('modo-escuro', darkModeActive);
+    });
+    if (localStorage.getItem('modo-escuro') === 'true') {
+        document.body.classList.add('modo-escuro');
     }
-    
-    .hero-content {
-        order: 1;
-        text-align: left;
-        margin: 0;
+});
+function localizarUsuario() {
+    if (!navigator.geolocation) {
+        alert("Navegador não suporta geolocalização.");
+        return;
     }
-    
-    .hero-image {
-        order: 2;
-    }
-    
-    .cta-buttons {
-        justify-content: flex-start;
-    }
+    navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        L.marker([lat, lng], {
+            icon: L.icon({
+                iconUrl: 'images/user-location.png',
+                iconSize: [32, 32],
+                iconAnchor: [16, 32]
+            })
+        }).addTo(map).bindPopup("📍 Você está aqui").openPopup();
+        map.setView([lat, lng], 14);
+        fetch(`ajax/proximos.php?lat=${lat}&lng=${lng}`)
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(s => {
+                    if (!s.latitude || !s.longitude) return;
+                    const cor = coresPorCategoria[s.categoria_id] || '#007bff';
+                    const marker = L.circleMarker([s.latitude, s.longitude], {
+                        radius: 8,
+                        color: cor,
+                        fillColor: cor,
+                        fillOpacity: 0.9
+                    }).addTo(map);
+                    const popup = `
+                        <strong>${s.nome_servico}</strong><br>
+                        ${s.endereco}, ${s.bairro}<br>
+                        <i class="fa fa-layer-group"></i> ${s.tipo}<br>
+                        <a href="detalhes.php?id=${s.id}&lang=<?= $lang ?>">ℹ️ <?= htmlspecialchars($t['detalhes']) ?></a>
+                    `;
+                    marker.bindPopup(popup);
+                });
+            })
+            .catch(() => alert("Erro ao buscar serviços próximos."));
+    }, () => {
+        alert("Erro ao obter sua localização.");
+    });
 }
-
-@media (max-width: 768px) {
-    .header-container {
-        flex-direction: column;
-        gap: var(--space-md);
-    }
-    
-    .filtros-flex {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .filtros input[type="text"],
-    .filtros select,
-    .filtros .btn {
-        width: 100%;
-    }
-    
-    .hero-section h1 {
-        font-size: 2rem;
-    }
-    
-    .lead {
-        font-size: 1.1rem;
-    }
-    
-    .section-title {
-        font-size: 1.75rem;
-    }
-    
-    .feature-card {
-        padding: var(--space-lg);
-    }
-}
-
-@media (max-width: 480px) {
-    html {
-        font-size: 14px;
-    }
-    
-    .filtros {
-        padding: var(--space-sm);
-    }
-    
-    .hero-section {
-        padding: var(--space-lg) 0;
-    }
-    
-    .hero-section h1 {
-        font-size: 1.8rem;
-    }
-    
-    .features-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .cta-buttons {
-        flex-direction: column;
-    }
-    
-    .btn {
-        width: 100%;
-    }
-}
+</script>
+</body>
+</html>
