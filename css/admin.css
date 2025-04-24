@@ -1,4 +1,31 @@
-/* ===== GERENCIAMENTO DE SERVIÇOS ===== */
+/* ============================================= */
+/* ÍNDICE DO CSS - GERENCIAMENTO DE SERVIÇOS     */
+/* ============================================= */
+/* 
+1. ESTILOS BASE
+2. CABEÇALHO ADMIN
+3. FILTROS
+4. TABELA DE SERVIÇOS
+5. ESTILOS DE BOTÕES
+6. MENSAGENS DO SISTEMA
+7. BOTÃO VOLTAR
+8. ELEMENTOS DIVERSOS
+9. RESPONSIVIDADE
+*/
+
+/* ============================================= */
+/* 1. ESTILOS BASE                               */
+/* ============================================= */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    line-height: 1.6; /* Melhora a legibilidade do texto */
+}
+
+/* Container principal da página */
 .container {
     max-width: 1200px;
     margin: 20px auto;
@@ -8,6 +35,7 @@
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Estilo para títulos principais */
 h2 {
     color: #2c3e50;
     margin-bottom: 20px;
@@ -15,18 +43,46 @@ h2 {
     border-bottom: 1px solid #ecf0f1;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 10px; /* Espaço entre ícone e texto */
 }
 
-/* ===== FILTROS ===== */
+/* ============================================= */
+/* 2. CABEÇALHO ADMIN                            */
+/* ============================================= */
+.admin-header {
+    background: #2c3e50;
+    color: white;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.admin-header a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 500;
+    transition: color 0.3s; /* Efeito suave ao passar o mouse */
+}
+
+.admin-header a:hover {
+    color: #3498db; /* Cor altera ao passar o mouse */
+}
+
+/* ============================================= */
+/* 3. FILTROS                                    */
+/* ============================================= */
 .filtros {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Permite quebra de linha em telas pequenas */
     align-items: center;
 }
 
+/* Estilização dos selects de filtro */
 .filtros select {
     padding: 10px 15px;
     border: 1px solid #ddd;
@@ -34,27 +90,28 @@ h2 {
     background-color: #f8f9fa;
     font-size: 14px;
     min-width: 200px;
-    transition: all 0.3s;
+    transition: all 0.3s; /* Transição suave para efeitos */
 }
 
 .filtros select:focus {
     border-color: #3498db;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); /* Destaque visual ao focar */
 }
 
-.filtros .btn {
-    padding: 10px 15px;
-}
-
-/* ===== TABELA ===== */
+/* ============================================= */
+/* 4. TABELA DE SERVIÇOS                         */
+/* ============================================= */
+/* Container para tabela responsiva */
 .table-responsive {
-    overflow-x: auto;
+    overflow-x: auto; /* Permite rolagem horizontal em telas pequenas */
     margin-bottom: 20px;
     border-radius: 6px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    -webkit-overflow-scrolling: touch; /* Melhora scroll em dispositivos móveis */
 }
 
+/* Estilo base da tabela */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -62,36 +119,81 @@ table {
     font-size: 14px;
 }
 
+/* Células da tabela */
 th, td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #e0e0e0;
 }
 
+/* Cabeçalho da tabela */
 th {
     background-color: #f8f9fa;
     font-weight: 600;
     color: #2c3e50;
     position: sticky;
-    top: 0;
+    top: 0; /* Fixa o cabeçalho durante a rolagem */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
+/* Efeito hover nas linhas */
 tr:hover {
     background-color: #f5f7fa;
 }
 
-/* Checkbox na tabela */
+/* Estilo para checkboxes na tabela */
 input[type="checkbox"] {
-    transform: scale(1.2);
+    transform: scale(1.2); /* Aumenta ligeiramente o tamanho */
     cursor: pointer;
+    accent-color: #3498db; /* Cor personalizada para o checkbox */
 }
 
-/* Coluna de ações */
-td[data-label="Ações"] {
-    white-space: nowrap;
+/* ============================================= */
+/* 5. ESTILOS DE BOTÕES                          */
+/* ============================================= */
+/* Classe base para botões */
+.btn {
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px; /* Espaço entre ícone e texto */
+    transition: all 0.3s; /* Efeito suave ao interagir */
+    border: none;
+    text-decoration: none;
+    font-weight: 500;
 }
 
-/* ===== BOTÕES NA TABELA ===== */
+/* Botão primário (azul) */
+.btn-primary {
+    background: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+    transform: translateY(-2px); /* Efeito de levantar ao passar o mouse */
+}
+
+/* Botão de perigo (vermelho) */
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+/* Botão secundário (cinza) */
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+/* Botões dentro da tabela */
 .btn-table {
     padding: 6px 10px;
     font-size: 13px;
@@ -104,10 +206,13 @@ td[data-label="Ações"] {
 }
 
 .btn-table:hover {
-    transform: translateY(-1px);
+    transform: translateY(-1px); /* Efeito mais sutil para botões na tabela */
 }
 
-/* ===== MENSAGENS ===== */
+/* ============================================= */
+/* 6. MENSAGENS DO SISTEMA                       */
+/* ============================================= */
+/* Classe base para mensagens */
 .msg {
     padding: 12px 15px;
     margin-bottom: 20px;
@@ -115,16 +220,26 @@ td[data-label="Ações"] {
     font-weight: 500;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 8px; /* Espaço entre ícone e texto */
 }
 
+/* Mensagem de sucesso (verde) */
 .msg-success {
     background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
 }
 
-/* ===== BOTÃO VOLTAR ===== */
+/* Mensagem de erro (vermelho) */
+.msg-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* ============================================= */
+/* 7. BOTÃO VOLTAR                               */
+/* ============================================= */
 .botao-voltar {
     display: inline-flex;
     align-items: center;
@@ -135,6 +250,7 @@ td[data-label="Ações"] {
     text-decoration: none;
     border-radius: 6px;
     transition: all 0.3s;
+    margin-top: 20px;
 }
 
 .botao-voltar:hover {
@@ -142,15 +258,36 @@ td[data-label="Ações"] {
     transform: translateY(-1px);
 }
 
-/* ===== RESPONSIVIDADE ===== */
+/* ============================================= */
+/* 8. ELEMENTOS DIVERSOS                         */
+/* ============================================= */
+/* Texto de contagem de serviços */
+.container > p {
+    color: #6c757d;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+/* Estilo para emojis nos botões */
+.btn span, .botao-voltar span {
+    font-size: 16px;
+}
+
+/* ============================================= */
+/* 9. RESPONSIVIDADE                             */
+/* ============================================= */
 @media (max-width: 768px) {
+    /* Ajustes para container em mobile */
     .container {
         padding: 15px;
+        margin: 10px;
     }
     
+    /* Filtros empilhados verticalmente */
     .filtros {
         flex-direction: column;
         align-items: stretch;
+        gap: 8px;
     }
     
     .filtros select,
@@ -158,14 +295,18 @@ td[data-label="Ações"] {
         width: 100%;
     }
     
+    /* Transformação da tabela em cards */
     table {
         display: block;
+        width: 100%;
     }
     
     thead {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
+        display: none; /* Oculta cabeçalho em mobile */
+    }
+    
+    tbody {
+        display: block;
     }
     
     tr {
@@ -174,6 +315,7 @@ td[data-label="Ações"] {
         border: 1px solid #ddd;
         border-radius: 6px;
         padding: 10px;
+        position: relative;
     }
     
     td {
@@ -183,52 +325,32 @@ td[data-label="Ações"] {
         padding: 8px 10px;
         border: none;
         border-bottom: 1px solid #eee;
-    }
-    
-    td:before {
-        content: attr(data-label);
-        font-weight: bold;
-        margin-right: 15px;
-        flex: 1;
+        text-align: right;
     }
     
     td:last-child {
         border-bottom: none;
     }
     
-    .btn-table {
-        padding: 8px 12px;
-        font-size: 14px;
+    /* Exibe rótulos antes do conteúdo */
+    td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 15px;
+        flex: 1;
+        text-align: left;
     }
-}
-
-/* ===== BOTÕES DE AÇÃO ===== */
-.btn-danger {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.3s;
-}
-
-.btn-danger:hover {
-    background-color: #c82333;
-    transform: translateY(-2px);
-}
-
-/* ===== CONTADOR DE SERVIÇOS ===== */
-.container > p {
-    color: #6c757d;
-    margin-bottom: 15px;
-    font-style: italic;
-}
-
-/* ===== EMOJIS NOS BOTÕES ===== */
-.btn span, .botao-voltar span {
-    font-size: 16px;
+    
+    /* Botões em telas pequenas */
+    .btn-table {
+        width: 100%;
+        justify-content: center;
+        padding: 8px;
+    }
+    
+    /* Checkbox maior para facilitar toque */
+    input[type="checkbox"] {
+        transform: scale(1.5);
+        margin-right: 10px;
+    }
 }
