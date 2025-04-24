@@ -15,7 +15,7 @@ $s = $stmt->fetch();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validação simples
     $nome_servico = filter_var($_POST['nome'], FILTER_SANITIZE_STRING);
-    $rua = filter_var($_POST['endereco'], FILTER_SANITIZE_STRING);
+    $endereco = filter_var($_POST['endereco'], FILTER_SANITIZE_STRING);
     $bairro = filter_var($_POST['bairro'], FILTER_SANITIZE_STRING);
     $cidade = filter_var($_POST['cidade'], FILTER_SANITIZE_STRING);
     $estado = filter_var($_POST['estado'], FILTER_SANITIZE_STRING);
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="nome">Nome do Serviço:</label>
         <input type="text" name="nome" id="nome" value="<?= htmlspecialchars($s['nome_servico']) ?>" required>
 
-        <label for="enderecoa">Rua:</label>
+        <label for="enderecoa">Endereço:</label>
         <input type="text" name="endereco" id="endereco" value="<?= htmlspecialchars($s['endereco']) ?>" required>
 
         <label for="bairro">Bairro:</label>
