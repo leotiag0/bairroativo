@@ -34,13 +34,6 @@ $porBairro = $pdo->query("
     <title>Estatísticas - Bairro Ativo</title>
     <link rel="stylesheet" href="css/admin.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        canvas {
-            max-width: 100%;
-            height: auto;
-            margin: 20px 0;
-        }
-    </style>
 </head>
     
 <body>
