@@ -6,7 +6,6 @@ if (!isset($_SESSION['admin'])) {
 }
 
 require 'conexao.php';
-include 'admin_header.php';
 
 $id = $_GET['id'] ?? null;
 $stmt = $pdo->prepare("SELECT * FROM servicos WHERE id = ?");
@@ -58,6 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="css/admin.css">
 </head>
 
+<body>
+<?php include 'admin_header.php'; ?>
 <div class="container">
     <h2>Editar Serviço</h2>
     
@@ -111,4 +112,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <?php include 'admin_footer.php'; ?>
+</body>
 </html>

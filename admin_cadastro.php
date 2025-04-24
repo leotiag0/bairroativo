@@ -89,7 +89,7 @@ $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PD
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
-    <?php include '/header.php'; ?>
+    <?php include 'admin_header.php'; ?>
 
     <div class="container">
         <h2>Cadastro de Serviço</h2>
@@ -178,7 +178,7 @@ $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PD
         </form>
     </div>
 
-    <?php include 'footer.php'; ?>
+    <?php include 'admin_footer.php'; ?>
 
 </body>
 </html>
