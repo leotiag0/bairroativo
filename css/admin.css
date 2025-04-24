@@ -1,20 +1,18 @@
 /* ============================================= */
-/* ÍNDICE DO CSS - GERENCIAMENTO DE SERVIÇOS     */
+/* CSS UNIFICADO - PAINEL ADMINISTRATIVO         */
 /* ============================================= */
-/* 
-1. ESTILOS BASE
-2. CABEÇALHO ADMIN
-3. FILTROS
-4. TABELA DE SERVIÇOS
-5. ESTILOS DE BOTÕES
-6. MENSAGENS DO SISTEMA
-7. BOTÃO VOLTAR
-8. ELEMENTOS DIVERSOS
-9. RESPONSIVIDADE
+/* ÍNDICE:
+1. ESTILOS GERAIS
+2. CABEÇALHO E RODAPÉ
+3. FORMULÁRIOS
+4. TABELAS
+5. COMPONENTES COMUNS
+6. MENSAGENS
+7. RESPONSIVIDADE
 */
 
 /* ============================================= */
-/* 1. ESTILOS BASE                               */
+/* 1. ESTILOS GERAIS                            */
 /* ============================================= */
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
@@ -22,10 +20,9 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    line-height: 1.6; /* Melhora a legibilidade do texto */
+    line-height: 1.6;
 }
 
-/* Container principal da página */
 .container {
     max-width: 1200px;
     margin: 20px auto;
@@ -35,7 +32,6 @@ body {
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilo para títulos principais */
 h2 {
     color: #2c3e50;
     margin-bottom: 20px;
@@ -43,11 +39,11 @@ h2 {
     border-bottom: 1px solid #ecf0f1;
     display: flex;
     align-items: center;
-    gap: 10px; /* Espaço entre ícone e texto */
+    gap: 10px;
 }
 
 /* ============================================= */
-/* 2. CABEÇALHO ADMIN                            */
+/* 2. CABEÇALHO E RODAPÉ                        */
 /* ============================================= */
 .admin-header {
     background: #2c3e50;
@@ -64,54 +60,97 @@ h2 {
     text-decoration: none;
     margin-left: 20px;
     font-weight: 500;
-    transition: color 0.3s; /* Efeito suave ao passar o mouse */
+    transition: color 0.3s;
 }
 
 .admin-header a:hover {
-    color: #3498db; /* Cor altera ao passar o mouse */
+    color: #3498db;
+}
+
+.admin-footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    color: #7f8c8d;
+    font-size: 14px;
 }
 
 /* ============================================= */
-/* 3. FILTROS                                    */
+/* 3. FORMULÁRIOS                               */
 /* ============================================= */
-.filtros {
+.form-cadastro {
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.form-row {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap; /* Permite quebra de linha em telas pequenas */
-    align-items: center;
+    gap: 20px;
+    margin-bottom: 15px;
 }
 
-/* Estilização dos selects de filtro */
-.filtros select {
-    padding: 10px 15px;
+.form-group {
+    flex: 1;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+input[type="text"],
+input[type="time"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px 15px;
     border: 1px solid #ddd;
     border-radius: 6px;
-    background-color: #f8f9fa;
-    font-size: 14px;
-    min-width: 200px;
-    transition: all 0.3s; /* Transição suave para efeitos */
+    font-size: 16px;
+    transition: all 0.3s;
+    box-sizing: border-box;
 }
 
-.filtros select:focus {
-    border-color: #3498db;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); /* Destaque visual ao focar */
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.categorias-list {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.categoria-item {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+
+.categoria-item input {
+    margin-right: 8px;
 }
 
 /* ============================================= */
-/* 4. TABELA DE SERVIÇOS                         */
+/* 4. TABELAS                                   */
 /* ============================================= */
-/* Container para tabela responsiva */
 .table-responsive {
-    overflow-x: auto; /* Permite rolagem horizontal em telas pequenas */
+    overflow-x: auto;
     margin-bottom: 20px;
     border-radius: 6px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    -webkit-overflow-scrolling: touch; /* Melhora scroll em dispositivos móveis */
 }
 
-/* Estilo base da tabela */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -119,39 +158,23 @@ table {
     font-size: 14px;
 }
 
-/* Células da tabela */
 th, td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #e0e0e0;
 }
 
-/* Cabeçalho da tabela */
 th {
     background-color: #f8f9fa;
     font-weight: 600;
     color: #2c3e50;
     position: sticky;
-    top: 0; /* Fixa o cabeçalho durante a rolagem */
-    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
-}
-
-/* Efeito hover nas linhas */
-tr:hover {
-    background-color: #f5f7fa;
-}
-
-/* Estilo para checkboxes na tabela */
-input[type="checkbox"] {
-    transform: scale(1.2); /* Aumenta ligeiramente o tamanho */
-    cursor: pointer;
-    accent-color: #3498db; /* Cor personalizada para o checkbox */
+    top: 0;
 }
 
 /* ============================================= */
-/* 5. ESTILOS DE BOTÕES                          */
+/* 5. COMPONENTES COMUNS                        */
 /* ============================================= */
-/* Classe base para botões */
 .btn {
     padding: 10px 15px;
     font-size: 14px;
@@ -159,14 +182,13 @@ input[type="checkbox"] {
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 6px; /* Espaço entre ícone e texto */
-    transition: all 0.3s; /* Efeito suave ao interagir */
+    gap: 6px;
+    transition: all 0.3s;
     border: none;
     text-decoration: none;
     font-weight: 500;
 }
 
-/* Botão primário (azul) */
 .btn-primary {
     background: #3498db;
     color: white;
@@ -174,10 +196,8 @@ input[type="checkbox"] {
 
 .btn-primary:hover {
     background: #2980b9;
-    transform: translateY(-2px); /* Efeito de levantar ao passar o mouse */
 }
 
-/* Botão de perigo (vermelho) */
 .btn-danger {
     background: #dc3545;
     color: white;
@@ -187,59 +207,15 @@ input[type="checkbox"] {
     background: #c82333;
 }
 
-/* Botão secundário (cinza) */
 .btn-secondary {
     background: #6c757d;
     color: white;
 }
 
-/* Botões dentro da tabela */
-.btn-table {
-    padding: 6px 10px;
-    font-size: 13px;
-    border-radius: 4px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.2s;
+.btn-secondary:hover {
+    background: #5a6268;
 }
 
-.btn-table:hover {
-    transform: translateY(-1px); /* Efeito mais sutil para botões na tabela */
-}
-
-/* ============================================= */
-/* 6. MENSAGENS DO SISTEMA                       */
-/* ============================================= */
-/* Classe base para mensagens */
-.msg {
-    padding: 12px 15px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Espaço entre ícone e texto */
-}
-
-/* Mensagem de sucesso (verde) */
-.msg-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-/* Mensagem de erro (vermelho) */
-.msg-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-/* ============================================= */
-/* 7. BOTÃO VOLTAR                               */
-/* ============================================= */
 .botao-voltar {
     display: inline-flex;
     align-items: center;
@@ -250,107 +226,87 @@ input[type="checkbox"] {
     text-decoration: none;
     border-radius: 6px;
     transition: all 0.3s;
-    margin-top: 20px;
-}
-
-.botao-voltar:hover {
-    background-color: #5a6268;
-    transform: translateY(-1px);
 }
 
 /* ============================================= */
-/* 8. ELEMENTOS DIVERSOS                         */
+/* 6. MENSAGENS                                 */
 /* ============================================= */
-/* Texto de contagem de serviços */
-.container > p {
-    color: #6c757d;
-    margin-bottom: 15px;
-    font-style: italic;
+.msg {
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* Estilo para emojis nos botões */
-.btn span, .botao-voltar span {
-    font-size: 16px;
+.msg-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.msg-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
 
 /* ============================================= */
-/* 9. RESPONSIVIDADE                             */
+/* 7. RESPONSIVIDADE                            */
 /* ============================================= */
 @media (max-width: 768px) {
-    /* Ajustes para container em mobile */
     .container {
         padding: 15px;
         margin: 10px;
     }
     
-    /* Filtros empilhados verticalmente */
-    .filtros {
+    .form-row {
         flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
+        gap: 0;
     }
     
-    .filtros select,
-    .filtros .btn {
-        width: 100%;
+    .admin-header {
+        flex-direction: column;
+        text-align: center;
     }
     
-    /* Transformação da tabela em cards */
-    table {
+    .admin-header a {
+        margin: 8px 0;
         display: block;
-        width: 100%;
     }
     
-    thead {
-        display: none; /* Oculta cabeçalho em mobile */
-    }
-    
-    tbody {
+    table, thead, tbody, th, td, tr {
         display: block;
+    }
+    
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
     }
     
     tr {
-        display: block;
         margin-bottom: 15px;
         border: 1px solid #ddd;
         border-radius: 6px;
         padding: 10px;
-        position: relative;
     }
     
     td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 10px;
         border: none;
-        border-bottom: 1px solid #eee;
-        text-align: right;
+        position: relative;
+        padding-left: 50%;
     }
     
-    td:last-child {
-        border-bottom: none;
-    }
-    
-    /* Exibe rótulos antes do conteúdo */
     td:before {
         content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
         font-weight: bold;
-        margin-right: 15px;
-        flex: 1;
-        text-align: left;
-    }
-    
-    /* Botões em telas pequenas */
-    .btn-table {
-        width: 100%;
-        justify-content: center;
-        padding: 8px;
-    }
-    
-    /* Checkbox maior para facilitar toque */
-    input[type="checkbox"] {
-        transform: scale(1.5);
-        margin-right: 10px;
     }
 }
