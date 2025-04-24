@@ -63,12 +63,17 @@ th {
     cursor: pointer;
     display: inline-block;
     text-decoration: none;
+    border: none;
+    transition: background 0.3s;
 }
 
 .btn-primary {
     background: #007bff;
     color: white;
-    border: none;
+}
+
+.btn-primary:hover {
+    background: #0069d9;
 }
 
 .btn-danger {
@@ -76,9 +81,17 @@ th {
     color: white;
 }
 
+.btn-danger:hover {
+    background: #c82333;
+}
+
 .btn-secondary {
     background: #6c757d;
     color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
 }
 
 /* ===== MESSAGE STYLES ===== */
@@ -100,17 +113,7 @@ th {
     border: 1px solid #f5c6cb;
 }
 
-/* ===== FORM STYLES (ORIGINAL) ===== */
-input, textarea, select {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-/* ===== NEW CADASTRO FORM STYLES ===== */
+/* ===== FORM STYLES ===== */
 .form-cadastro {
     background: #fff;
     padding: 25px;
@@ -127,12 +130,14 @@ input, textarea, select {
 
 .form-cadastro input[type="text"],
 .form-cadastro input[type="time"],
-.form-cadastro textarea {
+.form-cadastro textarea,
+.form-cadastro select {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .form-cadastro textarea {
@@ -140,11 +145,20 @@ input, textarea, select {
     resize: vertical;
 }
 
-.horario-row {
+/* FORM ROWS AND GROUPS */
+.form-row {
     display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 15px;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.form-group {
+    flex: 1;
+}
+
+/* CATEGORIAS CHECKBOXES */
+.categorias-list {
+    margin-top: 10px;
 }
 
 .categoria-item {
@@ -157,6 +171,7 @@ input, textarea, select {
     margin-right: 5px;
 }
 
+/* BOTÃO VOLTAR */
 .botao-voltar {
     display: inline-block;
     padding: 8px 15px;
@@ -214,35 +229,12 @@ input, textarea, select {
         font-weight: bold;
     }
     
-    .horario-row {
+    .form-row {
         flex-direction: column;
-        align-items: flex-start;
+        gap: 0;
     }
-}
-
-.form-row {
-    display: flex;
-    gap: 15px;
-}
-.form-group {
-    flex: 1;
-}
-.categorias-list {
-    margin-top: 10px;
-}
-
-/* ===== INPUT TIME ===== */
-.form-cadastro input[type="time"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-/* ===== BOTÃO PRIMÁRIO ===== */
-.btn-primary {
-    background: #007bff;
-    color: white;
-    border: none;
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
 }
