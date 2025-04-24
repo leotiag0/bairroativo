@@ -230,3 +230,19 @@ input, textarea, select {
 .categorias-list {
     margin-top: 10px;
 }
+
+/* ===== INPUT TIME ===== */
+.form-cadastro input[type="time"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* ===== BOTÃO PRIMÁRIO ===== */
+.btn-primary {
+    background: #007bff;
+    color: white;
+    border: none;
+}
