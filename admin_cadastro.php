@@ -83,66 +83,7 @@ $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PD
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Serviço</title>
     <link rel="stylesheet" href="/admin/assets/css/admin.css">
-    <style>
-        /* ESTILOS ESPECÍFICOS PARA ESTA PÁGINA */
-        .form-cadastro {
-            background: #fff;
-            padding: 25px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin: 20px 0;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .form-row .form-group {
-            flex: 1;
-        }
-        
-        .categorias-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .categoria-item {
-            display: flex;
-            align-items: center;
-            padding: 5px 10px;
-            background: #f5f5f5;
-            border-radius: 4px;
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-        
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-        }
-    </style>
-</head>
+    </head>
 <body>
     <?php include 'admin_header.php'; ?>
 
