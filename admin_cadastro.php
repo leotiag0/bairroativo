@@ -82,7 +82,7 @@ $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PD
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Serviço</title>
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css?v=<?= filemtime('css/admin.css') ?>">
     </head>
 <body>
     <?php include 'admin_header.php'; ?>
