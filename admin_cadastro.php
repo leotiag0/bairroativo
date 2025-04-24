@@ -6,7 +6,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 require 'conexao.php';
-require 'config.php'; // aqui está sua $apiKey
+require 'config.php';
 
 function getCoordinates($endereco, $apiKey, $pdo) {
     $check = $pdo->prepare("SELECT latitude, longitude FROM geocache WHERE endereco = ?");
@@ -30,28 +30,25 @@ function getCoordinates($endereco, $apiKey, $pdo) {
 
 $msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validação dos dados
-    $nome      = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
-    $rua       = filter_input(INPUT_POST, 'rua', FILTER_SANITIZE_STRING);
-    $bairro    = filter_input(INPUT_POST, 'bairro', FILTER_SANITIZE_STRING);
-    $cidade    = filter_input(INPUT_POST, 'cidade', FILTER_SANITIZE_STRING);
-    $estado    = filter_input(INPUT_POST, 'estado', FILTER_SANITIZE_STRING);
-    $tipo      = filter_input(INPUT_POST, 'tipo', FILTER_SANITIZE_STRING);
-    $descricao = filter_input(INPUT_POST, 'descricao', FILTER_SANITIZE_STRING);
-    $inicio    = $_POST['horario_inicio'];
-    $fim       = $_POST['horario_fim'];
-    $pt        = filter_input(INPUT_POST, 'agendamento_pt', FILTER_SANITIZE_STRING);
-    $es        = filter_input(INPUT_POST, 'agendamento_es', FILTER_SANITIZE_STRING);
-    $en        = filter_input(INPUT_POST, 'agendamento_en', FILTER_SANITIZE_STRING);
+    $nome = $_POST['nome'] ?? '';
+    $rua = $_POST['rua'] ?? '';
+    $bairro = $_POST['bairro'] ?? '';
+    $cidade = $_POST['cidade'] ?? '';
+    $estado = $_POST['estado'] ?? '';
+    $tipo = $_POST['tipo'] ?? '';
+    $descricao = $_POST['descricao'] ?? '';
+    $inicio = $_POST['horario_inicio'] ?? '';
+    $fim = $_POST['horario_fim'] ?? '';
+    $pt = $_POST['agendamento_pt'] ?? '';
+    $es = $_POST['agendamento_es'] ?? '';
+    $en = $_POST['agendamento_en'] ?? '';
     $categorias = $_POST['categorias'] ?? [];
 
-    // Geocodificação
     $enderecoCompleto = "$rua, $bairro, $cidade, $estado";
     $coords = getCoordinates($enderecoCompleto, $apiKey, $pdo);
     $lat = $coords['latitude'] ?? null;
     $lng = $coords['longitude'] ?? null;
 
-    // Inserção
     try {
         $pdo->beginTransaction();
         
@@ -64,19 +61,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($categorias)) {
             $vincular = $pdo->prepare("INSERT INTO servico_categoria (servico_id, categoria_id) VALUES (?, ?)");
             foreach ($categorias as $cat_id) {
-                $vincular->execute([$servico_id, (int)$cat_id]);
+                $vincular->execute([$servico_id, $cat_id]);
             }
         }
         
         $pdo->commit();
-        $msg = "<div class='alert success'>✅ Serviço cadastrado com sucesso!</div>";
+        $msg = "<div class='msg success'>✅ Serviço cadastrado com sucesso!</div>";
     } catch (PDOException $e) {
         $pdo->rollBack();
-        $msg = "<div class='alert error'>Erro ao cadastrar: " . htmlspecialchars($e->getMessage()) . "</div>";
+        $msg = "<div class='msg error'>Erro ao cadastrar: " . htmlspecialchars($e->getMessage()) . "</div>";
     }
 }
 
-// Carregar categorias
 $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -86,7 +82,66 @@ $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PD
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Serviço</title>
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="/admin/assets/css/admin.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA ESTA PÁGINA */
+        .form-cadastro {
+            background: #fff;
+            padding: 25px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .categorias-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .categoria-item {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
 </head>
 <body>
     <?php include 'admin_header.php'; ?>
@@ -98,65 +153,65 @@ $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PD
         <form method="POST" class="form-cadastro">
             <div class="form-group">
                 <label>Nome do Serviço *</label>
-                <input type="text" name="nome" required class="form-control">
+                <input type="text" name="nome" required>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Rua *</label>
-                    <input type="text" name="rua" required class="form-control">
+                    <input type="text" name="rua" required>
                 </div>
                 <div class="form-group">
                     <label>Bairro *</label>
-                    <input type="text" name="bairro" required class="form-control">
+                    <input type="text" name="bairro" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Cidade *</label>
-                    <input type="text" name="cidade" required class="form-control">
+                    <input type="text" name="cidade" required>
                 </div>
                 <div class="form-group">
                     <label>Estado *</label>
-                    <input type="text" name="estado" required class="form-control">
+                    <input type="text" name="estado" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Tipo *</label>
-                <input type="text" name="tipo" required class="form-control">
+                <input type="text" name="tipo" required>
             </div>
 
             <div class="form-group">
                 <label>Descrição *</label>
-                <textarea name="descricao" required class="form-control" rows="3"></textarea>
+                <textarea name="descricao" required rows="4"></textarea>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Horário de Abertura *</label>
-                    <input type="time" name="horario_inicio" required class="form-control">
+                    <input type="time" name="horario_inicio" required>
                 </div>
                 <div class="form-group">
                     <label>Horário de Fechamento *</label>
-                    <input type="time" name="horario_fim" required class="form-control">
+                    <input type="time" name="horario_fim" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Instruções para Agendamento (Português) *</label>
-                <textarea name="agendamento_pt" required class="form-control" rows="2"></textarea>
+                <textarea name="agendamento_pt" required rows="3"></textarea>
             </div>
 
             <div class="form-group">
                 <label>Instrucciones de Agendamiento (Español)</label>
-                <textarea name="agendamento_es" class="form-control" rows="2"></textarea>
+                <textarea name="agendamento_es" rows="3"></textarea>
             </div>
 
             <div class="form-group">
                 <label>Booking Instructions (English)</label>
-                <textarea name="agendamento_en" class="form-control" rows="2"></textarea>
+                <textarea name="agendamento_en" rows="3"></textarea>
             </div>
 
             <div class="form-group">
@@ -165,20 +220,19 @@ $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PD
                     <?php foreach ($categorias as $cat): ?>
                         <label class="categoria-item">
                             <input type="checkbox" name="categorias[]" value="<?= $cat['id'] ?>">
-                            <span style="color:<?= $cat['cor'] ?>"><?= htmlspecialchars($cat['nome']) ?></span>
+                            <span style="color:<?= $cat['cor'] ?>"><?= $cat['nome'] ?></span>
                         </label>
                     <?php endforeach; ?>
                 </div>
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Salvar Serviço</button>
-                <a href="/admin/admin_gerenciar.php" class="btn btn-secondary">Voltar</a>
+                <button type="submit" class="btn">Salvar</button>
+                <a href="admin_gerenciar.php" class="btn btn-secondary">Voltar</a>
             </div>
         </form>
     </div>
 
     <?php include 'admin_footer.php'; ?>
-
 </body>
 </html>
