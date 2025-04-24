@@ -15,7 +15,7 @@ $s = $stmt->fetch();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validação simples
     $nome_servico = filter_var($_POST['nome'], FILTER_SANITIZE_STRING);
-    $rua = filter_var($_POST['rua'], FILTER_SANITIZE_STRING);
+    $rua = filter_var($_POST['endereco'], FILTER_SANITIZE_STRING);
     $bairro = filter_var($_POST['bairro'], FILTER_SANITIZE_STRING);
     $cidade = filter_var($_POST['cidade'], FILTER_SANITIZE_STRING);
     $estado = filter_var($_POST['estado'], FILTER_SANITIZE_STRING);
@@ -31,13 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Atualiza no banco
     $stmt = $pdo->prepare("UPDATE servicos SET 
-        nome_servico=?, rua=?, bairro=?, cidade=?, estado=?, tipo=?, descricao=?, 
+        nome_servico=?, endereco=?, bairro=?, cidade=?, estado=?, tipo=?, descricao=?, 
         horario_inicio=?, horario_fim=?, latitude=?, longitude=?, 
         agendamento_pt=?, agendamento_es=?, agendamento_en=?
         WHERE id=?");
 
     $stmt->execute([
-        $nome_servico, $rua, $bairro, $cidade, $estado, 
+        $nome_servico, $endereco, $bairro, $cidade, $estado, 
         $tipo, $descricao, $horario_inicio, $horario_fim, 
         $latitude, $longitude, $agendamento_pt, $agendamento_es, $agendamento_en, $id
     ]);
@@ -71,8 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="nome">Nome do Serviço:</label>
         <input type="text" name="nome" id="nome" value="<?= htmlspecialchars($s['nome_servico']) ?>" required>
 
-        <label for="rua">Rua:</label>
-        <input type="text" name="rua" id="rua" value="<?= htmlspecialchars($s['rua']) ?>" required>
+        <label for="enderecoa">Rua:</label>
+        <input type="text" name="endereco" id="endereco" value="<?= htmlspecialchars($s['endereco']) ?>" required>
 
         <label for="bairro">Bairro:</label>
         <input type="text" name="bairro" id="bairro" value="<?= htmlspecialchars($s['bairro']) ?>" required>
