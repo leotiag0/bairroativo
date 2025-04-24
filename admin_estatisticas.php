@@ -32,7 +32,7 @@ $porBairro = $pdo->query("
 <head>
     <meta charset="UTF-8">
     <title>Estatísticas - Bairro Ativo</title>
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css?v=<?= time() ?>">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
     
