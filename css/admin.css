@@ -219,3 +219,14 @@ input, textarea, select {
         align-items: flex-start;
     }
 }
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+.form-group {
+    flex: 1;
+}
+.categorias-list {
+    margin-top: 10px;
+}
