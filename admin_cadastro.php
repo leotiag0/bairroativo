@@ -168,7 +168,7 @@ $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PD
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn">Salvar</button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
                 <a href="admin_gerenciar.php" class="btn btn-secondary">Voltar</a>
             </div>
         </form>
