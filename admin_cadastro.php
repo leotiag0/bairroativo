@@ -31,7 +31,7 @@ function getCoordinates($endereco, $apiKey, $pdo) {
 $msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'] ?? '';
-    $rua = $_POST['rua'] ?? '';
+    $rua = $_POST['endereco'] ?? '';
     $bairro = $_POST['bairro'] ?? '';
     $cidade = $_POST['cidade'] ?? '';
     $estado = $_POST['estado'] ?? '';
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $pdo->beginTransaction();
         
-        $stmt = $pdo->prepare("INSERT INTO servicos (nome_servico, rua, bairro, cidade, estado, tipo, descricao, horario_inicio, horario_fim, latitude, longitude, agendamento_pt, agendamento_es, agendamento_en)
+        $stmt = $pdo->prepare("INSERT INTO servicos (nome_servico, endereco, bairro, cidade, estado, tipo, descricao, horario_inicio, horario_fim, latitude, longitude, agendamento_pt, agendamento_es, agendamento_en)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$nome, $rua, $bairro, $cidade, $estado, $tipo, $descricao, $inicio, $fim, $lat, $lng, $pt, $es, $en]);
 
