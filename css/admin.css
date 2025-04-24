@@ -1,154 +1,79 @@
+/* GERAL */
 body {
     font-family: Arial, sans-serif;
-    background: #f9f9f9;
     margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
 }
 
 .container {
-    max-width: 1100px;
-    margin: auto;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
 }
 
-h2 {
-    margin-bottom: 20px;
-    color: #333;
-    text-align: center;
-}
-
-.filtros {
+/* HEADER */
+.admin-header {
+    background: #007bff;
+    color: white;
+    padding: 15px 20px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.filtros select, .filtros button, .btn-danger {
-    padding: 10px 15px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+/* FORMULÁRIOS */
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.filtros button, .btn {
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-    border: none;
-    display: inline-block;
-    transition: background 0.3s ease;
-}
-
-.btn-danger {
-    background: #dc3545;
-    color: white;
-}
-
-.btn:hover {
-    background: #0056b3;
-}
-
-.btn-danger:hover {
-    background: #c82333;
-}
-
-/* Estilos para botões no formato <a> */
-button.btn, a.btn {
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-    border: none;
-    text-decoration: none;
-    padding: 10px 15px;
-    font-size: 14px;
-    border-radius: 6px;
-    display: inline-block;
-    transition: background 0.3s ease;
-}
-
-button.btn:hover, a.btn:hover {
-    background: #0056b3;
-}
-
-/* Botões de perigo (como excluir) */
-button.btn-danger, a.btn-danger {
-    background: #dc3545;
-    color: white;
-    border: none;
-    text-decoration: none;
-    padding: 10px 15px;
-    font-size: 14px;
-    border-radius: 6px;
-    display: inline-block;
-    transition: background 0.3s ease;
-}
-
-button.btn-danger:hover, a.btn-danger:hover {
-    background: #c82333;
-}
-
-/* Estilo de mensagem de sucesso */
-.msg {
-    background: #d4edda;
-    color: #155724;
+input, textarea, select {
+    width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    border: 1px solid #c3e6cb;
-    text-align: center;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-/* Estilos da tabela */
-.table-responsive {
-    overflow-x: auto;
+/* BOTÕES */
+.btn {
+    background: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
+/* TABELAS */
 table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
+    margin: 20px 0;
 }
 
 th, td {
-    padding: 12px 10px;
-    border-bottom: 1px solid #ddd;
+    padding: 12px;
     text-align: left;
-    font-size: 14px;
+    border-bottom: 1px solid #ddd;
 }
 
-th {
-    background: #f0f0f0;
-    font-weight: bold;
+/* MENSAGENS */
+.msg {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
 }
 
-/* Responsividade para dispositivos menores */
-@media (max-width: 768px) {
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
+.msg-error {
+    background: #ffdddd;
+    color: #d8000c;
+}
 
-    thead {
-        display: none;
-    }
-
-    tr {
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        border-radius: 8px;
-    }
-
-    td {
-        padding: 10px;
-        position: relative;
-    }
-
-    td::before {
-        content: attr(data-label);
-        font-weight: bold;
-        display: block;
-        margin-bottom: 5px;
-        color: #555;
-    }
+.msg-success {
+    background: #ddffdd;
+    color: #007700;
 }
