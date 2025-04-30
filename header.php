@@ -1,6 +1,14 @@
 <?php 
 // Verifica se a variável $lang está definida, caso contrário, inclui o arquivo de idioma
 if (!isset($lang)) include 'lang.php'; 
+// Copia os parâmetros da URL atual
+$params = $_GET;
+unset($params['lang']); // Remove o idioma atual da URL
+
+// Reconstrói a base da query string
+$queryBase = http_build_query($params);
+$prefix = $queryBase ? $queryBase . '&' : '';
+    
 ?>
 <header>
     <div class="header-left">
@@ -12,9 +20,10 @@ if (!isset($lang)) include 'lang.php';
 
     <div class="header-right">
         <!-- Links para alterar o idioma com as respectivas bandeiras -->
-        <a href="?lang=pt"><img src="images/brasil-flag.jpg" class="flag-icon" alt="Português"></a>
-        <a href="?lang=es"><img src="images/spain-flag.jpg" class="flag-icon" alt="Español"></a>
-        <a href="?lang=en"><img src="images/uk-flag.jpg" class="flag-icon" alt="English"></a>
+
+            <a href="?<?= $prefix ?>lang=pt"><img src="images/brasil-flag.jpg" class="flag-icon" alt="Português"></a>
+            <a href="?<?= $prefix ?>lang=es"><img src="images/spain-flag.jpg" class="flag-icon" alt="Español"></a>
+            <a href="?<?= $prefix ?>lang=en"><img src="images/uk-flag.jpg" class="flag-icon" alt="English"></a>
 
         <!-- Botão para alternar o modo de alto contraste -->
         <button id="toggle-contraste" class='btn' title="Ativar/desativar alto contraste">🌓 Contraste</button>
