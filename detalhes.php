@@ -107,8 +107,8 @@ $categorias = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Botões de ações -->
     <div class="btn-group">
-        <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=<?= $s['latitude'] ?>,<?= $s['longitude'] ?>" target="_blank">📍 <?= $t['rota'] ?></a>
-        <a class="btn" href="geo:<?= $s['latitude'] ?>,<?= $s['longitude'] ?>" target="_blank">🧭 <?= $t['navegar'] ?></a>
+        <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=<?= urlencode($s['endereco'] . ', ' . $s['bairro'] . ', ' . $s['cidade'] . ', ' . $s['estado']) ?>" target="_blank">📍 <?= $t['rota'] ?></a>
+        <a class="btn" href="geo:<?= $s['latitude'] ?>,<?= $s['longitude'] ?>" target="_blank">🧭 <?= $t['navegar'] ?>
         <button class="btn" onclick="compartilhar()">🔗 <?= $t['compartilhar'] ?></button>
     </div>
 </main>
