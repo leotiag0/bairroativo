@@ -35,56 +35,6 @@ $categorias = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="css/public.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-
-    <style>
-        .detalhes-servico {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-            margin-top: 30px;
-        }
-
-        .detalhes-servico h2 {
-            margin-bottom: 15px;
-            color: #007bff;
-        }
-
-        .detalhes-servico p {
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-
-        .categoria-badge {
-            display: inline-block;
-            background: #ccc;
-            padding: 5px 10px;
-            border-radius: 20px;
-            color: #fff;
-            font-size: 13px;
-            margin: 2px 5px 2px 0;
-        }
-
-        #map {
-            height: 300px;
-            width: 100%;
-            margin-top: 20px;
-            border-radius: 6px;
-        }
-
-        .btn-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        @media (max-width: 600px) {
-            .btn-group {
-                flex-direction: column;
-            }
-        }
-    </style>
 </head>
 <body>
 
