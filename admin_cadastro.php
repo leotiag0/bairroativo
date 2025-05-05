@@ -36,12 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cidade = $_POST['cidade'] ?? '';
     $estado = $_POST['estado'] ?? '';
     $tipo = $_POST['tipo'] ?? '';
-    $descricao = $_POST['descricao'] ?? '';
     $inicio = $_POST['horario_inicio'] ?? '';
     $fim = $_POST['horario_fim'] ?? '';
-    $pt = $_POST['agendamento_pt'] ?? '';
-    $es = $_POST['agendamento_es'] ?? '';
-    $en = $_POST['agendamento_en'] ?? '';
+    $descricao_pt = $_POST['descricao_pt'] ?? '';
+    $descricao_es = $_POST['descricao_es'] ?? '';
+    $descricao_en = $_POST['descricao_en'] ?? '';
     $categorias = $_POST['categorias'] ?? [];
 
     $enderecoCompleto = "$rua, $bairro, $cidade, $estado";
@@ -52,9 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $pdo->beginTransaction();
         
-        $stmt = $pdo->prepare("INSERT INTO servicos (nome_servico, endereco, bairro, cidade, estado, tipo, descricao, horario_inicio, horario_fim, latitude, longitude, agendamento_pt, agendamento_es, agendamento_en)
+        $stmt = $pdo->prepare("INSERT INTO servicos (nome_servico, endereco, bairro, cidade, estado, tipo, horario_inicio, horario_fim, latitude, longitude, descricao_pt, descricao_es, descricao_en)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$nome, $rua, $bairro, $cidade, $estado, $tipo, $descricao, $inicio, $fim, $lat, $lng, $pt, $es, $en]);
+        $stmt->execute([$nome, $rua, $bairro, $cidade, $estado, $tipo, $inicio, $fim, $lat, $lng, $descricao_pt, $descricao_es, $descricao_en]);
 
         $servico_id = $pdo->lastInsertId();
         
@@ -124,11 +123,6 @@ $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PD
                 <input type="text" name="tipo" required>
             </div>
 
-            <div class="form-group">
-                <label>Descrição *</label>
-                <textarea name="descricao" required rows="4"></textarea>
-            </div>
-
             <div class="form-row">
                 <div class="form-group">
                     <label>Horário de Abertura *</label>
@@ -142,17 +136,17 @@ $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll(PD
 
             <div class="form-group">
                 <label>Instruções para Agendamento (Português) *</label>
-                <textarea name="agendamento_pt" required rows="3"></textarea>
+                <textarea name="descricao_pt" required rows="3"></textarea>
             </div>
 
             <div class="form-group">
                 <label>Instrucciones de Agendamiento (Español)</label>
-                <textarea name="agendamento_es" rows="3"></textarea>
+                <textarea name="descricao_es" rows="3"></textarea>
             </div>
 
             <div class="form-group">
                 <label>Booking Instructions (English)</label>
-                <textarea name="agendamento_en" rows="3"></textarea>
+                <textarea name="descricao_en" rows="3"></textarea>
             </div>
 
             <div class="form-group">
