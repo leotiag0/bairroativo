@@ -25,21 +25,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $horario_fim = $_POST['horario_fim'];
     $latitude = filter_var($_POST['latitude'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     $longitude = filter_var($_POST['longitude'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-    $agendamento_pt = filter_var($_POST['agendamento_pt'], FILTER_SANITIZE_STRING);
-    $agendamento_es = filter_var($_POST['agendamento_es'], FILTER_SANITIZE_STRING);
-    $agendamento_en = filter_var($_POST['agendamento_en'], FILTER_SANITIZE_STRING);
+    $descricao_pt = filter_var($_POST['descricao_pt'], FILTER_SANITIZE_STRING);
+    $descricao_es = filter_var($_POST['descricao_es'], FILTER_SANITIZE_STRING);
+    $descricao_en = filter_var($_POST['descricao_en'], FILTER_SANITIZE_STRING);
 
     // Atualiza no banco
     $stmt = $pdo->prepare("UPDATE servicos SET 
-        nome_servico=?, endereco=?, bairro=?, cidade=?, estado=?, tipo=?, descricao=?, 
+        nome_servico=?, endereco=?, bairro=?, cidade=?, estado=?, tipo=?, 
         horario_inicio=?, horario_fim=?, latitude=?, longitude=?, 
-        agendamento_pt=?, agendamento_es=?, agendamento_en=?
+        descricao_pt=?, descricao_es=?, descricao_en=?
         WHERE id=?");
 
     $stmt->execute([
         $nome_servico, $endereco, $bairro, $cidade, $estado, 
-        $tipo, $descricao, $horario_inicio, $horario_fim, 
-        $latitude, $longitude, $agendamento_pt, $agendamento_es, $agendamento_en, $id
+        $tipo, $horario_inicio, $horario_fim, 
+        $latitude, $longitude, $descricao_pt, $descricao_es, $descricao_en, $id
     ]);
 
     // Mensagem de sucesso
@@ -98,14 +98,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="longitude">Longitude:</label>
         <input type="text" name="longitude" id="longitude" value="<?= htmlspecialchars($s['longitude']) ?>">
 
-        <label for="agendamento_pt">Agendamento (PT):</label>
-        <textarea name="agendamento_pt" id="agendamento_pt"><?= htmlspecialchars($s['agendamento_pt']) ?></textarea>
+        <label for="agendamento_pt">Descrição (PT):</label>
+        <textarea name="agendamento_pt" id="descricao_pt"><?= htmlspecialchars($s['descricao_pt']) ?></textarea>
 
-        <label for="agendamento_es">Agendamento (ES):</label>
-        <textarea name="agendamento_es" id="agendamento_es"><?= htmlspecialchars($s['agendamento_es']) ?></textarea>
+        <label for="agendamento_es">Descrição (ES):</label>
+        <textarea name="agendamento_es" id="descricao_es"><?= htmlspecialchars($s['descricao_es']) ?></textarea>
 
-        <label for="agendamento_en">Agendamento (EN):</label>
-        <textarea name="agendamento_en" id="agendamento_en"><?= htmlspecialchars($s['agendamento_en']) ?></textarea>
+        <label for="agendamento_en">Descrição (EN):</label>
+        <textarea name="agendamento_en" id="descricao_en"><?= htmlspecialchars($s['descricao_en']) ?></textarea>
 
         <button type="submit" class="btn">Salvar Alterações</button>
     </form>
