@@ -3,7 +3,7 @@ $lang = $_GET['lang'] ?? 'pt';
 
 $textos = [
     'pt' => [
-        'titulo' => 'Mapeamento de Serviços Públicos e Privados da Cidade de São Paulo',
+        'titulo' => 'Mapeamento de Serviços Públicos e Privados',
         'bairro_ativo' => 'Bairro Ativo',
         'bem_vindo' => 'Bem-vindo ao Sistema. Localize os serviços públicos e privados disponíveis na sua região.',
         'buscar' => 'Buscar',
