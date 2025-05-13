@@ -44,7 +44,7 @@ include 'header.php';
             <div class="desc"><?= $t['ver_lista_desc'] ?></div>
         </a>
         <!-- Link para a área de login do administrador -->
-        <a href="admin_login.php" class="card-acao">
+        <a href="admin/admin_login.php" class="card-acao">
             <div class="icone">🔐</div>
             <div class="titulo"><?= $t['admin'] ?></div>
             <div class="desc"><?= $t['admin_desc'] ?></div>
