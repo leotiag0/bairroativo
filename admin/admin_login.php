@@ -1,9 +1,20 @@
 <?php
 session_start();
+require 'conexao.php';
+
 $msg = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($_POST['usuario'] === 'admin' && $_POST['senha'] === 'senha123') {
+    $usuario = $_POST['usuario'] ?? '';
+    $senha = $_POST['senha'] ?? '';
+
+    $stmt = $pdo->prepare("SELECT senha FROM admins WHERE usuario = :usuario LIMIT 1");
+    $stmt->bindParam(':usuario', $usuario, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && password_verify($senha, $user['senha'])) {
         $_SESSION['admin'] = true;
         header('Location: admin_cadastro.php');
         exit;
