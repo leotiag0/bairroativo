@@ -5,7 +5,7 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-require 'conexao.php';
+require '../conexao.php';
 
 $id = $_GET['id'] ?? null;
 $stmt = $pdo->prepare("SELECT * FROM servicos WHERE id = ?");
