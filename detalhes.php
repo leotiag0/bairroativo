@@ -42,29 +42,31 @@ $categorias = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
 
 <main class="container">
     <div class="detalhes-servico">
-        <h2><?= htmlspecialchars($s['nome_servico']) ?></h2>
+        <div class="info-textos">
+            <h2><?= htmlspecialchars($s['nome_servico']) ?></h2>
 
-        <p><strong><?= $t['descricao'] ?>:</strong><br><?= nl2br(htmlspecialchars($descricao)) ?></p>
-        <p><strong><?= $t['horario'] ?>:</strong> <?= htmlspecialchars($s['horario_inicio']) ?> - <?= htmlspecialchars($s['horario_fim']) ?></p>
-        <p><strong><?= $t['local'] ?? 'Local' ?>:</strong> <?= htmlspecialchars($s['endereco']) ?>, <?= htmlspecialchars($s['bairro']) ?>, <?= htmlspecialchars($s['cidade']) ?>/<?= htmlspecialchars($s['estado']) ?></p>
+            <p><strong><?= $t['descricao'] ?>:</strong><br><?= nl2br(htmlspecialchars($descricao)) ?></p>
+            <p><strong><?= $t['horario'] ?>:</strong> <?= htmlspecialchars($s['horario_inicio']) ?> - <?= htmlspecialchars($s['horario_fim']) ?></p>
+            <p><strong><?= $t['local'] ?? 'Local' ?>:</strong> <?= htmlspecialchars($s['endereco']) ?>, <?= htmlspecialchars($s['bairro']) ?>, <?= htmlspecialchars($s['cidade']) ?>/<?= htmlspecialchars($s['estado']) ?></p>
 
-        <?php if (!empty($categorias)): ?>
-            <p><strong><?= $t['categorias'] ?? 'Categorias' ?>:</strong><br>
-                <?php foreach ($categorias as $cat): ?>
-                    <span class="categoria-badge" style="background: <?= htmlspecialchars($cat['cor']) ?>;">
-                        <?= htmlspecialchars($cat['nome']) ?>
-                    </span>
-                <?php endforeach; ?>
-            </p>
-        <?php endif; ?>
+            <?php if (!empty($categorias)): ?>
+                <p><strong><?= $t['categorias'] ?? 'Categorias' ?>:</strong><br>
+                    <?php foreach ($categorias as $cat): ?>
+                        <span class="categoria-badge" style="background: <?= htmlspecialchars($cat['cor']) ?>;">
+                            <?= htmlspecialchars($cat['nome']) ?>
+                        </span>
+                    <?php endforeach; ?>
+                </p>
+            <?php endif; ?>
+
+            <div class="btn-group">
+                <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=<?= urlencode($s['endereco'] . ', ' . $s['bairro'] . ', ' . $s['cidade'] . ', ' . $s['estado']) ?>" target="_blank">📍 <?= $t['rota'] ?></a>
+                <a class="btn" href="geo:<?= $s['latitude'] ?>,<?= $s['longitude'] ?>" target="_blank">🧭 <?= $t['navegar'] ?></a>
+                <button class="btn" onclick="compartilhar()">🔗 <?= $t['compartilhar'] ?></button>
+            </div>
+        </div>
 
         <div id="map"></div>
-
-        <div class="btn-group">
-            <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=<?= urlencode($s['endereco'] . ', ' . $s['bairro'] . ', ' . $s['cidade'] . ', ' . $s['estado']) ?>" target="_blank">📍 <?= $t['rota'] ?></a>
-            <a class="btn" href="geo:<?= $s['latitude'] ?>,<?= $s['longitude'] ?>" target="_blank">🧭 <?= $t['navegar'] ?></a>
-            <button class="btn" onclick="compartilhar()">🔗 <?= $t['compartilhar'] ?></button>
-        </div>
     </div>
 </main>
 
