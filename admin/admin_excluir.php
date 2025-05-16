@@ -5,7 +5,7 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-require 'conexao.php';
+require '../conexao.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['excluir_ids']) && is_array($_POST['excluir_ids'])) {
