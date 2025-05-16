@@ -5,8 +5,8 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-require 'conexao.php';
-require 'config.php';
+require '../conexao.php';
+require '../config.php';
 
 function getCoordinates($endereco, $apiKey, $pdo) {
     $check = $pdo->prepare("SELECT latitude, longitude FROM geocache WHERE endereco = ?");
