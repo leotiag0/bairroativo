@@ -1,4 +1,4 @@
-/* -------------------- RESET & BASE -------------------- */
+/* Reset e base */
 * {
     margin: 0;
     padding: 0;
@@ -23,7 +23,7 @@ a:hover {
     text-decoration: underline;
 }
 
-/* -------------------- HEADER -------------------- */
+/* Header */
 header {
     background-color: #007bff;
     color: white;
@@ -55,7 +55,7 @@ header {
     transform: scale(1.1);
 }
 
-/* -------------------- CONTRASTE -------------------- */
+/* Contraste botão */
 #toggle-contraste {
     background: #222;
     color: #fff;
@@ -67,6 +67,7 @@ header {
     margin-left: 10px;
 }
 
+/* Contraste alto */
 body.contraste-alto {
     background-color: #000 !important;
     color: #fff !important;
@@ -86,7 +87,7 @@ body.contraste-alto footer {
     background: #111 !important;
 }
 
-/* -------------------- CONTAINERS & LAYOUT -------------------- */
+/* Layout principal */
 main {
     flex: 1;
     display: flex;
@@ -94,12 +95,21 @@ main {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 960px;
     margin: auto;
     padding: 20px;
 }
 
-/* -------------------- BOTÕES -------------------- */
+/* Rodapé */
+footer {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+}
+
+/* Botões */
 .btn {
     background-color: #28a745;
     color: white;
@@ -118,14 +128,7 @@ main {
     background-color: #218838;
 }
 
-.btn-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-/* -------------------- FILTROS -------------------- */
+/* Filtros */
 .filtros {
     background-color: #f1f1f1;
     padding: 15px;
@@ -149,95 +152,131 @@ main {
     outline: none;
 }
 
-/* -------------------- MAPA -------------------- */
+/* Mapa */
 #map {
     width: 100%;
-    height: 100%;
-    min-height: 300px;
+    min-height: 400px;
+    max-height: 90vh;
     border-radius: 6px;
-    margin-top: 20px;
+    margin: 0 auto;
 }
 
-/* -------------------- DETALHES DO SERVIÇO -------------------- */
-.detalhes-servico {
-    max-width: 1200px;
-    margin: 30px auto 0;
-    background: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-}
-
-.detalhes-servico .info-textos {
+/* Card de serviço (lista.php) */
+.card-servico {
     display: flex;
-    flex-direction: column;
     gap: 15px;
-}
-
-.detalhes-servico h2 {
-    margin-bottom: 15px;
-    color: #007bff;
-}
-
-.detalhes-servico p {
-    margin-bottom: 10px;
-    line-height: 1.6;
-}
-
-.categoria-badge {
-    display: inline-block;
-    background: #ccc;
-    padding: 5px 10px;
-    border-radius: 20px;
-    color: #fff;
-    font-size: 13px;
-    margin: 2px 5px 2px 0;
-}
-
-/* -------------------- MODO ESCURO -------------------- */
-body.modo-escuro {
-    background-color: #1c1c1c;
-    color: #f1f1f1;
-}
-
-body.modo-escuro header,
-body.modo-escuro footer {
-    background-color: #2a2a2a;
-}
-
-body.modo-escuro .filtros,
-body.modo-escuro .card,
-body.modo-escuro .container {
-    background-color: #2c2c2c;
-    color: #f1f1f1;
-}
-
-body.modo-escuro a {
-    color: #89c9ff;
-}
-
-body.modo-escuro .btn {
-    background-color: #555;
-    color: #fff;
-}
-
-body.modo-escuro .btn:hover {
-    background-color: #666;
-}
-
-/* -------------------- RODAPÉ -------------------- */
-footer {
-    background-color: #007bff;
-    color: white;
-    text-align: center;
+    border: 1px solid #ccc;
     padding: 15px;
+    border-radius: 6px;
+    background: #fff;
+    align-items: center;
+    transition: box-shadow 0.2s ease;
+}
+
+.card-servico:hover {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card-servico .thumb {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-servico .thumb img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.card-servico .info {
+    flex-grow: 1;
+}
+
+.card-servico .info strong {
+    font-size: 16px;
+}
+
+.card-servico .info span {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Ações (index) */
+.acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.card-acao {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    width: 250px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-acao:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.card-acao .icone {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.card-acao .titulo {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.card-acao .desc {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Imagem explicativa (index) */
+.imagem-explicativa {
+    max-width: 100%;
+    margin-top: 20px;
+    border-radius: 6px;
+}
+
+/* Tabelas responsivas */
+.responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
     font-size: 14px;
 }
 
-/* -------------------- RESPONSIVIDADE -------------------- */
+.responsive-table thead {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.responsive-table th,
+.responsive-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
 @media (max-width: 768px) {
     .responsive-table thead {
         display: none;
@@ -301,12 +340,83 @@ footer {
         margin: 10px auto 0;
         display: block;
     }
+}
 
-    .detalhes-servico {
-        grid-template-columns: 1fr;
-        padding: 20px;
-    }
+/* Modo Escuro */
+body.modo-escuro {
+    background-color: #1c1c1c;
+    color: #f1f1f1;
+}
 
+body.modo-escuro header,
+body.modo-escuro footer {
+    background-color: #2a2a2a;
+}
+
+body.modo-escuro .filtros,
+body.modo-escuro .card,
+body.modo-escuro .container {
+    background-color: #2c2c2c;
+    color: #f1f1f1;
+}
+
+body.modo-escuro a {
+    color: #89c9ff;
+}
+
+body.modo-escuro .btn {
+    background-color: #555;
+    color: #fff;
+}
+
+body.modo-escuro .btn:hover {
+    background-color: #666;
+}
+
+/* Detalhes do Serviço */
+.detalhes-servico {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    margin-top: 30px;
+}
+
+.detalhes-servico h2 {
+    margin-bottom: 15px;
+    color: #007bff;
+}
+
+.detalhes-servico p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.categoria-badge {
+    display: inline-block;
+    background: #ccc;
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 13px;
+    margin: 2px 5px 2px 0;
+}
+
+#map {
+    height: 300px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 6px;
+}
+
+.btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
     .btn-group {
         flex-direction: column;
     }
