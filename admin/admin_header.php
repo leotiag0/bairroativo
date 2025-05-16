@@ -6,8 +6,8 @@
         <div class="header-left">
             <a href="../index.php?lang=<?= $lang ?>">
             <img src="images/logo.png" alt="Logo" class="logo">
-        </a>
-    </div>
+            </a>
+        </div>
         <span style="font-size:20px; font-weight:bold;">Administração - Bairro Ativo</span>
     </div>
     <nav style="display:flex; gap:20px;">
