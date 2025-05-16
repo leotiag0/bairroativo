@@ -3,7 +3,11 @@
 
 <header style="background:#007bff; color:white; padding:10px 20px; display:flex; justify-content:space-between; align-items:center;">
     <div style="display:flex; align-items:center; gap:10px;">
-        <img src="images/logo.png" alt="Logo" style="height:50px;">
+        <div class="header-left">
+            <a href="../index.php?lang=<?= $lang ?>">
+            <img src="images/logo.png" alt="Logo" class="logo">
+        </a>
+    </div>
         <span style="font-size:20px; font-weight:bold;">Administração - Bairro Ativo</span>
     </div>
     <nav style="display:flex; gap:20px;">
