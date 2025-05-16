@@ -6,10 +6,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 require '../conexao.php';
-
-$apiKey = '2923ef94f739425b96ec104bd6613eb5';
-$msg = '';
-$errors = [];
+require '../config.php';
 
 // Função para buscar coordenadas com cache
 function getCoordinates($endereco, $apiKey, $pdo) {
