@@ -5,7 +5,7 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-require 'conexao.php';
+require '../conexao.php';
 
 $apiKey = '2923ef94f739425b96ec104bd6613eb5';
 $msg = '';
