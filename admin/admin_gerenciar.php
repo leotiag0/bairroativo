@@ -5,7 +5,7 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-require 'conexao.php';
+require '../conexao.php';
 include 'admin_header.php';
 
 // Filtros
